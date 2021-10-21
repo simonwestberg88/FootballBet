@@ -4,7 +4,7 @@ namespace FootballBet.Server.Data.Mappers
 {
     public static class GroupMapper
     {
-        public static Shared.Models.Groups.BettingGroupDto Map(BettingGroup bettingGroup)
+        public static Shared.Models.Groups.BettingGroupShared Map(BettingGroup bettingGroup)
             => new()
             {
                 Description = bettingGroup.Description,
@@ -13,7 +13,7 @@ namespace FootballBet.Server.Data.Mappers
                 Memberships = bettingGroup?.Memberships?.Select(x => Map(x))?.ToList()
             };
 
-        public static Shared.Models.Groups.BettingGroupMemberDto Map(BettingGroupMember bettingGroupMember)
+        public static Shared.Models.Groups.BettingGroupMemberShared Map(BettingGroupMember bettingGroupMember)
             => new()
             {
                 Id = bettingGroupMember.Id,

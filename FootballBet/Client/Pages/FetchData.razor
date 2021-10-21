@@ -20,7 +20,7 @@
 
 
 @code {
-    private BettingGroupDto bettingGroupDto = new();
+    private BettingGroupShared bettingGroupDto = new();
     private async void HandleValidSubmit()
     {
         var test = await Http.PostAsJsonAsync("/group/", bettingGroupDto);

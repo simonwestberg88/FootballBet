@@ -22,7 +22,7 @@ namespace FootballBet.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateGroup(BettingGroupDto group, CancellationToken ct)
+        public async Task<IActionResult> CreateGroup(BettingGroupShared group, CancellationToken ct)
             => Ok(await _groupService.CreateBettingGroup(User.Identity.GetUserId(), group.Description, group.Name, ct));
 
     }

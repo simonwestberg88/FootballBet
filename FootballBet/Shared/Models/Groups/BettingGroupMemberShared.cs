@@ -1,6 +1,6 @@
 ﻿namespace FootballBet.Shared.Models.Groups
 {
-    public class BettingGroupMemberDto
+    public class BettingGroupMemberShared
     {
         public Guid Id { get; set; }
         public string Nickname { get; set; }
