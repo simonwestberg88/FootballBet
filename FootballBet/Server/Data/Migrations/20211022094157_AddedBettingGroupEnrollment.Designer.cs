@@ -4,6 +4,7 @@ using FootballBet.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FootballBet.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211022094157_AddedBettingGroupEnrollment")]
+    partial class AddedBettingGroupEnrollment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,7 +107,7 @@ namespace FootballBet.Server.Data.Migrations
 
                     b.HasIndex("Use");
 
-                    b.ToTable("Keys", (string)null);
+                    b.ToTable("Keys");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.PersistedGrant", b =>
@@ -246,7 +248,7 @@ namespace FootballBet.Server.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BettingGroups", (string)null);
+                    b.ToTable("BettingGroups");
                 });
 
             modelBuilder.Entity("FootballBet.Server.Models.Groups.BettingGroupMember", b =>
@@ -272,7 +274,7 @@ namespace FootballBet.Server.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("BettingGroupMembers", (string)null);
+                    b.ToTable("BettingGroupMembers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

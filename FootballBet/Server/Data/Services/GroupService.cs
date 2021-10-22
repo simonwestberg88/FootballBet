@@ -1,7 +1,9 @@
-﻿using FootballBet.Server.Data.Repositories.Interfaces;
+﻿using FootballBet.Server.Data.Mappers;
+using FootballBet.Server.Data.Repositories.Interfaces;
 using FootballBet.Server.Data.Services.Interfaces;
 using FootballBet.Server.Models;
 using FootballBet.Server.Models.Groups;
+using FootballBet.Shared.Models.Groups;
 
 namespace FootballBet.Server.Data.Services
 {
@@ -30,13 +32,21 @@ namespace FootballBet.Server.Data.Services
             return await _groupRepository.CreateGroup(user, newGroup, ct);
         }
 
-        public async Task<List<BettingGroup>> ListGroups(CancellationToken ct)
+        public async Task<List<BettingGroupShared>> ListGroupsForUser(string userId, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var bettingGroupIds = (await _groupRepository.GetBettingGroupMemberByUserId(userId, ct)).Select(p => p.BettingGroupId)
+                .ToList();
+            var groupList = new List<BettingGroup>();
+
+            foreach (var id in bettingGroupIds)
+            {
+                groupList.Add(await _groupRepository.GetGroupById(id, ct));
+            }
+            return groupList.Select(g => GroupMapper.Map(g)).ToList();
         }
 
-        private BettingGroup CreateBettingGroup(string groupName, string description, ApplicationUser creator)
-           => new ()
+        private static BettingGroup CreateBettingGroup(string groupName, string description, ApplicationUser creator)
+           => new()
            {
                Description = description,
                Name = groupName,
@@ -48,7 +58,8 @@ namespace FootballBet.Server.Data.Services
                             Nickname = creator.UserName,
                             UserId = creator.Id
                         }
-                    }
+                    },
+               CreatedAt = DateTime.UtcNow
            };
     }
 }

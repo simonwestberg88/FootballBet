@@ -25,5 +25,9 @@ namespace FootballBet.Server.Controllers
         public async Task<IActionResult> CreateGroup(BettingGroupShared group, CancellationToken ct)
             => Ok(await _groupService.CreateBettingGroup(User.Identity.GetUserId(), group.Description, group.Name, ct));
 
+        [HttpGet]
+        public async Task<IActionResult> GetGroupsForUser(CancellationToken ct)
+            => Ok(await _groupService.ListGroupsForUser(User.Identity.GetUserId(), ct));
+
     }
 }

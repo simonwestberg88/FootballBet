@@ -10,19 +10,58 @@
 
 <h1>Create Betting Group</h1>
 
-        <EditForm Model="@bettingGroupDto" OnValidSubmit="@HandleValidSubmit">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <InputText id = "groupName" @bind-Value="bettingGroupDto.Name" />
-            <InputText id = "description" @bind-Value="bettingGroupDto.Description" />
-            <button type="submit">Ok</button>
-        </EditForm>
+<EditForm Model="@bettingGroup" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <InputText id="groupName" @bind-Value="bettingGroup.Name" />
+    <InputText id="description" @bind-Value="bettingGroup.Description" />
+    <button type="submit">Ok</button>
+</EditForm>
 
+@if (bettingGroups == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var group in bettingGroups)
+            {
+                <tr>
+                    <td>@group.Name</td>
+                    <td>@group.Description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
-    private BettingGroupShared bettingGroupDto = new();
+    private BettingGroupShared bettingGroup = new();
+    private List<BettingGroupShared> bettingGroups = new();
+
     private async void HandleValidSubmit()
     {
-        var test = await Http.PostAsJsonAsync("/group/", bettingGroupDto);
+        var createdGroup = await Http.PostAsJsonAsync("/group/", bettingGroup);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        try
+        {
+            bettingGroups = await Http.GetFromJsonAsync<List<BettingGroupShared>>("/group");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
     }
 }

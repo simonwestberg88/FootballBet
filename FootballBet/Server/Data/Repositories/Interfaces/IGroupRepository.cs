@@ -5,8 +5,9 @@ namespace FootballBet.Server.Data.Repositories.Interfaces
 {
     public interface IGroupRepository
     {
-        public void JoinGroup(Guid groupId, Guid userId, CancellationToken ct);
-        public Task<BettingGroup> CreateGroup(ApplicationUser user, BettingGroup newGroup, CancellationToken ct);
-        public List<BettingGroup> ListGroups(CancellationToken ct);
+        Task<BettingGroup> CreateGroup(ApplicationUser user, BettingGroup newGroup, CancellationToken ct);
+        Task<List<BettingGroupMember>> GetBettingGroupMemberByUserId(string userId, CancellationToken ct);
+        Task<BettingGroup> GetGroupById(Guid groupId, CancellationToken ct);
+        void JoinGroup(Guid groupId, Guid userId, CancellationToken ct);
     }
 }
