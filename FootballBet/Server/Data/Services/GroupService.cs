@@ -22,6 +22,13 @@ namespace FootballBet.Server.Data.Services
             throw new NotImplementedException();
         }
 
+        //to create an invite we want to first generate a uniqueguid & url (put guid in database along with group guid)
+        //when invitation url is accessed we want to get the inviation (in db) and also get the 
+        //group ID from invitation that we then use to connect a use to a group.
+        //we then probably want to delete the inviation... don't think they are needed for anything
+        //after they are consumed
+
+
         public async Task<BettingGroup> CreateBettingGroup(string creatorId, string description, string groupName, CancellationToken ct)
         {
             var user = await _userRepository.GetApplicationUserById(creatorId, ct);

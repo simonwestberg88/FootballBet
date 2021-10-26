@@ -22,9 +22,15 @@ namespace FootballBet.Server.Data.Repositories
         public async Task<List<BettingGroupMember>> GetBettingGroupMemberByUserId(string userId, CancellationToken ct)
             => await _context.BettingGroupMembers.Where(x => x.UserId == userId).ToListAsync(ct);
 
-        public void JoinGroup(Guid groupId, Guid userId, CancellationToken ct)
+        public async Task JoinGroup(Guid groupId, Guid userId, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var group = await _context.BettingGroups.FirstOrDefaultAsync(x => x.Id == groupId, ct);
+            var member = await _context.BettingGroupMembers.FirstOrDefaultAsync(x => x.UserId == userId.ToString(), ct);
+            if(member != null && group != null)
+            {
+                group.Memberships.Add(member);
+                await _context.SaveChangesAsync(ct);
+            }
         }
 
         public async Task<BettingGroup> GetGroupById(Guid groupId, CancellationToken ct)
