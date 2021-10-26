@@ -26,7 +26,7 @@ namespace FootballBet.Server.Data.Repositories
         {
             var group = await _context.BettingGroups.FirstOrDefaultAsync(x => x.Id == groupId, ct);
             var member = await _context.BettingGroupMembers.FirstOrDefaultAsync(x => x.UserId == userId.ToString(), ct);
-            if(member != null && group != null)
+            if (member != null && group != null)
             {
                 group.Memberships.Add(member);
                 await _context.SaveChangesAsync(ct);
@@ -35,5 +35,13 @@ namespace FootballBet.Server.Data.Repositories
 
         public async Task<BettingGroup> GetGroupById(Guid groupId, CancellationToken ct)
             => await _context.BettingGroups.FirstOrDefaultAsync(x => x.Id == groupId, ct);
+
+        public async Task<BettingGroupInvitation> CreateBettingGroupInvitation(BettingGroupInvitation invitation, CancellationToken ct)
+        {
+            await _context.BettingGroupInvitations.AddAsync(invitation, ct);
+            return invitation;
+        }
+
+        //public async Task<BettingGroupInvitation> GetBettingGroupInvitationByUserIdAsync
     }
 }

@@ -9,5 +9,6 @@ namespace FootballBet.Server.Data.Repositories.Interfaces
         Task<List<BettingGroupMember>> GetBettingGroupMemberByUserId(string userId, CancellationToken ct);
         Task<BettingGroup> GetGroupById(Guid groupId, CancellationToken ct);
         Task JoinGroup(Guid groupId, Guid userId, CancellationToken ct);
+        Task<BettingGroupInvitation> CreateBettingGroupInvitation(BettingGroupInvitation invitation, CancellationToken ct);
     }
 }

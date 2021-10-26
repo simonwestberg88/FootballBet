@@ -22,6 +22,15 @@ namespace FootballBet.Server.Data.Services
             throw new NotImplementedException();
         }
 
+        public async Task<BettingGroupInvitation> CreateInvitation(string groupId, string invitedUserEmail, string inviterUserId, CancellationToken ct)
+        {
+            //send email to user
+
+            //add to group
+            var invitation = await _groupRepository.CreateBettingGroupInvitation(CreateBettingGroupInvitation(Guid.Parse(groupId), inviterUserId), ct);
+            return invitation;
+        }
+
         //to create an invite we want to first generate a uniqueguid & url (put guid in database along with group guid)
         //when invitation url is accessed we want to get the inviation (in db) and also get the 
         //group ID from invitation that we then use to connect a use to a group.
@@ -47,10 +56,20 @@ namespace FootballBet.Server.Data.Services
 
             foreach (var id in bettingGroupIds)
             {
+                //wanted to do this by making a task list and awaiting all, but could not be done 
+                //this close to the context... will have to get back to it later
                 groupList.Add(await _groupRepository.GetGroupById(id, ct));
             }
             return groupList.Select(g => GroupMapper.Map(g)).ToList();
         }
+
+        private static BettingGroupInvitation CreateBettingGroupInvitation(Guid groupId, string invitingUserId)
+            => new ()
+            {
+                BettingGroupInvitationId = new Guid(),
+                BettingGroupId = groupId,
+                InvitingUserId = invitingUserId,
+            };
 
         private static BettingGroup CreateBettingGroup(string groupName, string description, ApplicationUser creator)
            => new()
