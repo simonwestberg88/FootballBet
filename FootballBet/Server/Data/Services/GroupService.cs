@@ -11,32 +11,20 @@ namespace FootballBet.Server.Data.Services
     {
         private readonly IGroupRepository _groupRepository;
         private readonly IUserRepository _userRepository;
+
         public GroupService(IGroupRepository groupRepository, IUserRepository userRepository)
         {
             _groupRepository = groupRepository;
             _userRepository = userRepository;
         }
 
-        public async Task JoinGroup(Guid groupId, Guid userId, CancellationToken ct)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<BettingGroupInvitation> CreateInvitation(string groupId, string invitedUserEmail, string inviterUserId, CancellationToken ct)
         {
-            //send email to user
+            //TODO: send email to invited user
 
-            //add to group
-            var invitation = await _groupRepository.CreateBettingGroupInvitation(CreateBettingGroupInvitation(Guid.Parse(groupId), inviterUserId), ct);
+            var invitation = await _groupRepository.CreateBettingGroupInvitation(CreateBettingGroupInvitation(Guid.Parse(groupId), inviterUserId, invitedUserEmail), ct);
             return invitation;
         }
-
-        //to create an invite we want to first generate a uniqueguid & url (put guid in database along with group guid)
-        //when invitation url is accessed we want to get the inviation (in db) and also get the 
-        //group ID from invitation that we then use to connect a use to a group.
-        //we then probably want to delete the inviation... don't think they are needed for anything
-        //after they are consumed
-
 
         public async Task<BettingGroup> CreateBettingGroup(string creatorId, string description, string groupName, CancellationToken ct)
         {
@@ -63,12 +51,41 @@ namespace FootballBet.Server.Data.Services
             return groupList.Select(g => GroupMapper.Map(g)).ToList();
         }
 
-        private static BettingGroupInvitation CreateBettingGroupInvitation(Guid groupId, string invitingUserId)
-            => new ()
+        public async Task ConsumeInvitation(string invitationId, string groupId, string userId, CancellationToken ct)
+        {
+            var invitedUser = await _userRepository.GetApplicationUserById(userId, ct);
+            if (await ValidateInvitation(groupId, invitationId, invitedUser.Email, ct))
+            {
+                var bettingGroupMember = CreateBettingGroupMember(invitedUser);
+                await _groupRepository.JoinGroup(Guid.Parse(groupId), bettingGroupMember, ct);
+                await _groupRepository.DeleteBettingGroupInvitation(Guid.Parse(invitationId), ct);
+            }
+            else
+                throw new BadHttpRequestException("Validation of invitation failed");
+        }
+
+        public async Task<BettingGroup> GetBettingGroupById(string groupId, CancellationToken ct)
+            => await _groupRepository.GetGroupById(Guid.Parse(groupId), ct) ?? throw new NotFoundException("Betting group not found");
+
+        private async Task<bool> ValidateInvitation(string groupId, string invitationId, string userEmail, CancellationToken ct)
+        {
+            var invitation = await _groupRepository.GetBettingGroupInvitationByIdAsync(Guid.Parse(invitationId), ct);
+            var group = await _groupRepository.GetGroupById(Guid.Parse(groupId), ct);
+            //can make above calls at the same time and await both tasks
+            if (invitation == null || group == null || invitation.InvitedUserEmail != userEmail || invitation.BettingGroupId != Guid.Parse(groupId))
+                return false;
+            return true;
+        }
+
+
+
+        private static BettingGroupInvitation CreateBettingGroupInvitation(Guid groupId, string invitingUserId, string invitedUserEmail)
+            => new()
             {
                 BettingGroupInvitationId = new Guid(),
                 BettingGroupId = groupId,
                 InvitingUserId = invitingUserId,
+                InvitedUserEmail = invitedUserEmail
             };
 
         private static BettingGroup CreateBettingGroup(string groupName, string description, ApplicationUser creator)
@@ -78,14 +95,18 @@ namespace FootballBet.Server.Data.Services
                Name = groupName,
                Memberships = new List<BettingGroupMember>()
                     {
-                        new BettingGroupMember()
-                        {
-                            ApplicationUser = creator,
-                            Nickname = creator.UserName,
-                            UserId = creator.Id
-                        }
+                        CreateBettingGroupMember(creator)
                     },
                CreatedAt = DateTime.UtcNow
            };
+
+        private static BettingGroupMember CreateBettingGroupMember(ApplicationUser user)
+            => new()
+            {
+                Nickname = user.UserName,
+                UserId = user.Id
+            };
+
+
     }
 }

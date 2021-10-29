@@ -13,6 +13,7 @@ namespace FootballBet.Server.Data.Repositories
         public UserRepository(ApplicationDbContext context)
             => _context = context;
 
+        //this should be authorized later by role
         public async Task<ApplicationUser> GetApplicationUserById(string userId, CancellationToken ct)
             => await _context.Users.FirstOrDefaultAsync(x => x.Id == userId, ct);
 

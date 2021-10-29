@@ -6,6 +6,7 @@ namespace FootballBet.Server.Models.Groups
     {
         public Guid BettingGroupInvitationId { get; set; }
         public Guid BettingGroupId { get; set; }
+        public string InvitedUserEmail { get; set; }
         public string InvitingUserId { get; set; }
         [ForeignKey("InvitingUserId")]
         public ApplicationUser InvitingUser { get; set; }

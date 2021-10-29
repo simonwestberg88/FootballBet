@@ -1,0 +1,49 @@
+﻿@page "/invitation/{invitationId}/{groupId}"
+@using FootballBet.Shared.Models.Groups
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using FootballBet.Shared
+@inject NavigationManager navigationManager
+@*@using Microsoft.AspNetCore.WebUtilities*@
+@attribute [Authorize]
+@inject HttpClient Http
+
+<PageTitle>Accept invitation</PageTitle>
+
+<h1>Here you can accept your invitation with this Id: @InvitationId and groupId=@GroupId</h1>
+<button>Accept invitation</button>
+
+
+@if (BettingGroup == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p>@BettingGroup.Name</p>
+    <p>@BettingGroup.Description</p>
+}
+
+@code {
+
+    [Parameter]
+    public string InvitationId { get; set; }
+    [Parameter]
+    public string GroupId { get; set; }
+
+    public BettingGroupShared? BettingGroup {get;set;}
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        try
+        {
+            BettingGroup = await Http.GetFromJsonAsync<BettingGroupShared>($"/group/invitation/accept/?invitationId={InvitationId}&groupId={GroupId}");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}

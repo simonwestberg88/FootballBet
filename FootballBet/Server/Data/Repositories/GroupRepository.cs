@@ -22,10 +22,9 @@ namespace FootballBet.Server.Data.Repositories
         public async Task<List<BettingGroupMember>> GetBettingGroupMemberByUserId(string userId, CancellationToken ct)
             => await _context.BettingGroupMembers.Where(x => x.UserId == userId).ToListAsync(ct);
 
-        public async Task JoinGroup(Guid groupId, Guid userId, CancellationToken ct)
+        public async Task JoinGroup(Guid groupId, BettingGroupMember member, CancellationToken ct)
         {
-            var group = await _context.BettingGroups.FirstOrDefaultAsync(x => x.Id == groupId, ct);
-            var member = await _context.BettingGroupMembers.FirstOrDefaultAsync(x => x.UserId == userId.ToString(), ct);
+            var group = await _context.BettingGroups.Include(group => group.Memberships).FirstOrDefaultAsync(x => x.Id == groupId, ct); //need to test if we can do this part in the service and use a parameter instead
             if (member != null && group != null)
             {
                 group.Memberships.Add(member);
@@ -34,12 +33,26 @@ namespace FootballBet.Server.Data.Repositories
         }
 
         public async Task<BettingGroup> GetGroupById(Guid groupId, CancellationToken ct)
-            => await _context.BettingGroups.FirstOrDefaultAsync(x => x.Id == groupId, ct);
+            => await _context.BettingGroups.Include(group => group.Memberships).FirstOrDefaultAsync(x => x.Id == groupId, ct);
 
         public async Task<BettingGroupInvitation> CreateBettingGroupInvitation(BettingGroupInvitation invitation, CancellationToken ct)
         {
             await _context.BettingGroupInvitations.AddAsync(invitation, ct);
+            await _context.SaveChangesAsync(ct);
             return invitation;
+        }
+
+        public async Task<BettingGroupInvitation> GetBettingGroupInvitationByIdAsync(Guid invitationId, CancellationToken ct)
+            => await _context.BettingGroupInvitations.FirstOrDefaultAsync(x => x.BettingGroupInvitationId == invitationId, ct);
+
+        public async Task DeleteBettingGroupInvitation(Guid invitationId, CancellationToken ct)
+        {
+            var invitation = await _context.BettingGroupInvitations.FirstOrDefaultAsync(x => x.BettingGroupInvitationId == invitationId, ct);
+            if (invitation != null)
+            {
+                _context.BettingGroupInvitations.Remove(invitation);
+                await _context.SaveChangesAsync(ct);
+            }
         }
 
         //public async Task<BettingGroupInvitation> GetBettingGroupInvitationByUserIdAsync

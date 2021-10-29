@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FootballBet.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211026140559_Added betting group invitations")]
-    partial class Addedbettinggroupinvitations
+    [Migration("20211027143622_Added email to Invitationobject for validation")]
+    partial class AddedemailtoInvitationobjectforvalidation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -259,6 +259,10 @@ namespace FootballBet.Server.Data.Migrations
 
                     b.Property<Guid>("BettingGroupId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("InvitedUserEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("InvitingUserId")
                         .IsRequired()
