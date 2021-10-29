@@ -1,7 +1,10 @@
 using FootballBet.Server.Data;
+using FootballBet.Server.Data.Repositories;
+using FootballBet.Server.Data.Repositories.Interfaces;
+using FootballBet.Server.Data.Services;
+using FootballBet.Server.Data.Services.Interfaces;
 using FootballBet.Server.Models;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,11 +19,16 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
     options.Password.RequireNonAlphanumeric = false;
     options.SignIn.RequireConfirmedAccount = true;
-}   )
+})
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddIdentityServer()
     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+builder.Services.AddTransient<IGroupRepository, GroupRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IGroupService, GroupService>();
+
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication()
     .AddIdentityServerJwt();

@@ -234,6 +234,12 @@ namespace FootballBet.Server.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -243,13 +249,39 @@ namespace FootballBet.Server.Data.Migrations
                     b.ToTable("BettingGroups");
                 });
 
+            modelBuilder.Entity("FootballBet.Server.Models.Groups.BettingGroupInvitation", b =>
+                {
+                    b.Property<Guid>("BettingGroupInvitationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BettingGroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("InvitedUserEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InvitingUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("BettingGroupInvitationId");
+
+                    b.HasIndex("BettingGroupId");
+
+                    b.HasIndex("InvitingUserId");
+
+                    b.ToTable("BettingGroupInvitations");
+                });
+
             modelBuilder.Entity("FootballBet.Server.Models.Groups.BettingGroupMember", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("BettingGroupId")
+                    b.Property<Guid>("BettingGroupId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Nickname")
@@ -406,11 +438,32 @@ namespace FootballBet.Server.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("FootballBet.Server.Models.Groups.BettingGroupInvitation", b =>
+                {
+                    b.HasOne("FootballBet.Server.Models.Groups.BettingGroup", "BettingGroup")
+                        .WithMany()
+                        .HasForeignKey("BettingGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FootballBet.Server.Models.ApplicationUser", "InvitingUser")
+                        .WithMany()
+                        .HasForeignKey("InvitingUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BettingGroup");
+
+                    b.Navigation("InvitingUser");
+                });
+
             modelBuilder.Entity("FootballBet.Server.Models.Groups.BettingGroupMember", b =>
                 {
                     b.HasOne("FootballBet.Server.Models.Groups.BettingGroup", null)
                         .WithMany("Memberships")
-                        .HasForeignKey("BettingGroupId");
+                        .HasForeignKey("BettingGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("FootballBet.Server.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()

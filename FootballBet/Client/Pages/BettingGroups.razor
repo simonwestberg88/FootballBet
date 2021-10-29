@@ -1,0 +1,82 @@
+﻿@page "/bettingGroups"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using FootballBet.Shared
+@using FootballBet.Shared.Models.Groups
+@attribute [Authorize]
+@inject HttpClient Http
+
+<PageTitle>Create Betting Group</PageTitle>
+
+<h1>Create Betting Group</h1>
+
+<EditForm Model="@bettingGroup" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <InputText id="groupName" @bind-Value="bettingGroup.Name" />
+    <InputText id="description" @bind-Value="bettingGroup.Description" />
+    <button type="submit">Ok</button>
+</EditForm>
+
+<h1>Invite member</h1>
+<EditForm Model="@bettingGroupInvitation" OnValidSubmit="@HandleCreateInvitation">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <InputText id="groupId" @bind-Value="bettingGroupInvitation.BettingGroupId" />
+    <InputText id="invitedEmail" @bind-Value="bettingGroupInvitation.InvitedUserEmail" />
+    <button type="submit">Ok</button>
+</EditForm>
+@if (bettingGroups == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var group in bettingGroups)
+            {
+                <tr>
+                    <td>@group.Name</td>
+                    <td>@group.Description</td>
+                    <td>@group.Id</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+    @code {
+        private BettingGroupShared bettingGroup = new();
+    private List<BettingGroupShared> bettingGroups = new();
+    private BettingGroupInvitationShared bettingGroupInvitation = new();
+
+    private async void HandleValidSubmit()
+    {
+        var createdGroup = await Http.PostAsJsonAsync("/group/", bettingGroup);
+    }
+    private async void HandleCreateInvitation()
+    {
+        var invitation = await Http.PostAsJsonAsync("/group/invitation", bettingGroupInvitation);
+        //add something to indicate invitation has been sent
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        try
+        {
+            bettingGroups = await Http.GetFromJsonAsync<List<BettingGroupShared>>("/group");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}
