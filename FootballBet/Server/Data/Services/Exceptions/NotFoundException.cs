@@ -1,6 +1,7 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
-namespace FootballBet.Server.Data.Services
+namespace FootballBet.Server.Data.Services.Exceptions
 {
     [Serializable]
     internal class NotFoundException : Exception

@@ -1,4 +1,7 @@
-﻿namespace FootballBet.Server.Models.Groups
+﻿using System;
+using System.Collections.Generic;
+
+namespace FootballBet.Server.Models.Groups
 {
     public class BettingGroup
     {
