@@ -36,7 +36,7 @@ builder.Services.AddAuthentication()
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-builder.Services.AddHangfireServer();
+//builder.Services.AddHangfireServer();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -53,11 +53,11 @@ else
 }
 
 app.UseHttpsRedirection();
-app.UseHangfireServer();
-app.UseHangfireDashboard("/hangfire", new DashboardOptions
-{
-    //Authorization = new [] {new HangfireAuthorization()} //can ensure that this can only be visited by people with a certain role associated to them
-});
+//app.UseHangfireServer();
+//app.UseHangfireDashboard("/hangfire", new DashboardOptions
+//{
+//    //Authorization = new [] {new HangfireAuthorization()} //can ensure that this can only be visited by people with a certain role associated to them
+//});
 
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
