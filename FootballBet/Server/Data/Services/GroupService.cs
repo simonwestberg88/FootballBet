@@ -5,10 +5,6 @@ using FootballBet.Server.Data.Services.Interfaces;
 using FootballBet.Server.Models;
 using FootballBet.Server.Models.Groups;
 using FootballBet.Shared.Models.Groups;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace FootballBet.Server.Data.Services
 {

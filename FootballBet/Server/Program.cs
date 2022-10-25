@@ -2,9 +2,10 @@ using FootballBet.Server.Data;
 using FootballBet.Server.Data.Repositories;
 using FootballBet.Server.Data.Repositories.Interfaces;
 using FootballBet.Server.Data.Services;
+using FootballBet.Server.Data.Services.APIs;
 using FootballBet.Server.Data.Services.Interfaces;
+using FootballBet.Server.Data.Settings;
 using FootballBet.Server.Models;
-using Hangfire;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+builder.Services.Configure<FootballApiSettings>(builder.Configuration.GetSection("FootballApi"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
@@ -28,7 +30,8 @@ builder.Services.AddIdentityServer()
 builder.Services.AddTransient<IGroupRepository, GroupRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IGroupService, GroupService>();
-
+builder.Services.AddTransient<IFootballApi, FootballApi>();
+builder.Services.AddTransient<IFootballAPIService, FootballAPIService>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication()

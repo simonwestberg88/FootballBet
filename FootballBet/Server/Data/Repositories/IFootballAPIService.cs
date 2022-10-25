@@ -2,5 +2,6 @@
 {
     public interface IFootballAPIService
     {
+        public Task<string> GetLeagues();
     }
 }
