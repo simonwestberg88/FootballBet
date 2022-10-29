@@ -33,8 +33,8 @@ namespace FootballBet.Server.Data.Services
             teams.AddRange(matches.Select(m => m.Teams.Home).ToList());
             teams.AddRange(matches.Select(m => m.Teams.Away).ToList());
             teams = teams.DistinctBy(t => t.Id).ToList();
-            var result = _footballRepository.CreateOrUpdateTeams(teams.Select(t => t.ToTeamEntity()));
-            var fixtures = _footballRepository.CreateOrUpdateMatches(matches.Select(m => m.ToMatchEntity()));
+            var result = await _footballRepository.CreateOrUpdateTeams(teams.Select(t => t.ToTeamEntity()));
+            var fixtures = await _footballRepository.CreateOrUpdateMatches(matches.Select(m => m.ToMatchEntity()));
             return "hello";
 
         }       

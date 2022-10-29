@@ -6,6 +6,7 @@ namespace FootballBet.Server.Models.Football.DBModels
     public class MatchEntity
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public int? HomeFulltimeGoals { get; set; }
@@ -47,4 +48,23 @@ namespace FootballBet.Server.Models.Football.DBModels
         WO,
         LIVE,
     }
+//TBD : Time To Be Defined
+//NS : Not Started
+//1H : First Half, Kick Off
+//HT : Halftime
+//2H : Second Half, 2nd Half Started
+//ET : Extra Time
+//P : Penalty In Progress
+//FT : Match Finished
+//AET : Match Finished After Extra Time
+//PEN : Match Finished After Penalty
+//BT : Break Time(in Extra Time)
+//SUSP : Match Suspended
+//INT : Match Interrupted
+//PST : Match Postponed
+//CANC : Match Cancelled
+//ABD : Match Abandoned
+//AWD : Technical Loss
+//WO : WalkOver
+//LIVE : In Progress *
 }

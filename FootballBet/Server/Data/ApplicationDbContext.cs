@@ -5,6 +5,7 @@ using FootballBet.Server.Models.Groups;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FootballBet.Server.Data
 {
@@ -23,6 +24,7 @@ namespace FootballBet.Server.Data
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
+
         }
     }
 }

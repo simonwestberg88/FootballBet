@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace FootballBet.Server.Data.Migrations
+#nullable disable
+
+namespace FootballBet.Server.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class DatabaseGenerateOptionNone : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,6 +49,20 @@ namespace FootballBet.Server.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BettingGroups",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BettingGroups", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DeviceCodes",
                 columns: table => new
                 {
@@ -58,7 +74,7 @@ namespace FootballBet.Server.Data.Migrations
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Expiration = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 52610, nullable: false)
+                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 50000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -72,15 +88,29 @@ namespace FootballBet.Server.Data.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Version = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Use = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true),
+                    Use = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Algorithm = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     IsX509Certificate = table.Column<bool>(type: "bit", nullable: false),
                     DataProtected = table.Column<bool>(type: "bit", nullable: false),
-                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 52610, nullable: false)
+                    Data = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Keys", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LeagueEntities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LogoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Season = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LeagueEntities", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -96,11 +126,24 @@ namespace FootballBet.Server.Data.Migrations
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ConsumedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 52610, nullable: false)
+                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 50000, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PersistedGrants", x => x.Key);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TeamEntities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LogoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeamEntities", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -209,6 +252,98 @@ namespace FootballBet.Server.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "BettingGroupInvitations",
+                columns: table => new
+                {
+                    BettingGroupInvitationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BettingGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    InvitedUserEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InvitingUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BettingGroupInvitations", x => x.BettingGroupInvitationId);
+                    table.ForeignKey(
+                        name: "FK_BettingGroupInvitations_AspNetUsers_InvitingUserId",
+                        column: x => x.InvitingUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BettingGroupInvitations_BettingGroups_BettingGroupId",
+                        column: x => x.BettingGroupId,
+                        principalTable: "BettingGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BettingGroupMembers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Nickname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    BettingGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BettingGroupMembers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BettingGroupMembers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BettingGroupMembers_BettingGroups_BettingGroupId",
+                        column: x => x.BettingGroupId,
+                        principalTable: "BettingGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MatchEntities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    HomeFulltimeGoals = table.Column<int>(type: "int", nullable: true),
+                    AwayFulltimeGoals = table.Column<int>(type: "int", nullable: true),
+                    HomeCurrentGoals = table.Column<int>(type: "int", nullable: true),
+                    AwayCurrentGoals = table.Column<int>(type: "int", nullable: true),
+                    HomePenaltyGoals = table.Column<int>(type: "int", nullable: true),
+                    AwayPenaltyGoals = table.Column<int>(type: "int", nullable: true),
+                    AwayTeamId = table.Column<int>(type: "int", nullable: true),
+                    HomeTeamId = table.Column<int>(type: "int", nullable: true),
+                    MatchStatus = table.Column<int>(type: "int", nullable: false),
+                    Round = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Season = table.Column<int>(type: "int", nullable: true),
+                    LeagueId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MatchEntities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MatchEntities_LeagueEntities_LeagueId",
+                        column: x => x.LeagueId,
+                        principalTable: "LeagueEntities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MatchEntities_TeamEntities_AwayTeamId",
+                        column: x => x.AwayTeamId,
+                        principalTable: "TeamEntities",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_MatchEntities_TeamEntities_HomeTeamId",
+                        column: x => x.HomeTeamId,
+                        principalTable: "TeamEntities",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -249,6 +384,26 @@ namespace FootballBet.Server.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BettingGroupInvitations_BettingGroupId",
+                table: "BettingGroupInvitations",
+                column: "BettingGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BettingGroupInvitations_InvitingUserId",
+                table: "BettingGroupInvitations",
+                column: "InvitingUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BettingGroupMembers_BettingGroupId",
+                table: "BettingGroupMembers",
+                column: "BettingGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BettingGroupMembers_UserId",
+                table: "BettingGroupMembers",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",
                 table: "DeviceCodes",
                 column: "DeviceCode",
@@ -263,6 +418,21 @@ namespace FootballBet.Server.Data.Migrations
                 name: "IX_Keys_Use",
                 table: "Keys",
                 column: "Use");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MatchEntities_AwayTeamId",
+                table: "MatchEntities",
+                column: "AwayTeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MatchEntities_HomeTeamId",
+                table: "MatchEntities",
+                column: "HomeTeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MatchEntities_LeagueId",
+                table: "MatchEntities",
+                column: "LeagueId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PersistedGrants_ConsumedTime",
@@ -303,10 +473,19 @@ namespace FootballBet.Server.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "BettingGroupInvitations");
+
+            migrationBuilder.DropTable(
+                name: "BettingGroupMembers");
+
+            migrationBuilder.DropTable(
                 name: "DeviceCodes");
 
             migrationBuilder.DropTable(
                 name: "Keys");
+
+            migrationBuilder.DropTable(
+                name: "MatchEntities");
 
             migrationBuilder.DropTable(
                 name: "PersistedGrants");
@@ -316,6 +495,15 @@ namespace FootballBet.Server.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "BettingGroups");
+
+            migrationBuilder.DropTable(
+                name: "LeagueEntities");
+
+            migrationBuilder.DropTable(
+                name: "TeamEntities");
         }
     }
 }

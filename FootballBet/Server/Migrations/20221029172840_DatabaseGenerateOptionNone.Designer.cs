@@ -9,17 +9,17 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace FootballBet.Server.Data.Migrations
+namespace FootballBet.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211027143622_Added email to Invitationobject for validation")]
-    partial class AddedemailtoInvitationobjectforvalidation
+    [Migration("20221029172840_DatabaseGenerateOptionNone")]
+    partial class DatabaseGenerateOptionNone
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.0-rc.2.21480.5")
+                .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -228,6 +228,97 @@ namespace FootballBet.Server.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("FootballBet.Server.Models.Football.DBModels.LeagueEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LogoUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Season")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LeagueEntities");
+                });
+
+            modelBuilder.Entity("FootballBet.Server.Models.Football.DBModels.MatchEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AwayCurrentGoals")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AwayFulltimeGoals")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AwayPenaltyGoals")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AwayTeamId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("HomeCurrentGoals")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HomeFulltimeGoals")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HomePenaltyGoals")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HomeTeamId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LeagueId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MatchStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Round")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Season")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AwayTeamId");
+
+                    b.HasIndex("HomeTeamId");
+
+                    b.HasIndex("LeagueId");
+
+                    b.ToTable("MatchEntities");
+                });
+
+            modelBuilder.Entity("FootballBet.Server.Models.Football.DBModels.TeamEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LogoUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TeamEntities");
                 });
 
             modelBuilder.Entity("FootballBet.Server.Models.Groups.BettingGroup", b =>
@@ -440,6 +531,29 @@ namespace FootballBet.Server.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("FootballBet.Server.Models.Football.DBModels.MatchEntity", b =>
+                {
+                    b.HasOne("FootballBet.Server.Models.Football.DBModels.TeamEntity", "AwayTeam")
+                        .WithMany()
+                        .HasForeignKey("AwayTeamId");
+
+                    b.HasOne("FootballBet.Server.Models.Football.DBModels.TeamEntity", "HomeTeam")
+                        .WithMany()
+                        .HasForeignKey("HomeTeamId");
+
+                    b.HasOne("FootballBet.Server.Models.Football.DBModels.LeagueEntity", "League")
+                        .WithMany("Matches")
+                        .HasForeignKey("LeagueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AwayTeam");
+
+                    b.Navigation("HomeTeam");
+
+                    b.Navigation("League");
+                });
+
             modelBuilder.Entity("FootballBet.Server.Models.Groups.BettingGroupInvitation", b =>
                 {
                     b.HasOne("FootballBet.Server.Models.Groups.BettingGroup", "BettingGroup")
@@ -525,6 +639,11 @@ namespace FootballBet.Server.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("FootballBet.Server.Models.Football.DBModels.LeagueEntity", b =>
+                {
+                    b.Navigation("Matches");
                 });
 
             modelBuilder.Entity("FootballBet.Server.Models.Groups.BettingGroup", b =>
