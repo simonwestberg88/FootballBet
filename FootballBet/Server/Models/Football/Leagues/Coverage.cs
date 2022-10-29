@@ -1,34 +1,38 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace FootballBet.Server.Models.Football.Leagues
 {
     public class Coverage
     {
-        [JsonPropertyName("fixtures")]
+        [JsonProperty("fixtures")]
         public Fixtures Fixtures { get; set; }
 
-        [JsonPropertyName("standings")]
+        [JsonProperty("standings")]
         public bool Standings { get; set; }
 
-        [JsonPropertyName("players")]
+        [JsonProperty("players")]
         public bool Players { get; set; }
 
-        [JsonPropertyName("top_scorers")]
+        [JsonProperty("top_scorers")]
         public bool TopScorers { get; set; }
 
-        [JsonPropertyName("top_assists")]
+        [JsonProperty("top_assists")]
         public bool TopAssists { get; set; }
 
-        [JsonPropertyName("top_cards")]
+        [JsonProperty("top_cards")]
         public bool TopCards { get; set; }
 
-        [JsonPropertyName("injuries")]
+        [JsonProperty("injuries")]
         public bool Injuries { get; set; }
 
-        [JsonPropertyName("predictions")]
+        [JsonProperty("predictions")]
         public bool Predictions { get; set; }
 
-        [JsonPropertyName("odds")]
+        [JsonProperty("odds")]
         public bool Odds { get; set; }
     }
+
+    
+
+
 }

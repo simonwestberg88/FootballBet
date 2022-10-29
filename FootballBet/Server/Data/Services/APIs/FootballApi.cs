@@ -16,10 +16,10 @@ namespace FootballBet.Server.Data.Services.APIs
             => _footballApiSettings = footballApiSettings.Value;
 
         #region LeaguesAndCompetitions
-        public async Task<List<LeaguesResponse>> GetAllLeagues()
+        public async Task<List<Response>> GetAllLeagues()
         {
             //var client = new RestClient("https://api-football-v1.p.rapidapi.com/v3/fixtures/rounds?league=333&season=2022");
-            var client = new RestClient(_footballApiSettings.Url + _footballApiSettings.Version + @"/" + ENDPOINT_LEAGUES);
+            var client = new RestClient(_footballApiSettings.Url + _footballApiSettings.Version + @"/" + ENDPOINT_LEAGUES + "?id=1");
             //var client = new RestClient("https://api-football-v1.p.rapidapi.com/v3/leagues");
             var request = new RestRequest();
             request.Method = Method.Get;
@@ -28,9 +28,19 @@ namespace FootballBet.Server.Data.Services.APIs
             var response = await client.ExecuteAsync(request);
             if (response.Content == null)
                 return null;
-            var deserializedResponse = JsonConvert.DeserializeObject<Root>(response.Content);
-            
-            return deserializedResponse.Response;
+            var content = response.Content;
+            try
+            {
+                var deserializedResponse = JsonConvert.DeserializeObject<Root>(response.Content);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return new List<Response>();
         }
         #endregion
         #region Fixtures

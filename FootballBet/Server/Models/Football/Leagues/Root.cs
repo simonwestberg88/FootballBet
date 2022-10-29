@@ -1,26 +1,29 @@
-﻿using FootballBet.Server.Models.Football.Common;
-using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace FootballBet.Server.Models.Football.Leagues
 {
     public class Root
     {
-        [JsonPropertyName("get")]
+        [JsonProperty("get")]
         public string Get { get; set; }
 
-        [JsonPropertyName("parameters")]
-        public List<object> Parameters { get; set; }
+        [JsonProperty("parameters")]
+        public Parameters Parameters { get; set; }
 
-        [JsonPropertyName("errors")]
+        [JsonProperty("errors")]
         public List<object> Errors { get; set; }
 
-        [JsonPropertyName("results")]
+        [JsonProperty("results")]
         public int Results { get; set; }
 
-        [JsonPropertyName("paging")]
+        [JsonProperty("paging")]
         public Paging Paging { get; set; }
 
-        [JsonPropertyName("response")]
-        public List<LeaguesResponse> Response { get; set; }
+        [JsonProperty("response")]
+        public List<Response> Response { get; set; }
     }
+
+
+
+
 }
