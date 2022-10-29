@@ -5,9 +5,9 @@ namespace FootballBet.Server.Models.Football.Fixtures
     public class Teams
     {
         [JsonPropertyName("home")]
-        public Home Home { get; set; }
+        public Team Home { get; set; }
 
         [JsonPropertyName("away")]
-        public Away Away { get; set; }
+        public Team Away { get; set; }
     }
 }

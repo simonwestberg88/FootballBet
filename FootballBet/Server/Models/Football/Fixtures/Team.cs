@@ -2,7 +2,7 @@
 
 namespace FootballBet.Server.Models.Football.Fixtures
 {
-    public class Home
+    public class Team
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }
