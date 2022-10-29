@@ -18,7 +18,7 @@ namespace FootballBet.Server.Models.Football.DBModels
         public int? HomeTeamId { get; set; }
         public MatchStatus MatchStatus { get; set; }
         public string Round { get; set; }
-        public string Season { get; set; }
+        public int? Season { get; set; }
         public int LeagueId { get; set; }
         public virtual LeagueEntity League { get; set; }
         public virtual TeamEntity HomeTeam { get; set; }

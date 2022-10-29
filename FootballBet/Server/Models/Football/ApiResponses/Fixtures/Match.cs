@@ -1,23 +1,22 @@
-﻿using FootballBet.Server.Models.Football.ApiResponses.Fixtures;
-using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace FootballBet.Server.Models.Football.ApiResponses.Fixtures
 {
     public class Match
     {
-        [JsonPropertyName("fixture")]
+        [JsonProperty("fixture")]
         public Fixture Fixture { get; set; }
 
-        [JsonPropertyName("league")]
+        [JsonProperty("league")]
         public League League { get; set; }
 
-        [JsonPropertyName("teams")]
+        [JsonProperty("teams")]
         public Teams Teams { get; set; }
 
-        [JsonPropertyName("goals")]
+        [JsonProperty("goals")]
         public MatchScore Goals { get; set; }
 
-        [JsonPropertyName("score")]
+        [JsonProperty("score")]
         public Score Score { get; set; }
     }
 }

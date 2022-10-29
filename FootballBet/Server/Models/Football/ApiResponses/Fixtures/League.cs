@@ -1,28 +1,28 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace FootballBet.Server.Models.Football.ApiResponses.Fixtures
 {
     public class League
     {
-        [JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonPropertyName("country")]
+        [JsonProperty("country")]
         public string Country { get; set; }
 
-        [JsonPropertyName("logo")]
+        [JsonProperty("logo")]
         public string Logo { get; set; }
 
-        [JsonPropertyName("flag")]
+        [JsonProperty("flag")]
         public object Flag { get; set; } //not returned in 2018
 
-        [JsonPropertyName("season")]
-        public string Season { get; set; }
+        [JsonProperty("season")]
+        public int? Season { get; set; }
 
-        [JsonPropertyName("round")]
+        [JsonProperty("round")]
         public string Round { get; set; }
     }
 }

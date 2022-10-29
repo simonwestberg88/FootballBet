@@ -1,13 +1,13 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace FootballBet.Server.Models.Football.ApiResponses.Fixtures
 {
     public class Periods
     {
-        [JsonPropertyName("first")]
+        [JsonProperty("first")]
         public int? First { get; set; }
 
-        [JsonPropertyName("second")]
+        [JsonProperty("second")]
         public int? Second { get; set; }
     }
 }

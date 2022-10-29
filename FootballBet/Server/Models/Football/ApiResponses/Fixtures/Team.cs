@@ -1,19 +1,19 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace FootballBet.Server.Models.Football.ApiResponses.Fixtures
 {
     public class Team
     {
-        [JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonPropertyName("logo")]
+        [JsonProperty("logo")]
         public string Logo { get; set; }
 
-        [JsonPropertyName("winner")]
+        [JsonProperty("winner")]
         public bool? Winner { get; set; }
     }
 }

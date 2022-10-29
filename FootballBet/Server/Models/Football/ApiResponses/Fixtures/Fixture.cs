@@ -1,31 +1,31 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace FootballBet.Server.Models.Football.ApiResponses.Fixtures
 {
     public class Fixture
     {
-        [JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonPropertyName("referee")]
+        [JsonProperty("referee")]
         public string Referee { get; set; }
 
-        [JsonPropertyName("timezone")]
+        [JsonProperty("timezone")]
         public string Timezone { get; set; }
 
-        [JsonPropertyName("date")]
+        [JsonProperty("date")]
         public DateTime Date { get; set; }
 
-        [JsonPropertyName("timestamp")]
+        [JsonProperty("timestamp")]
         public int Timestamp { get; set; }
 
-        [JsonPropertyName("periods")]
+        [JsonProperty("periods")]
         public Periods Periods { get; set; }
 
-        [JsonPropertyName("venue")]
+        [JsonProperty("venue")]
         public Venue Venue { get; set; }
 
-        [JsonPropertyName("status")]
+        [JsonProperty("status")]
         public Status Status { get; set; }
     }
 }
