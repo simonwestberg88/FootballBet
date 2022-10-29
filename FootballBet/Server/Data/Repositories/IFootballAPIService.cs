@@ -2,6 +2,7 @@
 {
     public interface IFootballAPIService
     {
-        public Task<string> GetLeagues();
+        public Task<string> GetWorldCup();
+        public Task<string> SeedDatabase();
     }
 }

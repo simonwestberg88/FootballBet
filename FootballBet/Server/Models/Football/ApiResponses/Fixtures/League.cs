@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace FootballBet.Server.Models.Football.Fixtures
+namespace FootballBet.Server.Models.Football.ApiResponses.Fixtures
 {
     public class League
     {
@@ -20,7 +20,7 @@ namespace FootballBet.Server.Models.Football.Fixtures
         public object Flag { get; set; } //not returned in 2018
 
         [JsonPropertyName("season")]
-        public int Season { get; set; }
+        public string Season { get; set; }
 
         [JsonPropertyName("round")]
         public string Round { get; set; }

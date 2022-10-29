@@ -5,6 +5,7 @@ namespace FootballBet.Server.Data.Services.Interfaces
 {
     public interface IFootballApi
     {
-        public Task<List<Response>> GetAllLeagues();
+        public Task<Root> GetSpecificLeague(string id);
+        Task<List<Models.Football.ApiResponses.Fixtures.Match>> GetFixtures(int leagueId, string season);
     }
 }

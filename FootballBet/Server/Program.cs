@@ -32,6 +32,7 @@ builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IGroupService, GroupService>();
 builder.Services.AddTransient<IFootballApi, FootballApi>();
 builder.Services.AddTransient<IFootballAPIService, FootballAPIService>();
+builder.Services.AddTransient<IFootballRepository, FootballRepository>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication()

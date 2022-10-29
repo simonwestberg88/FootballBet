@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace FootballBet.Server.Models.Football.Common
+namespace FootballBet.Server.Models.Football.ApiResponses.Common
 {
     public class Paging
     {

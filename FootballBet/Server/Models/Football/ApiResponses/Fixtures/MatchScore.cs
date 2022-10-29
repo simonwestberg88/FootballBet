@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace FootballBet.Server.Models.Football.Fixtures
+namespace FootballBet.Server.Models.Football.ApiResponses.Fixtures
 {
-    public class Goals
+    public class MatchScore
     {
         [JsonPropertyName("home")]
         public int? Home { get; set; }

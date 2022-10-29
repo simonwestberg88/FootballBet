@@ -1,7 +1,7 @@
-﻿using FootballBet.Server.Models.Football.Common;
+﻿using FootballBet.Server.Models.Football.ApiResponses.Common;
 using System.Text.Json.Serialization;
 
-namespace FootballBet.Server.Models.Football.Fixtures
+namespace FootballBet.Server.Models.Football.ApiResponses.Fixtures
 {
     public class Root
     {
@@ -21,6 +21,6 @@ namespace FootballBet.Server.Models.Football.Fixtures
         public Paging Paging { get; set; }
 
         [JsonPropertyName("response")]
-        public List<FixturesResponse> Response { get; set; }
+        public List<Match> Matches { get; set; }
     }
 }

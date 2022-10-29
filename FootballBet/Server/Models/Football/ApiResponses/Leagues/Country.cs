@@ -8,9 +8,9 @@ namespace FootballBet.Server.Models.Football.Leagues
         public string Name { get; set; }
 
         [JsonProperty("code")]
-        public object Code { get; set; }
+        public string? Code { get; set; }
 
         [JsonProperty("flag")]
-        public object Flag { get; set; }
+        public string? Flag { get; set; }
     }
 }

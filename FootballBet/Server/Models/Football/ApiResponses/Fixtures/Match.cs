@@ -1,8 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using FootballBet.Server.Models.Football.ApiResponses.Fixtures;
+using System.Text.Json.Serialization;
 
-namespace FootballBet.Server.Models.Football.Fixtures
+namespace FootballBet.Server.Models.Football.ApiResponses.Fixtures
 {
-    public class FixturesResponse
+    public class Match
     {
         [JsonPropertyName("fixture")]
         public Fixture Fixture { get; set; }
@@ -14,7 +15,7 @@ namespace FootballBet.Server.Models.Football.Fixtures
         public Teams Teams { get; set; }
 
         [JsonPropertyName("goals")]
-        public Goals Goals { get; set; }
+        public MatchScore Goals { get; set; }
 
         [JsonPropertyName("score")]
         public Score Score { get; set; }
