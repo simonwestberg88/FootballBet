@@ -22,6 +22,7 @@ namespace FootballBet.Server.Data.Services
         {
             var result = await _footballAPI.GetSpecificLeague("1");
             var resultTwo = await _footballAPI.GetFixtures(1, "2018");
+            var test = _footballRepository.GetAllMatchesForLeagueId(1);
             return "ok";
         }
 
@@ -35,6 +36,8 @@ namespace FootballBet.Server.Data.Services
             teams = teams.DistinctBy(t => t.Id).ToList();
             var result = await _footballRepository.CreateOrUpdateTeams(teams.Select(t => t.ToTeamEntity()));
             var fixtures = await _footballRepository.CreateOrUpdateMatches(matches.Select(m => m.ToMatchEntity()));
+
+            
             return "hello";
 
         }       

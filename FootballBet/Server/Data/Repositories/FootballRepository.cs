@@ -71,5 +71,12 @@ namespace FootballBet.Server.Data.Repositories
             await _context.SaveChangesAsync();
             return matches;
         }
+
+        public IEnumerable<MatchEntity> GetAllMatchesForLeagueId(int leagueId)
+        {
+            var matches =  _context.MatchEntities.Where(m => m.League.Id == leagueId).ToList();
+            var matchesByLeague = _context.LeagueEntities.FirstOrDefault(l => l.Id == leagueId)?.Matches;
+            return matches;
+        }
     }
 }
