@@ -8,26 +8,26 @@ namespace FootballBet.Server.Data.Services
 {
     public class FootballAPIService : IFootballAPIService
     {
-        private readonly IFootballApi _footballAPI;
+        private readonly IFootballApiClient _footballApiClient;
         private readonly IFootballRepository _footballRepository;
 
-        public FootballAPIService(IFootballApi footballApi, IFootballRepository footballRepository)
+        public FootballAPIService(IFootballApiClient footballApiClient, IFootballRepository footballRepository)
         {
-            _footballAPI = footballApi;
+            _footballApiClient = footballApiClient;
             _footballRepository = footballRepository;
         }
 
         public async Task<string> GetWorldCup()
         {
-            var result = await _footballAPI.GetSpecificLeague("1");
-            var resultTwo = await _footballAPI.GetFixtures(1, "2018");
+            var result = await _footballApiClient.GetSpecificLeague("1");
+            var resultTwo = await _footballApiClient.GetFixtures(1, "2018");
             var test = _footballRepository.GetAllMatchesForLeagueId(1);
             return "ok";
         }
 
         public async Task<string> SeedDatabase()
         {
-            var matches = (await _footballAPI.GetFixtures(1, "2018"));
+            var matches = (await _footballApiClient.GetFixtures(1, "2018"));
             var league = await _footballRepository.CreateOrUpdateLeague(matches.First().League.ToLeagueEntity());
             var teams = new List<Team>();
             teams.AddRange(matches.Select(m => m.Teams.Home).ToList());
