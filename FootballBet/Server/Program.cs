@@ -36,6 +36,7 @@ builder.Services.AddTransient<IGroupService, GroupService>();
 builder.Services.AddTransient<IFootballApi, FootballApi>();
 builder.Services.AddTransient<IFootballAPIService, FootballAPIService>();
 builder.Services.AddTransient<IFootballRepository, FootballRepository>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication()
@@ -43,10 +44,8 @@ builder.Services.AddAuthentication()
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-//builder.Services.AddHangfireServer();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -60,11 +59,6 @@ else
 }
 
 app.UseHttpsRedirection();
-//app.UseHangfireServer();
-//app.UseHangfireDashboard("/hangfire", new DashboardOptions
-//{
-//    //Authorization = new [] {new HangfireAuthorization()} //can ensure that this can only be visited by people with a certain role associated to them
-//});
 
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();

@@ -5,6 +5,8 @@ using FootballBet.Server.Data.Services.Interfaces;
 using FootballBet.Server.Models;
 using FootballBet.Server.Models.Groups;
 using FootballBet.Shared.Models.Groups;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Text.Encodings.Web;
 
 namespace FootballBet.Server.Data.Services
 {
@@ -12,18 +14,24 @@ namespace FootballBet.Server.Data.Services
     {
         private readonly IGroupRepository _groupRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IEmailSender _emailSender;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public GroupService(IGroupRepository groupRepository, IUserRepository userRepository)
+        public GroupService(IGroupRepository groupRepository, IUserRepository userRepository, IEmailSender emailSender, IHttpContextAccessor httpContextAccessor)
         {
             _groupRepository = groupRepository;
             _userRepository = userRepository;
+            _emailSender = emailSender;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<BettingGroupInvitation> CreateInvitation(string groupId, string invitedUserEmail, string inviterUserId, CancellationToken ct)
         {
-            //TODO: send email to invited user
-
             var invitation = await _groupRepository.CreateBettingGroupInvitation(CreateBettingGroupInvitation(Guid.Parse(groupId), inviterUserId, invitedUserEmail), ct);
+
+            var callbackUrl = $"https://{_httpContextAccessor.HttpContext.Request.Host.Value}/invitation/{invitation.BettingGroupInvitationId}/{groupId}";
+            await _emailSender.SendEmailAsync(invitedUserEmail, "You are invited to join FootballBet",
+                $"Accept your invitation by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
             return invitation;
         }
 

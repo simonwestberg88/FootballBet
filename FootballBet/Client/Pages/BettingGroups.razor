@@ -13,7 +13,9 @@
 <EditForm Model="@bettingGroup" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
+    <label>Group Name</label>
     <InputText id="groupName" @bind-Value="bettingGroup.Name" />
+    <label>Description</label>
     <InputText id="description" @bind-Value="bettingGroup.Description" />
     <button type="submit">Ok</button>
 </EditForm>
@@ -22,7 +24,9 @@
 <EditForm Model="@bettingGroupInvitation" OnValidSubmit="@HandleCreateInvitation">
     <DataAnnotationsValidator />
     <ValidationSummary />
+    <label>Group Id</label>
     <InputText id="groupId" @bind-Value="bettingGroupInvitation.BettingGroupId" />
+    <label>Email to invited user</label>
     <InputText id="invitedEmail" @bind-Value="bettingGroupInvitation.InvitedUserEmail" />
     <button type="submit">Ok</button>
 </EditForm>
