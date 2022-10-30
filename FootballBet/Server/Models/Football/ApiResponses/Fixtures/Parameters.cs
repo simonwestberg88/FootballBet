@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace FootballBet.Server.Models.Football.ApiResponses.Fixtures
 {
     public class Parameters
     {
-        [JsonProperty("league")]
+        [JsonPropertyName("league")]
         public string League { get; set; }
 
-        [JsonProperty("season")]
+        [JsonPropertyName("season")]
         public string Season { get; set; }
     }
 }

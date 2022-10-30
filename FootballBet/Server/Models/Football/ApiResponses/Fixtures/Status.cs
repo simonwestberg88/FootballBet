@@ -1,16 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace FootballBet.Server.Models.Football.ApiResponses.Fixtures
 {
     public class Status
     {
-        [JsonProperty("long")]
+        [JsonPropertyName("long")]
         public string Long { get; set; }
 
-        [JsonProperty("short")]
+        [JsonPropertyName("short")]
         public string Short { get; set; }
 
-        [JsonProperty("elapsed")]
+        [JsonPropertyName("elapsed")]
         public int? Elapsed { get; set; }
     }
 }

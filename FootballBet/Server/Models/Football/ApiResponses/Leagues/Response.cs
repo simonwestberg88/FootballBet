@@ -1,16 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace FootballBet.Server.Models.Football.Leagues
 {
     public class Response
     {
-        [JsonProperty("league")]
+        [JsonPropertyName("league")]
         public League League { get; set; }
 
-        [JsonProperty("country")]
+        [JsonPropertyName("country")]
         public Country Country { get; set; }
 
-        [JsonProperty("seasons")]
+        [JsonPropertyName("seasons")]
         public List<Season> Seasons { get; set; }
     }
 

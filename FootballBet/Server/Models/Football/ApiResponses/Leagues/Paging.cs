@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace FootballBet.Server.Models.Football.Leagues
 {
     public class Paging
     {
-        [JsonProperty("current")]
+        [JsonPropertyName("current")]
         public int Current { get; set; }
 
-        [JsonProperty("total")]
+        [JsonPropertyName("total")]
         public int Total { get; set; }
     }
 

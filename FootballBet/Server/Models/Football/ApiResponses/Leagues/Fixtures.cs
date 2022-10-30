@@ -1,19 +1,19 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace FootballBet.Server.Models.Football.Leagues
 {
     public class Fixtures
     {
-        [JsonProperty("events")]
+        [JsonPropertyName("events")]
         public bool Events { get; set; }
 
-        [JsonProperty("lineups")]
+        [JsonPropertyName("lineups")]
         public bool Lineups { get; set; }
 
-        [JsonProperty("statistics_fixtures")]
+        [JsonPropertyName("statistics_fixtures")]
         public bool StatisticsFixtures { get; set; }
 
-        [JsonProperty("statistics_players")]
+        [JsonPropertyName("statistics_players")]
         public bool StatisticsPlayers { get; set; }
     }
 

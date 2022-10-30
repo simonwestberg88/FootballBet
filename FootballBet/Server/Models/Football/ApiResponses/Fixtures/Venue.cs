@@ -1,16 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace FootballBet.Server.Models.Football.ApiResponses.Fixtures
+namespace FootballBet.Server.Models.Football.ApiResponses.Fixtures;
+
+public class Venue
 {
-    public class Venue
-    {
-        [JsonProperty("id")]
-        public int? Id { get; set; }
+    [JsonPropertyName("id")]
+    public int? Id { get; set; }
 
-        [JsonProperty("name")]
-        public string Name { get; set; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 
-        [JsonProperty("city")]
-        public string City { get; set; }
-    }
+    [JsonPropertyName("city")]
+    public string City { get; set; }
 }

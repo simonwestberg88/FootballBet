@@ -1,19 +1,19 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace FootballBet.Server.Models.Football.ApiResponses.Fixtures
 {
     public class Score
     {
-        [JsonProperty("halftime")]
+        [JsonPropertyName("halftime")]
         public MatchScore Halftime { get; set; }
 
-        [JsonProperty("fulltime")]
+        [JsonPropertyName("fulltime")]
         public MatchScore Fulltime { get; set; }
 
-        [JsonProperty("extratime")]
+        [JsonPropertyName("extratime")]
         public MatchScore Extratime { get; set; }
 
-        [JsonProperty("penalty")]
+        [JsonPropertyName("penalty")]
         public MatchScore Penalty { get; set; }
     }
 }

@@ -1,22 +1,22 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace FootballBet.Server.Models.Football.Leagues
 {
     public class Season
     {
-        [JsonProperty("year")]
+        [JsonPropertyName("year")]
         public int Year { get; set; }
 
-        [JsonProperty("start")]
+        [JsonPropertyName("start")]
         public string Start { get; set; }
 
-        [JsonProperty("end")]
+        [JsonPropertyName("end")]
         public string End { get; set; }
 
-        [JsonProperty("current")]
+        [JsonPropertyName("current")]
         public bool Current { get; set; }
 
-        [JsonProperty("coverage")]
+        [JsonPropertyName("coverage")]
         public Coverage Coverage { get; set; }
     }
 }

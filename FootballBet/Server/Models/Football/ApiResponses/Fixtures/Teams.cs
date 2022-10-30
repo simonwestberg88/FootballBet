@@ -1,13 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace FootballBet.Server.Models.Football.ApiResponses.Fixtures
+namespace FootballBet.Server.Models.Football.ApiResponses.Fixtures;
+
+public abstract class Teams
 {
-    public class Teams
-    {
-        [JsonProperty("home")]
-        public Team Home { get; set; }
+    [JsonPropertyName("home")]
+    public Team Home { get; set; }
 
-        [JsonProperty("away")]
-        public Team Away { get; set; }
-    }
+    [JsonPropertyName("away")]
+    public Team Away { get; set; }
 }
