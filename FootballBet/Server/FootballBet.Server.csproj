@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\FootballBet.Infrastructure\FootballBet.Infrastructure.csproj" />
     <ProjectReference Include="..\Client\FootballBet.Client.csproj" />
     <ProjectReference Include="..\Shared\FootballBet.Shared.csproj" />
   </ItemGroup>
@@ -35,9 +36,5 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\Services\Exceptions\" />
-  </ItemGroup>
-
+	
 </Project>

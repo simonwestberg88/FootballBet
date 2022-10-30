@@ -1,5 +1,4 @@
-﻿using FootballBet.Server.Data.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+﻿using FootballBet.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FootballBet.Server.Controllers
