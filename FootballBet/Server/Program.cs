@@ -1,10 +1,12 @@
-using FootballBet.Server.Data;
-using FootballBet.Server.Data.Repositories;
+using FootballBet.Infrastructure;
+using FootballBet.Infrastructure.Interfaces;
+using FootballBet.Infrastructure.Settings;
+using FootballBet.Repository;
+using FootballBet.Repository.Entities;
+using FootballBet.Repository.Repositories;
+using FootballBet.Repository.Repositories.Interfaces;
 using FootballBet.Server.Data.Repositories.Interfaces;
 using FootballBet.Server.Data.Services;
-using FootballBet.Server.Data.Services.APIs;
-using FootballBet.Server.Data.Services.Interfaces;
-using FootballBet.Server.Data.Settings;
 using FootballBet.Server.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
@@ -30,18 +32,9 @@ builder.Services.AddIdentityServer()
 builder.Services.AddTransient<IGroupRepository, GroupRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IGroupService, GroupService>();
-builder.Services.AddTransient<IFootballApiClient, FootballApiClientClient>();
+builder.Services.AddTransient<IFootballApiClient, FootballApiClient>();
 builder.Services.AddTransient<IFootballAPIService, FootballAPIService>();
 builder.Services.AddTransient<IFootballRepository, FootballRepository>();
-builder.Services.AddHttpClient<IFootballApiClient, FootballApiClientClient>(client =>
-{
-    var baseUrl = builder.Configuration.GetSection("FootballApi")["url"];
-    var key = builder.Configuration.GetSection("FootballApi")["key"];
-    var host = builder.Configuration.GetSection("FootballApi")["host"];
-    client.BaseAddress = new Uri(baseUrl);
-    client.DefaultRequestHeaders.Add("x-rapidapi-key", key);
-    client.DefaultRequestHeaders.Add("x-rapidapi-host", host);
-});
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication()

@@ -4,6 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
+using FootballBet.Repository.Entities;
 using Microsoft.AspNetCore.Authorization;
 using FootballBet.Server.Models;
 using Microsoft.AspNetCore.Identity;
