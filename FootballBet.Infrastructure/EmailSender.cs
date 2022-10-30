@@ -1,10 +1,11 @@
-﻿using FootballBet.Server.Data.Settings;
+﻿using FootballBet.Infrastructure.Settings;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
-namespace FootballBet.Server.Data.Services.Interfaces
+namespace FootballBet.Infrastructure
 {
     public class EmailSender : IEmailSender
     {

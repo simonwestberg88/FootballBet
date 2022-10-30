@@ -7,7 +7,6 @@ using FootballBet.Repository.Repositories;
 using FootballBet.Repository.Repositories.Interfaces;
 using FootballBet.Server.Data.Repositories.Interfaces;
 using FootballBet.Server.Data.Services;
-using FootballBet.Server.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FootballBet.Repository")));
 builder.Services.Configure<FootballApiSettings>(builder.Configuration.GetSection("FootballApi"));
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration.GetSection("EmailSenderSettings"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();

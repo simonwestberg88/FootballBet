@@ -1,5 +1,5 @@
 ﻿using FootballBet.Infrastructure.ApiResponses.Fixtures;
-using FootballBet.Server.Models.Football.DBModels;
+using FootballBet.Repository.Entities;
 
 namespace FootballBet.Infrastructure.Mappers;
 

@@ -1,4 +1,4 @@
-﻿namespace FootballBet.Server.Data.Settings
+﻿namespace FootballBet.Infrastructure.Settings
 {
     public class AuthMessageSenderOptions
     {

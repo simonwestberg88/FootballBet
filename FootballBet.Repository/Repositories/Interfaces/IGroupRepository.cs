@@ -1,10 +1,4 @@
-﻿using FootballBet.Server.Models;
-using FootballBet.Server.Models.Groups;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using FootballBet.Repository.Entities;
+﻿using FootballBet.Repository.Entities;
 
 namespace FootballBet.Server.Data.Repositories.Interfaces
 {
