@@ -1,5 +1,4 @@
 ﻿using FootballBet.Server.Data.Mappers;
-using FootballBet.Server.Data.Repositories;
 using FootballBet.Server.Data.Repositories.Interfaces;
 using FootballBet.Server.Data.Services.Interfaces;
 using FootballBet.Server.Models.Football.ApiResponses.Fixtures;

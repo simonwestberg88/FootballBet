@@ -1,5 +1,4 @@
-﻿using FootballBet.Server.Data.Repositories;
-using FootballBet.Server.Data.Repositories.Interfaces;
+﻿using FootballBet.Server.Data.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

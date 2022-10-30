@@ -1,4 +1,4 @@
-﻿namespace FootballBet.Server.Data.Repositories
+﻿namespace FootballBet.Server.Data.Services.Interfaces
 {
     public interface IFootballAPIService
     {
