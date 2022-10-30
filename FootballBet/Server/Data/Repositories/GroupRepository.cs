@@ -54,7 +54,5 @@ namespace FootballBet.Server.Data.Repositories
                 await _context.SaveChangesAsync(ct);
             }
         }
-
-        //public async Task<BettingGroupInvitation> GetBettingGroupInvitationByUserIdAsync
     }
 }

@@ -52,8 +52,8 @@ else
     </table>
 }
 
-    @code {
-        private BettingGroupShared bettingGroup = new();
+@code {
+    private BettingGroupShared bettingGroup = new();
     private List<BettingGroupShared> bettingGroups = new();
     private BettingGroupInvitationShared bettingGroupInvitation = new();
 
@@ -69,10 +69,11 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        
+
         try
         {
             bettingGroups = await Http.GetFromJsonAsync<List<BettingGroupShared>>("/group");
+            await Http.GetAsync("/FootballLeague");
         }
         catch (AccessTokenNotAvailableException exception)
         {

@@ -3,6 +3,8 @@ using FootballBet.Server.Data.Repositories.Interfaces;
 using FootballBet.Server.Models;
 using FootballBet.Shared.Models.Users;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace FootballBet.Server.Data.Repositories
 {

@@ -1,0 +1,17 @@
+﻿@page "/seedDatabase"
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject HttpClient Http
+
+<PageTitle>Seed Database</PageTitle>
+
+<h1>Click to seed database</h1>
+
+
+<button class="btn btn-primary" @onclick="SeedDatabaseBtn">Click to seed DB</button>
+
+@code {
+    private async void SeedDatabaseBtn()
+    {
+        await Http.GetAsync("/FootballLeague/seed");
+    }
+}

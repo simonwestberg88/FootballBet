@@ -1,4 +1,5 @@
 ﻿using FootballBet.Server.Models.Groups;
+using System.Linq;
 
 namespace FootballBet.Server.Data.Mappers
 {
