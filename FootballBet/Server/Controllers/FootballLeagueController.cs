@@ -1,4 +1,5 @@
 ﻿using FootballBet.Infrastructure.Interfaces;
+using FootballBet.Shared.Models.Football;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FootballBet.Server.Controllers
@@ -22,10 +23,10 @@ namespace FootballBet.Server.Controllers
             return Ok(await _footballAPIService.GetWorldCup());
         }
 
-        [HttpGet("seed")]
-        public async Task<IActionResult> SeedDatabase()
+        [HttpPost("seed")]
+        public async Task<IActionResult> SeedDatabase([FromBody] SeedTeamsAndFixturesShared seed)
         {
-            return Ok(await _footballAPIService.SeedDatabase());
+            return Ok(await _footballAPIService.SeedDatabase(seed.Year, seed.LeagueId));
         }
     }
 }

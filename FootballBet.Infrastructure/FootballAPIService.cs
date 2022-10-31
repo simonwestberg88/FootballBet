@@ -24,19 +24,20 @@ public class FootballAPIService : IFootballAPIService
         return "ok";
     }
 
-    public async Task<string> SeedDatabase()
+    public async Task<string> SeedDatabase(string? year, int? leagueId)
     {
-        var matches = (await _footballApiClient.GetFixtures(1, "2018"));
+        var matches = await _footballApiClient.GetFixtures(leagueId ?? 1, year ?? "2022");
         var league = await _footballRepository.CreateOrUpdateLeague(matches.First().League.ToLeagueEntity());
         var teams = new List<Team>();
         teams.AddRange(matches.Select(m => m.Teams.Home).ToList());
         teams.AddRange(matches.Select(m => m.Teams.Away).ToList());
         teams = teams.DistinctBy(t => t.Id).ToList();
-        var result = await _footballRepository.CreateOrUpdateTeams(teams.Select(t => t.ToTeamEntity()));
+        var teamResult = await _footballRepository.CreateOrUpdateTeams(teams.Select(t => t.ToTeamEntity()));
         var fixtures = await _footballRepository.CreateOrUpdateMatches(matches.Select(m => m.ToMatchEntity()));
 
             
-        return "hello";
+        return $"Amount of teams added: {teamResult.Created}. Amount of teams updated: {teamResult.Updated}. " +
+            $"Amount of fixtures added: {fixtures.Created}. Amount of fixtures updated: {fixtures.Created}";
 
     }       
 }

@@ -3,5 +3,5 @@
 public interface IFootballAPIService
 {
     public Task<string> GetWorldCup();
-    public Task<string> SeedDatabase();
+    public Task<string> SeedDatabase(string? year, int? leagueId);
 }
