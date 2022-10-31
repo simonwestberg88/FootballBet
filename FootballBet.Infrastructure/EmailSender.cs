@@ -18,7 +18,7 @@ namespace FootballBet.Infrastructure
             _logger = logger;
         }
 
-        public AuthMessageSenderOptions Options { get; } //Set with Secret Manager.
+        public AuthMessageSenderOptions Options { get; }
 
         public async Task SendEmailAsync(string toEmail, string subject, string message)
         {
@@ -34,7 +34,7 @@ namespace FootballBet.Infrastructure
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("footballbettingleague@gmail.com", "Password Recovery"),
+                From = new EmailAddress("footballbettingleague@gmail.com", $"FootballBet"),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message
