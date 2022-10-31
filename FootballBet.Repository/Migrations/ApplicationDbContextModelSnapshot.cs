@@ -258,9 +258,6 @@ namespace FootballBet.Repository.Migrations
                     b.Property<Guid>("BettingGroupEntityId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BettingGroupId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("InvitedUserEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

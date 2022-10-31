@@ -4,25 +4,19 @@
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using FootballBet.Shared
 @inject NavigationManager navigationManager
-@*@using Microsoft.AspNetCore.WebUtilities*@
 @attribute [Authorize]
 @inject HttpClient Http
 
 <PageTitle>Accept invitation</PageTitle>
 
-<h1>Here you can accept your invitation with this Id: @InvitationId and groupId=@GroupId</h1>
-<button>Accept invitation</button>
 
-
-@if (BettingGroup == null)
-{
-    <p><em>Loading...</em></p>
+@{
+    if (BettingGroup is not null)
+    {
+        <p>You have been invited to join @BettingGroup.Name</p>
+    }
 }
-else
-{
-    <p>@BettingGroup.Name</p>
-    <p>@BettingGroup.Description</p>
-}
+<button @onclick="OnAccept">Accept invitation</button>
 
 @code {
 
@@ -31,19 +25,27 @@ else
     [Parameter]
     public string GroupId { get; set; }
 
-    public BettingGroupShared? BettingGroup {get;set;}
+    public BettingGroupShared? BettingGroup { get; set; }
 
-
-    protected override async Task OnInitializedAsync()
+    protected async Task OnAccept()
     {
-
         try
         {
-            BettingGroup = await Http.GetFromJsonAsync<BettingGroupShared>($"/group/invitation/accept/?invitationId={InvitationId}&groupId={GroupId}");
+            var result = await Http.PostAsJsonAsync<BettingGroupInvitationAcceptShared>($"/group/invitation/accept/", new BettingGroupInvitationAcceptShared() { InvitationId = this.InvitationId, GroupId = this.GroupId });
+            if (result.IsSuccessStatusCode)
+            {
+                navigationManager.NavigateTo("/bettingGroups");
+            }
+
         }
         catch (AccessTokenNotAvailableException exception)
         {
             exception.Redirect();
         }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        BettingGroup = await Http.GetFromJsonAsync<BettingGroupShared>($"/group/{this.GroupId}/");
     }
 }

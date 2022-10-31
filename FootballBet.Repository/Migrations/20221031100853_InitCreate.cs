@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FootballBet.Repository.Migrations
 {
-    public partial class Initialcreate : Migration
+    public partial class InitCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -257,10 +257,9 @@ namespace FootballBet.Repository.Migrations
                 columns: table => new
                 {
                     BettingGroupInvitationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BettingGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BettingGroupEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     InvitedUserEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InvitingUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    BettingGroupEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    InvitingUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {

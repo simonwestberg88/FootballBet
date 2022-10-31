@@ -74,15 +74,15 @@ namespace FootballBet.Server.Data.Services
                 throw new BadHttpRequestException("Validation of invitation failed");
         }
 
-        public async Task<BettingGroupEntity> GetBettingGroupById(string groupId, CancellationToken ct)
-            => await _groupRepository.GetGroupById(Guid.Parse(groupId), ct) ?? throw new NotFoundException("Betting group not found");
+        public async Task<BettingGroupShared> GetBettingGroupById(string groupId, CancellationToken ct)
+            => GroupMapper.Map(await _groupRepository.GetGroupById(Guid.Parse(groupId), ct) ?? throw new NotFoundException("Betting group not found"));
 
         private async Task<bool> ValidateInvitation(string groupId, string invitationId, string userEmail, CancellationToken ct)
         {
             var invitation = await _groupRepository.GetBettingGroupInvitationByIdAsync(Guid.Parse(invitationId), ct);
             var group = await _groupRepository.GetGroupById(Guid.Parse(groupId), ct);
             //can make above calls at the same time and await both tasks
-            if (invitation == null || group == null || invitation.InvitedUserEmail != userEmail || invitation.BettingGroupId != Guid.Parse(groupId))
+            if (invitation == null || group == null || invitation.InvitedUserEmail != userEmail || invitation.BettingGroupEntityId != Guid.Parse(groupId))
                 return false;
             return true;
         }
@@ -92,8 +92,7 @@ namespace FootballBet.Server.Data.Services
         private static BettingGroupInvitationEntity CreateBettingGroupInvitation(Guid groupId, string invitingUserId, string invitedUserEmail)
             => new()
             {
-                BettingGroupInvitationId = new Guid(),
-                BettingGroupId = groupId,
+                BettingGroupEntityId = groupId,
                 InvitingUserId = invitingUserId,
                 InvitedUserEmail = invitedUserEmail
             };

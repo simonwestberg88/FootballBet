@@ -30,17 +30,17 @@ namespace FootballBet.Server.Controllers
             => Ok(await _groupService.ListGroupsForUser(User.Identity.GetUserId(), ct));
 
         [HttpGet("{bettingGroupId}")]
-        public async Task<IActionResult> GetGroupById([FromQuery] string bettingGroupId, CancellationToken ct)
-            => Ok(await _groupService.GetBettingGroupById(bettingGroupId, ct));
+        public async Task<IActionResult> GetGroupById(string bettingGroupId, CancellationToken ct)
+            => Ok(await _groupService.GetBettingGroupById(bettingGroupId.ToString(), ct));
 
         [HttpPost("invitation")]
         public async Task<IActionResult> CreateInvitation(BettingGroupInvitationShared invitation, CancellationToken ct)
             => Ok(await _groupService.CreateInvitation(invitation.BettingGroupId, invitation.InvitedUserEmail, User.Identity.GetUserId(), ct));
 
-        [HttpGet("invitation/accept/")]
-        public async Task<IActionResult> ConsumeInvitation([FromQuery]string invitationId, [FromQuery]string groupId, CancellationToken ct)
+        [HttpPost("invitation/accept/")]
+        public async Task<IActionResult> ConsumeInvitation([FromBody]BettingGroupInvitationAcceptShared acceptedInvitation, CancellationToken ct)
         {
-            await _groupService.ConsumeInvitation(invitationId, groupId, User.Identity.GetUserId(), ct);
+            await _groupService.ConsumeInvitation(acceptedInvitation.InvitationId, acceptedInvitation.GroupId, User.Identity.GetUserId(), ct);
             return NoContent();
         }
 

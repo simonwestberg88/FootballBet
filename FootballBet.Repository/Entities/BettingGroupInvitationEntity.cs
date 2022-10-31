@@ -7,7 +7,7 @@ public class BettingGroupInvitationEntity
 {
     [Key]
     public Guid BettingGroupInvitationId { get; set; }
-    public Guid BettingGroupId { get; set; }
+    public Guid BettingGroupEntityId { get; set; }
     public string InvitedUserEmail { get; set; }
     public string InvitingUserId { get; set; }
     [ForeignKey("InvitingUserId")]

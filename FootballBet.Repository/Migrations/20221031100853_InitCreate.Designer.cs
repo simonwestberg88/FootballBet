@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FootballBet.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221030210608_Initialcreate")]
-    partial class Initialcreate
+    [Migration("20221031100853_InitCreate")]
+    partial class InitCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -258,9 +258,6 @@ namespace FootballBet.Repository.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("BettingGroupEntityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BettingGroupId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("InvitedUserEmail")
