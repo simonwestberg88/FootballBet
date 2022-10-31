@@ -1,4 +1,4 @@
-﻿using FootballBet.Server.Models.Football.DBModels;
+﻿using FootballBet.Repository.Entities;
 
 namespace FootballBet.Server.Data.Repositories.Interfaces
 {

@@ -1,4 +1,4 @@
-﻿namespace FootballBet.Server.Models.Groups
+﻿namespace FootballBet.Repository.Entities
 {
     public class BettingGroupEntity
     {

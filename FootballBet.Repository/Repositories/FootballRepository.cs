@@ -1,6 +1,5 @@
-﻿using FootballBet.Server.Data;
+﻿using FootballBet.Repository.Entities;
 using FootballBet.Server.Data.Repositories.Interfaces;
-using FootballBet.Server.Models.Football.DBModels;
 
 namespace FootballBet.Repository.Repositories;
 

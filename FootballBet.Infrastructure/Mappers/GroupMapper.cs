@@ -1,4 +1,4 @@
-﻿using FootballBet.Server.Models.Groups;
+﻿using FootballBet.Repository.Entities;
 
 namespace FootballBet.Infrastructure.Mappers;
 

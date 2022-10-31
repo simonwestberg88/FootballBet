@@ -1,6 +1,5 @@
 ﻿using FootballBet.Repository.Entities;
 using FootballBet.Repository.Repositories.Interfaces;
-using FootballBet.Server.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace FootballBet.Repository.Repositories;

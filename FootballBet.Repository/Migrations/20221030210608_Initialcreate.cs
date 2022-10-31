@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FootballBet.Repository.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initialcreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -259,7 +259,8 @@ namespace FootballBet.Repository.Migrations
                     BettingGroupInvitationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BettingGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     InvitedUserEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InvitingUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    InvitingUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    BettingGroupEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -271,8 +272,8 @@ namespace FootballBet.Repository.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BettingGroupInvitations_BettingGroups_BettingGroupId",
-                        column: x => x.BettingGroupId,
+                        name: "FK_BettingGroupInvitations_BettingGroups_BettingGroupEntityId",
+                        column: x => x.BettingGroupEntityId,
                         principalTable: "BettingGroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -285,8 +286,7 @@ namespace FootballBet.Repository.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Nickname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    BettingGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BettingGroupEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    BettingGroupEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -301,7 +301,8 @@ namespace FootballBet.Repository.Migrations
                         name: "FK_BettingGroupMembers_BettingGroups_BettingGroupEntityId",
                         column: x => x.BettingGroupEntityId,
                         principalTable: "BettingGroups",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -384,9 +385,9 @@ namespace FootballBet.Repository.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BettingGroupInvitations_BettingGroupId",
+                name: "IX_BettingGroupInvitations_BettingGroupEntityId",
                 table: "BettingGroupInvitations",
-                column: "BettingGroupId");
+                column: "BettingGroupEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BettingGroupInvitations_InvitingUserId",

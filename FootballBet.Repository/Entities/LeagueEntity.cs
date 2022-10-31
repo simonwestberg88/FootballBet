@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FootballBet.Server.Models.Football.DBModels
+namespace FootballBet.Repository.Entities
 {
     public class LeagueEntity
     {

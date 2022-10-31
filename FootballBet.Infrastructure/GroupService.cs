@@ -4,10 +4,10 @@ using FootballBet.Infrastructure.Mappers;
 using FootballBet.Repository.Entities;
 using FootballBet.Repository.Repositories.Interfaces;
 using FootballBet.Server.Data.Repositories.Interfaces;
-using FootballBet.Server.Models;
-using FootballBet.Server.Models.Groups;
 using FootballBet.Shared.Models.Groups;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Text.Encodings.Web;
 
 namespace FootballBet.Server.Data.Services
 {
@@ -15,18 +15,24 @@ namespace FootballBet.Server.Data.Services
     {
         private readonly IGroupRepository _groupRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IEmailSender _emailSender;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public GroupService(IGroupRepository groupRepository, IUserRepository userRepository)
+        public GroupService(IGroupRepository groupRepository, IUserRepository userRepository, IEmailSender emailSender, IHttpContextAccessor httpContextAccessor)
         {
             _groupRepository = groupRepository;
             _userRepository = userRepository;
+            _emailSender = emailSender;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<BettingGroupInvitationEntity> CreateInvitation(string groupId, string invitedUserEmail, string inviterUserId, CancellationToken ct)
         {
-            //TODO: send email to invited user
-
             var invitation = await _groupRepository.CreateBettingGroupInvitation(CreateBettingGroupInvitation(Guid.Parse(groupId), inviterUserId, invitedUserEmail), ct);
+
+            var callbackUrl = $"https://{_httpContextAccessor.HttpContext.Request.Host.Value}/invitation/{invitation.BettingGroupInvitationId}/{groupId}";
+            await _emailSender.SendEmailAsync(invitedUserEmail, "You are invited to join FootballBet",
+                $"Accept your invitation by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
             return invitation;
         }
 
@@ -42,7 +48,7 @@ namespace FootballBet.Server.Data.Services
 
         public async Task<List<BettingGroupShared>> ListGroupsForUser(string userId, CancellationToken ct)
         {
-            var bettingGroupIds = (await _groupRepository.GetBettingGroupMemberByUserId(userId, ct)).Select(p => p.BettingGroupId)
+            var bettingGroupIds = (await _groupRepository.GetBettingGroupMemberByUserId(userId, ct)).Select(p => p.BettingGroupEntityId)
                 .ToList();
             var groupList = new List<BettingGroupEntity>();
 
@@ -95,6 +101,7 @@ namespace FootballBet.Server.Data.Services
         private static BettingGroupEntity CreateBettingGroup(string groupName, string description, ApplicationUser creator)
            => new()
            {
+               Id = new Guid(),
                Description = description,
                Name = groupName,
                Memberships = new List<BettingGroupMemberEntity>()
@@ -107,6 +114,7 @@ namespace FootballBet.Server.Data.Services
         private static BettingGroupMemberEntity CreateBettingGroupMember(ApplicationUser user)
             => new()
             {
+                Id = new Guid(),
                 Nickname = user.UserName,
                 UserId = user.Id
             };
