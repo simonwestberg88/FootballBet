@@ -2,15 +2,16 @@
 using FootballBet.Infrastructure.Interfaces;
 using FootballBet.Infrastructure.Mappers;
 using FootballBet.Server.Data.Repositories.Interfaces;
+using FootballBet.Shared.Models.Match;
 
 namespace FootballBet.Infrastructure;
 
-public class FootballAPIService : IFootballAPIService
+public class FootballApiService : IFootballAPIService
 {
     private readonly IFootballApiClient _footballApiClient;
     private readonly IFootballRepository _footballRepository;
 
-    public FootballAPIService(IFootballApiClient footballApiClient, IFootballRepository footballRepository)
+    public FootballApiService(IFootballApiClient footballApiClient, IFootballRepository footballRepository)
     {
         _footballApiClient = footballApiClient;
         _footballRepository = footballRepository;
@@ -35,8 +36,10 @@ public class FootballAPIService : IFootballAPIService
         var result = await _footballRepository.CreateOrUpdateTeams(teams.Select(t => t.ToTeamEntity()));
         var fixtures = await _footballRepository.CreateOrUpdateMatches(matches.Select(m => m.ToMatchEntity()));
 
-            
-        return "hello";
 
-    }       
+        return "hello";
+    }
+
+    public IEnumerable<MatchDto> GetMatches(int leagueId)
+        => _footballRepository.GetAllMatchesForLeagueId(leagueId).Select(e => e.ToMatchDto());
 }

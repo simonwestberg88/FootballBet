@@ -5,6 +5,7 @@ using FootballBet.Repository;
 using FootballBet.Repository.Entities;
 using FootballBet.Repository.Repositories;
 using FootballBet.Repository.Repositories.Interfaces;
+using FootballBet.Server.Controllers;
 using FootballBet.Server.Data.Repositories.Interfaces;
 using FootballBet.Server.Data.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -35,7 +36,7 @@ builder.Services.AddTransient<IGroupRepository, GroupRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IGroupService, GroupService>();
 builder.Services.AddTransient<IFootballApiClient, FootballApiClient>();
-builder.Services.AddTransient<IFootballAPIService, FootballAPIService>();
+builder.Services.AddTransient<IFootballAPIService, FootballApiService>();
 builder.Services.AddTransient<IFootballRepository, FootballRepository>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddHttpContextAccessor();
@@ -46,6 +47,7 @@ builder.Services.AddAuthentication()
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 var app = builder.Build();
+app.AddMatchesApi();
 
 if (app.Environment.IsDevelopment())
 {
