@@ -1,5 +1,5 @@
-using FootballBet.Infrastructure.Models;
 using FootballBet.Repository.Entities;
+using FootballBet.Shared.Models.Match;
 
 namespace FootballBet.Infrastructure.Mappers;
 
@@ -10,7 +10,7 @@ public static class MatchDtoMapper
         {
             Date = entity.Date,
             Round = entity.Round,
-            MatchStatus = entity.MatchStatus,
+            MatchStatus = entity.MatchStatus.ToStatusString(),
             AwayCurrentGoals = entity.AwayCurrentGoals,
             AwayFulltimeGoals = entity.AwayFulltimeGoals,
             AwayPenaltyGoals = entity.AwayFulltimeGoals,

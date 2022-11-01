@@ -1,9 +1,8 @@
 ﻿using FootballBet.Infrastructure.ApiResponses.Fixtures;
 using FootballBet.Infrastructure.Interfaces;
 using FootballBet.Infrastructure.Mappers;
-using FootballBet.Infrastructure.Models;
-using FootballBet.Repository.Entities;
 using FootballBet.Server.Data.Repositories.Interfaces;
+using FootballBet.Shared.Models.Match;
 
 namespace FootballBet.Infrastructure;
 

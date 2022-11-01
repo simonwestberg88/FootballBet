@@ -1,6 +1,4 @@
-using FootballBet.Repository.Entities;
-
-namespace FootballBet.Infrastructure.Models;
+namespace FootballBet.Shared.Models.Match;
 
  public record struct MatchDto (
  DateTime Date, 
@@ -14,5 +12,5 @@ namespace FootballBet.Infrastructure.Models;
  string? HomeTeamName,
  string? HomeTeamLogo,
  string? AwayTeamLogo,
- MatchStatus MatchStatus, 
+ string MatchStatus, 
  string Round);

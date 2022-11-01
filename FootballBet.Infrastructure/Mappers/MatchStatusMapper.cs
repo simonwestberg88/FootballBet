@@ -4,7 +4,7 @@ namespace FootballBet.Infrastructure.Mappers;
 
 public static class MatchStatusMapper
 {
-    public static string GetStatusString(this MatchStatus status)
+    public static string ToStatusString(this MatchStatus status)
         => status switch
         {
             MatchStatus.TBD => "TBD",

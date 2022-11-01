@@ -1,4 +1,4 @@
-﻿using FootballBet.Infrastructure.Models;
+﻿using FootballBet.Shared.Models.Match;
 
 namespace FootballBet.Infrastructure.Interfaces;
 
