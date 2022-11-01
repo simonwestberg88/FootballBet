@@ -35,7 +35,7 @@ builder.Services.AddTransient<IGroupRepository, GroupRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IGroupService, GroupService>();
 builder.Services.AddTransient<IFootballApiClient, FootballApiClient>();
-builder.Services.AddTransient<IFootballAPIService, FootballAPIService>();
+builder.Services.AddTransient<IFootballAPIService, FootballApiService>();
 builder.Services.AddTransient<IFootballRepository, FootballRepository>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddHttpContextAccessor();

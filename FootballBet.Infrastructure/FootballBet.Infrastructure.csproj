@@ -12,10 +12,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="DependencyInjection" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Compile Remove="DependencyInjection\DependencyInjectionExtensions.cs" />
     </ItemGroup>
 
