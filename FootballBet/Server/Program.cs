@@ -5,6 +5,7 @@ using FootballBet.Repository;
 using FootballBet.Repository.Entities;
 using FootballBet.Repository.Repositories;
 using FootballBet.Repository.Repositories.Interfaces;
+using FootballBet.Server.Controllers;
 using FootballBet.Server.Data.Repositories.Interfaces;
 using FootballBet.Server.Data.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -46,6 +47,7 @@ builder.Services.AddAuthentication()
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 var app = builder.Build();
+app.AddMatchesApi();
 
 if (app.Environment.IsDevelopment())
 {
