@@ -1,0 +1,39 @@
+@using FootballBet.Shared.Models.Match
+
+<MudPaper Elevation="2" Style="margin: 10px">
+    <MudExpansionPanel @bind-IsExpanded="_isOpen" HideIcon="true">
+        <TitleContent>
+            <MudGrid >
+                <MudItem xs="3" Style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+                    <div>
+                        <MudText>@MatchData.HomeTeamName</MudText>
+                        <MudImage Src="@MatchData.HomeTeamLogo" Width="Width" Height="Height"></MudImage>
+                    </div>
+                </MudItem>
+                <MudItem xs="6" Style="display: flex; justify-content: center; align-items: center">
+                    <MudText>@MatchData.HomeCurrentGoals - @MatchData.AwayCurrentGoals</MudText>
+                </MudItem>
+                <MudItem xs="3" Style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+                    <MudText>@MatchData.AwayTeamName</MudText>
+                    <MudImage Src="@MatchData.AwayTeamLogo" Width="Width" Height="Height"></MudImage>
+                </MudItem>
+            </MudGrid>
+        </TitleContent>
+        <ChildContent>
+            <MudButton Variant="Variant.Filled">Place bet</MudButton>
+            <MudText Style="padding-top: 10px">@(MatchData.MatchStatus)</MudText>
+        </ChildContent>
+    </MudExpansionPanel>
+</MudPaper>
+
+@code {
+
+    [Parameter]
+    public MatchDto MatchData { get; set; }
+
+    bool _isOpen;
+
+    private static int Width => 50;
+    private int Height => 50;
+
+}

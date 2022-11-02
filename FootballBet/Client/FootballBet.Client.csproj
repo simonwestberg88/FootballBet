@@ -17,10 +17,20 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
+    <PackageReference Include="MudBlazor" Version="6.0.17" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Shared\FootballBet.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\bootstrap.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\bootstrap.min.css.map" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\css" />
   </ItemGroup>
 
 </Project>

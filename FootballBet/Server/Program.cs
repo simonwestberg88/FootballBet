@@ -41,8 +41,8 @@ builder.Services.AddTransient<IFootballRepository, FootballRepository>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddAuthentication()
-    .AddIdentityServerJwt();
+// builder.Services.AddAuthentication()
+//     .AddIdentityServerJwt();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -69,8 +69,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseIdentityServer();
-app.UseAuthentication();
-app.UseAuthorization();
+// app.UseAuthentication();
+// app.UseAuthorization();
 
 
 app.MapRazorPages();
