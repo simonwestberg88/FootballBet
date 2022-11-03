@@ -20,11 +20,11 @@ public static class UserApi
             }
         });
         
-        app.MapPost("/api/{userId}/balance/withdraw", async (string userId, TransactionRequest request, ITransactionService service, CancellationToken token) =>
+        app.MapPost("/api/{userId}/balance/withdraw", async (string userId, WithdrawRequest request, ITransactionService service, CancellationToken token) =>
         {
             try
             {
-                return Results.Ok(await service.WithdrawAsync(userId, request.WithdrawAmount));
+                return Results.Ok(await service.WithdrawAsync(userId, request.Amount));
             }
             //todo change to not found exception
             catch (InvalidOperationException e)
@@ -33,11 +33,11 @@ public static class UserApi
             }
         });
         
-        app.MapPost("/api/{userId}/balance/deposit", async (string userId, TransactionRequest request, ITransactionService service, CancellationToken token) =>
+        app.MapPost("/api/{userId}/balance/deposit", async (string userId, DepositRequest request, ITransactionService service, CancellationToken token) =>
         {
             try
             {
-                return Results.Ok(await service.DepositAsync(userId, request.DepositAmount));
+                return Results.Ok(await service.DepositAsync(userId, request.Amount));
             }
             //todo change to not found exception
             catch (InvalidOperationException e)
