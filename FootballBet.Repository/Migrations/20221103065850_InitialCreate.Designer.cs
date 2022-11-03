@@ -4,6 +4,7 @@ using FootballBet.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FootballBet.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221103065850_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,8 +173,8 @@ namespace FootballBet.Repository.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Balance")
+                        .HasColumnType("float");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -229,44 +231,6 @@ namespace FootballBet.Repository.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("FootballBet.Repository.Entities.BetEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<bool>("HasBeenPayed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsWinningBet")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("MatchId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("PaybackAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Wager")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("WagerAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MatchId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("BetEntities");
                 });
 
             modelBuilder.Entity("FootballBet.Repository.Entities.BettingGroupEntity", b =>
@@ -570,21 +534,6 @@ namespace FootballBet.Repository.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("FootballBet.Repository.Entities.BetEntity", b =>
-                {
-                    b.HasOne("FootballBet.Repository.Entities.MatchEntity", "Match")
-                        .WithMany("MatchBets")
-                        .HasForeignKey("MatchId");
-
-                    b.HasOne("FootballBet.Repository.Entities.ApplicationUser", "User")
-                        .WithMany("Bets")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Match");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("FootballBet.Repository.Entities.BettingGroupInvitationEntity", b =>
                 {
                     b.HasOne("FootballBet.Repository.Entities.BettingGroupEntity", "BettingGroupEntity")
@@ -695,11 +644,6 @@ namespace FootballBet.Repository.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FootballBet.Repository.Entities.ApplicationUser", b =>
-                {
-                    b.Navigation("Bets");
-                });
-
             modelBuilder.Entity("FootballBet.Repository.Entities.BettingGroupEntity", b =>
                 {
                     b.Navigation("Memberships");
@@ -708,11 +652,6 @@ namespace FootballBet.Repository.Migrations
             modelBuilder.Entity("FootballBet.Repository.Entities.LeagueEntity", b =>
                 {
                     b.Navigation("Matches");
-                });
-
-            modelBuilder.Entity("FootballBet.Repository.Entities.MatchEntity", b =>
-                {
-                    b.Navigation("MatchBets");
                 });
 #pragma warning restore 612, 618
         }

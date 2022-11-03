@@ -24,6 +24,7 @@ namespace FootballBet.Repository.Entities
         public virtual LeagueEntity League { get; set; }
         public virtual TeamEntity HomeTeam { get; set; }
         public virtual TeamEntity AwayTeam { get; set; }
+        public virtual ICollection<BetEntity> MatchBets { get; set; }
 
     }
     public enum MatchStatus

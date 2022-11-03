@@ -17,10 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\FootballBet\Shared\FootballBet.Shared.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Reference Include="Microsoft.EntityFrameworkCore.SqlServer">
         <HintPath>..\..\..\.nuget\packages\microsoft.entityframeworkcore.sqlserver\6.0.10\lib\net6.0\Microsoft.EntityFrameworkCore.SqlServer.dll</HintPath>
       </Reference>

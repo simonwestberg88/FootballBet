@@ -24,7 +24,7 @@ builder.Services.Configure<FootballApiSettings>(builder.Configuration.GetSection
 builder.Services.AddSingleton<IFootballApiClient, FootballApiClient>();
 builder.Services.AddHttpClient<FootballApiClient>();
 builder.Services.AddScoped<IFootballRepository, FootballRepository>();
-builder.Services.AddScoped<IFootballAPIService, FootballAPIService>();
+builder.Services.AddScoped<IFootballAPIService, FootballApiService>();
 var app = builder.Build();
 app.AddTestApi();
 

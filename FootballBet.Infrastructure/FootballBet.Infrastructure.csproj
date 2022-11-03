@@ -8,15 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\FootballBet.Repository\FootballBet.Repository.csproj" />
-      <ProjectReference Include="..\FootballBet\Shared\FootballBet.Shared.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="DependencyInjection" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="DependencyInjection\DependencyInjectionExtensions.cs" />
+      <ProjectReference Include="..\FootballBet.Shared\FootballBet.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>
