@@ -1,11 +1,11 @@
 ﻿using FootballBet.Repository.Entities;
-using FootballBet.Server.Models;
+using FootballBet.Shared.Models.Users;
 
 namespace FootballBet.Infrastructure.Mappers;
 
 public static class UserMapper
 {
-    public static Shared.Models.Users.UserDto Map(ApplicationUser databaseUser)
+    public static UserDto ToUserDto(this ApplicationUser databaseUser)
         => new ()
         {
             Id = databaseUser.Id,
