@@ -1,6 +1,6 @@
 namespace FootballBet.Repository.Enums;
 
-public enum BetWager
+public enum Prediction
 {
     HomeTeamWin,
     Draw,
