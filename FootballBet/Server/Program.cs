@@ -1,5 +1,6 @@
 using FootballBet.Infrastructure;
 using FootballBet.Infrastructure.Interfaces;
+using FootballBet.Infrastructure.Services;
 using FootballBet.Infrastructure.Settings;
 using FootballBet.Repository;
 using FootballBet.Repository.Entities;
@@ -40,7 +41,8 @@ builder.Services.AddTransient<IFootballAPIService, FootballApiService>();
 builder.Services.AddTransient<IFootballRepository, FootballRepository>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IBalanceService, BalanceService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+
 builder.Services.AddHttpContextAccessor();
 
 // builder.Services.AddAuthentication()
@@ -50,6 +52,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 var app = builder.Build();
 app.AddMatchesApi();
+app.AddUserApi();
 
 if (app.Environment.IsDevelopment())
 {
