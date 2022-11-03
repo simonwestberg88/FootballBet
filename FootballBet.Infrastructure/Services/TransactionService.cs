@@ -11,7 +11,7 @@ public class TransactionService: ITransactionService
         _userRepository = userRepository;
     }
     
-    public async Task<decimal> GetBalance(string userId, CancellationToken cancellationToken = default)
+    public async Task<decimal> GetBalanceAsync(string userId, CancellationToken cancellationToken = default)
      => await _userRepository.GetBalanceAsync(userId, cancellationToken);
 
     public async Task<decimal> WithdrawAsync(string userId, decimal amount, CancellationToken token = default)

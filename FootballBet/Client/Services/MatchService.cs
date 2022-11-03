@@ -17,8 +17,10 @@ public class MatchService: IMatchService
     
     public async Task<IEnumerable<MatchDto>> GetMatchesAsync()
     {
-        Console.WriteLine($"Sending to {_httpClient.BaseAddress}");
+        Console.WriteLine("Sending to matches");
         var result = await _httpClient.GetFromJsonAsync<IEnumerable<MatchDto>>("/api/matches/1");
+        Console.WriteLine("Received from matches");
+        Console.WriteLine(result);
         return result;
     }
 }
