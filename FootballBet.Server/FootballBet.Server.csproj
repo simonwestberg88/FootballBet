@@ -20,9 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FootballBet.Infrastructure\FootballBet.Infrastructure.csproj" />
-    <ProjectReference Include="..\Client\FootballBet.Client.csproj" />
-    <ProjectReference Include="..\Shared\FootballBet.Shared.csproj" />
+    <ProjectReference Include="..\FootballBet.Infrastructure\FootballBet.Infrastructure.csproj" />
+    <ProjectReference Include="..\FootballBet.Client\FootballBet.Client.csproj" />
+    <ProjectReference Include="..\FootballBet.Shared\FootballBet.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

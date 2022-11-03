@@ -8,7 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\FootballBet.Repository\FootballBet.Repository.csproj" />
-      <ProjectReference Include="..\FootballBet\Shared\FootballBet.Shared.csproj" />
+      <ProjectReference Include="..\FootballBet.Shared\FootballBet.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>
