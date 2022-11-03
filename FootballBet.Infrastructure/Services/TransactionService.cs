@@ -3,10 +3,10 @@ using FootballBet.Repository.Repositories.Interfaces;
 
 namespace FootballBet.Infrastructure.Services;
 
-public class BalanceService: IBalanceService
+public class TransactionService: ITransactionService
 {
     private readonly IUserRepository _userRepository;
-    public BalanceService(IUserRepository userRepository)
+    public TransactionService(IUserRepository userRepository)
     {
         _userRepository = userRepository;
     }
