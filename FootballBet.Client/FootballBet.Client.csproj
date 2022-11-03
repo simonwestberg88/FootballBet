@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shared\FootballBet.Shared.csproj" />
+    <ProjectReference Include="..\FootballBet.Shared\FootballBet.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

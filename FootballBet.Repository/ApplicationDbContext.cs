@@ -16,7 +16,6 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<TeamEntity> TeamEntities => Set<TeamEntity>();
 
 
-
     public ApplicationDbContext(
         DbContextOptions options,
         IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
