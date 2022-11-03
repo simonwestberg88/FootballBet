@@ -1,7 +1,20 @@
 @page "/UserPage"
+@using FootballBet.Shared.Models.Users
+@using FootballBet.Client.Services
 
 <h3>UserPage</h3>
+<MudText>@user.Email</MudText>
+<MudText>@user.UserName</MudText>
+<MudText>@user.Balance</MudText>
 
 @code {
+    UserDto user;
+
+    [Inject]
+    IUserService UserService { get; set; } = default!;
     
+    protected override async Task OnInitializedAsync()
+    {
+        user = await UserService.GetUserAsync("84a2a7ab-34ff-4d1d-b1b6-4249458ea0e4");
+    }
 }
