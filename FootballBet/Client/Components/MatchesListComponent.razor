@@ -62,34 +62,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
-        // _matches = new List<MatchDto>
-        // {
-        //     new()
-        //     {
-        //         Date = DateTime.Now,
-        //         Round = "Group Stage - 1",
-        //         MatchStatus = "Match Finished",
-        //         AwayCurrentGoals = 1,
-        //         AwayFulltimeGoals = 1,
-        //         HomeCurrentGoals = 2,
-        //         HomeFulltimeGoals = 2,
-        //         AwayPenaltyGoals = 1,
-        //         HomePenaltyGoals = 1,
-        //         AwayTeamName = "France",
-        //         AwayTeamLogo = "https://media.api-sports.io/football/teams/2.png",
-        //         HomeTeamLogo = "https://media.api-sports.io/football/teams/26.png",
-        //         HomeTeamName = "Argentina"
-        //     }
-        // };
-        _matches = await MatchService.GetMatchesAsync();
-
-        _groupMatches1 = _matches?.Where(m => m.Round == "Group Stage - 1").ToList();
-        _groupMatches2 = _matches?.Where(m => m.Round == "Group Stage - 2").ToList();
-        _eighthFinals = _matches?.Where(m => m.Round == "8th Finals").ToList();
-        _quarterFinals = _matches?.Where(m => m.Round == "Quarter-finals").ToList();
-        _semiFinals = _matches?.Where(m => m.Round == "Semi-finals").ToList();
-        _final = _matches?.Where(m => m.Round == "Final").ToList();
+        _matches = (await MatchService.GetMatchesAsync()).ToList();
+        _groupMatches1 = _matches.Where(m => m.Round == "Group Stage - 1").ToList();
+        _groupMatches2 = _matches.Where(m => m.Round == "Group Stage - 2").ToList();
+        _eighthFinals = _matches.Where(m => m.Round == "8th Finals").ToList();
+        _quarterFinals = _matches.Where(m => m.Round == "Quarter-finals").ToList();
+        _semiFinals = _matches.Where(m => m.Round == "Semi-finals").ToList();
+        _final = _matches.Where(m => m.Round == "Final").ToList();
+        await base.OnInitializedAsync();
     }
 
 }
