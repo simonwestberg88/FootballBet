@@ -1,16 +1,16 @@
 using System.Net.Http.Json;
 
 namespace FootballBet.Client.Services;
-public interface IBalanceService
+public interface ITransactionService
 {
     Task<decimal> GetBalanceAsync(string userId, CancellationToken token);
     Task<decimal> DepositAsync(string userId, decimal amount);
     Task<decimal> WithdrawAsync(string userId, decimal amount);
 }
-public class BalanceService: IBalanceService
+public class TransactionService: ITransactionService
 {
     private readonly HttpClient _httpClient;
-    public BalanceService(HttpClient httpClient)
+    public TransactionService(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
