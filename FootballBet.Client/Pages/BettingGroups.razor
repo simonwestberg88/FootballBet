@@ -76,7 +76,7 @@ else
 
         try
         {
-            bettingGroups = await Http.GetFromJsonAsync<List<BettingGroupShared>>("/group");
+            bettingGroups = await Http.GetFromJsonAsync<List<BettingGroupShared>>("/group") ?? new ();
             await Http.GetAsync("/FootballLeague");
         }
         catch (AccessTokenNotAvailableException exception)

@@ -15,15 +15,19 @@
     {
         <p>You have been invited to join @BettingGroup.Name</p>
     }
+    else
+    {
+        <p>Loading...</p>
+    }
 }
 <button @onclick="OnAccept">Accept invitation</button>
 
 @code {
 
     [Parameter]
-    public string InvitationId { get; set; }
+    public string? InvitationId { get; set; }
     [Parameter]
-    public string GroupId { get; set; }
+    public string? GroupId { get; set; }
 
     public BettingGroupShared? BettingGroup { get; set; }
 
@@ -46,6 +50,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        BettingGroup = await Http.GetFromJsonAsync<BettingGroupShared>($"/group/{this.GroupId}/");
+        if (this.GroupId is not null)
+            BettingGroup = await Http.GetFromJsonAsync<BettingGroupShared>($"/group/{this.GroupId}/");
     }
 }

@@ -20,7 +20,7 @@ public static class ApiWebApplicationExtension
 
         app.MapPost("test/seed", async (IFootballAPIService footballService) =>
         {
-            await footballService.SeedDatabase();
+            await footballService.SeedDatabase("2022", 1);
         });
     }
 }
