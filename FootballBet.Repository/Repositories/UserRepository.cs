@@ -15,7 +15,7 @@ public class UserRepository : IUserRepository
     public async Task<ApplicationUser?> GetApplicationUserById(string userId, CancellationToken ct)
         => await _context.Users.FirstOrDefaultAsync(x => x.Id == userId, ct);
 
-    public async Task<double> UpdateBalance(string userId, double balance, CancellationToken ct)
+    public async Task<decimal> UpdateBalance(string userId, decimal balance, CancellationToken ct)
     {
         var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId, ct);
         if (user == null) return 0;

@@ -11,13 +11,13 @@ public class BalanceService: IBalanceService
         _userRepository = userRepository;
     }
     
-    public async Task<double> GetBalance(string userId, CancellationToken cancellationToken = default)
+    public async Task<decimal> GetBalance(string userId, CancellationToken cancellationToken = default)
     {
         var user = await _userRepository.GetApplicationUserById(userId, cancellationToken);
         return user?.Balance ?? 0;
         //todo add handling if user does not exist
     }
 
-    public async Task<double> UpdateBalance(string userId, double amount, CancellationToken cancellationToken = default)
+    public async Task<decimal> UpdateBalance(string userId, decimal amount, CancellationToken cancellationToken = default)
     => await _userRepository.UpdateBalance(userId, amount, cancellationToken);
 }

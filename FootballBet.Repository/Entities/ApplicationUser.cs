@@ -4,5 +4,5 @@ namespace FootballBet.Repository.Entities;
 
 public class ApplicationUser : IdentityUser
 {
-    public double Balance { get; set; }
+    public decimal Balance { get; set; }
 }
