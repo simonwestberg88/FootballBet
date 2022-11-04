@@ -8,5 +8,6 @@ namespace FootballBet.Server.Data.Repositories.Interfaces
         Task<(int Updated, int Created)> CreateOrUpdateTeams(IEnumerable<TeamEntity> teams);
         Task<(int Updated, int Created)> CreateOrUpdateMatches(IEnumerable<MatchEntity> matches);
         IEnumerable<MatchEntity> GetAllMatchesForLeagueId(int leagueId);
+        Task<LeagueEntity> GetLeague(int leagueId);
     }
 }

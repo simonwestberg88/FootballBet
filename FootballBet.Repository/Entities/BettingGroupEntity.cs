@@ -7,7 +7,7 @@
         public string? Description { get; set; }
         public List<BettingGroupMemberEntity> Memberships { get; set; }
         public DateTime CreatedAt { get; set; }
-        //TODO:needs a connection to competitions in the future
+        public virtual LeagueEntity League { get; set; }
     }
 
    

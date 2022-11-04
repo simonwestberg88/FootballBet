@@ -104,4 +104,7 @@ public class FootballRepository : IFootballRepository
         var matchesByLeague = _context.LeagueEntities.FirstOrDefault(l => l.Id == leagueId)?.Matches;
         return matches;
     }
+
+    public async Task<LeagueEntity> GetLeague(int leagueId)
+        => await _context.LeagueEntities.FirstOrDefaultAsync(l => l.Id == leagueId) ?? throw new Exception();    
 }

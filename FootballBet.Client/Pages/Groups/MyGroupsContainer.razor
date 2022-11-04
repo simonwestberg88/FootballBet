@@ -1,0 +1,38 @@
+﻿@page "/mygroups"
+@using FootballBet.Shared.Models.Groups
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@attribute [Authorize]
+@inject HttpClient Http
+
+<MudContainer Class="mt-16">
+    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Betting Groups</MudText>
+    <MudText Align="Align.Center">These are the betting groups you are a member of</MudText>
+    @if (BettingGroups?.Count > 0)
+    {
+        <MudGrid Class="mt-8">
+            @foreach (var bettingGroup in BettingGroups)
+            {
+                <GroupListItemComponent BettingGroup="bettingGroup"></GroupListItemComponent>
+            }
+        </MudGrid>
+    }
+</MudContainer>
+
+@code {
+    private List<BettingGroupShared> BettingGroups = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        try
+        {
+            BettingGroups = await Http.GetFromJsonAsync<List<BettingGroupShared>>("/group") ?? new();
+            await Http.GetAsync("/FootballLeague");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}
