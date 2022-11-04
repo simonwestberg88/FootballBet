@@ -1,4 +1,5 @@
 ﻿@using FootballBet.Shared.Models.Groups
+@inject NavigationManager navigationManager
 
 @if (BettingGroup == null)
 {
@@ -6,31 +7,31 @@
 }
 else
 {
-    <MudItem xs="12" sm="6" md="4">
+    <MudItem @onclick="NavigateToGroupPage" Class="cursor-pointer" xs="12" sm="6" md="4">
         <MudCard Elevation="25" Class="rounded-lg pb-4">
-            <MudCardHeader>
-                <CardHeaderContent>
-                    <MudText Typo="Typo.h5" Align="Align.Center">@BettingGroup.Name</MudText>
-                </CardHeaderContent>
-            </MudCardHeader>
-            <MudCardContent>
-                <div class="d-flex justify-center">
-                    <MudImage Src="@BettingGroup.League?.LogoUrl" Alt="Competition Logo" Elevation="25" Class="rounded-lg" />
-                </div>
-                <div class="d-flex justify-center">
-                    <MudList Class="mx-auto mt-4" Style="width:300px;">
-                        <MudListItem>
-                            <MudText Align="Align.Center">@BettingGroup.Description</MudText>
-                        </MudListItem>
-                        <MudListItem>
-                            <MudText Align="Align.Center">@BettingGroup.League?.Name @BettingGroup.League?.Season</MudText>
-                        </MudListItem>
-                    </MudList>
-                </div>
-            </MudCardContent>
-            <MudCardActions Class="d-flex justify-center">
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Style="width:50%;">Go to group</MudButton>
-            </MudCardActions>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h5" Align="Align.Center">@BettingGroup.Name</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <div class="d-flex justify-center">
+                        <MudImage Src="@BettingGroup.League?.LogoUrl" Alt="Competition Logo" Elevation="25" Class="rounded-lg" />
+                    </div>
+                    <div class="d-flex justify-center">
+                        <MudList Class="mx-auto mt-4" Style="width:300px;">
+                            <MudListItem>
+                                <MudText Align="Align.Center">@BettingGroup.Description</MudText>
+                            </MudListItem>
+                            <MudListItem>
+                                <MudText Align="Align.Center">@BettingGroup.League?.Name @BettingGroup.League?.Season</MudText>
+                            </MudListItem>
+                        </MudList>
+                    </div>
+                </MudCardContent>
+                <MudCardActions Class="d-flex justify-center">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Style="width:50%;">Go to group</MudButton>
+                </MudCardActions>
         </MudCard>
     </MudItem>
 }
@@ -39,5 +40,10 @@ else
 
     [Parameter]
     public BettingGroupShared BettingGroup { get; set; }
+
+    void NavigateToGroupPage()
+    {
+        navigationManager.NavigateTo("/bettingGroup");
+    }
 
 }
