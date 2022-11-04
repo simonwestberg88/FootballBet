@@ -1,0 +1,57 @@
+﻿@using FootballBet.Shared.Models.Groups
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager navigationManager
+@inject HttpClient Http
+
+<EditForm Model="@bettingGroup" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="Group name" HelperText="Max. 20 characters"
+                                  @bind-Value="bettingGroup.Name" For="@(() => bettingGroup.Name)" />
+                    <MudTextField Label="Description" Class="mt-3"
+                                  @bind-Value="bettingGroup.Description" For="@(() => bettingGroup.Description)" />
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Create Group</MudButton>
+                </MudCardActions>
+                @if (CreatedGroupSuccess == true)
+                {
+                    <MudText Color="Color.Success">Success</MudText>
+                    <MudLink Href="@CreatedGroupUrl">Click here to go to your group</MudLink>
+                }
+                else
+                {
+                    <MudText Color="@Color.Error">
+                        <ValidationSummary />
+                    </MudText>
+                }
+            </MudCard>
+        </MudItem>        
+    </MudGrid>
+</EditForm>
+
+@code {
+    private BettingGroupShared bettingGroup = new();
+    private bool? CreatedGroupSuccess = null;
+    private string CreatedGroupUrl = "";
+
+    private async void OnValidSubmit()
+    {
+        var createdGroupResponse = await Http.PostAsJsonAsync("/group/", bettingGroup);
+        if (createdGroupResponse.IsSuccessStatusCode)
+        {
+            CreatedGroupSuccess = true;
+            var betgroup = await createdGroupResponse.Content.ReadFromJsonAsync<BettingGroupShared>();
+            //navigationManager.NavigateTo($"/bettingGroup/{betgroup.Id}");
+            CreatedGroupUrl = navigationManager.BaseUri + $"bettingGroup/{betgroup.Id}";
+        }
+        else
+        {
+            CreatedGroupSuccess = false;
+        }
+        StateHasChanged();
+    }
+}

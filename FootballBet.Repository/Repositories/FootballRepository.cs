@@ -26,32 +26,55 @@ public class FootballRepository : IFootballRepository
         await _context.SaveChangesAsync();
         return league;
     }
-    public async Task<IEnumerable<TeamEntity>> CreateOrUpdateTeams(IEnumerable<TeamEntity> teams)
+    public async Task<(int Updated, int Created)> CreateOrUpdateTeams(IEnumerable<TeamEntity> teams)
     {
-        foreach(var team in teams)
+        var updated = 0;
+        var created = 0;
+        foreach (var team in teams)
         {
             var entity = await _context.TeamEntities.FindAsync(team.Id);
-            if(entity == null)
+            if (entity == null)
+            {
                 await _context.TeamEntities.AddAsync(team);
-            else
+                created++;
+            }
+            else if (entity.LogoUrl != team.LogoUrl || entity.Name != team.Name)
             {
                 entity.LogoUrl = team.LogoUrl;
                 entity.Name = team.Name;
                 _context.TeamEntities.Update(entity);
+                updated++;
             }
         }
         await _context.SaveChangesAsync();
-        return teams;
+        return (Updated: updated, Created: created);
     }
 
-    public async Task<IEnumerable<MatchEntity>> CreateOrUpdateMatches(IEnumerable<MatchEntity> matches)
+    public async Task<(int Updated, int Created)> CreateOrUpdateMatches(IEnumerable<MatchEntity> matches)
     {
+        var updated = 0;
+        var created = 0;
         foreach (var match in matches)
         {
             var entity = await _context.MatchEntities.FindAsync(match.Id);
             if (entity == null)
+            {
                 await _context.MatchEntities.AddAsync(match);
-            else
+                created++;
+            }
+            else if (entity.HomeTeamId != match.HomeTeamId ||
+                entity.AwayTeamId != match.AwayTeamId ||
+                entity.AwayCurrentGoals != match.AwayCurrentGoals ||
+                entity.HomeCurrentGoals != match.HomeCurrentGoals ||
+                entity.AwayFulltimeGoals != match.AwayFulltimeGoals ||
+                entity.HomeFulltimeGoals != match.HomeFulltimeGoals ||
+                entity.AwayPenaltyGoals != match.AwayPenaltyGoals ||
+                entity.HomePenaltyGoals != match.HomePenaltyGoals ||
+                entity.MatchStatus != match.MatchStatus ||
+                entity.Season != match.Season ||
+                entity.LeagueId != entity.LeagueId ||
+                entity.Round != entity.Round ||
+                entity.Date != entity.Date)
             {
                 entity.HomeTeamId = match.HomeTeamId;
                 entity.AwayTeamId = match.AwayTeamId;
@@ -67,10 +90,11 @@ public class FootballRepository : IFootballRepository
                 entity.Round = entity.Round;
                 entity.Date = entity.Date;
                 _context.MatchEntities.Update(entity);
+                updated++;
             }
         }
         await _context.SaveChangesAsync();
-        return matches;
+        return (Updated: updated, Created: created);
     }
 
     public IEnumerable<MatchEntity> GetAllMatchesForLeagueId(int leagueId)
@@ -80,4 +104,7 @@ public class FootballRepository : IFootballRepository
         var matchesByLeague = _context.LeagueEntities.FirstOrDefault(l => l.Id == leagueId)?.Matches;
         return matches;
     }
+
+    public async Task<LeagueEntity> GetLeague(int leagueId)
+        => await _context.LeagueEntities.FirstOrDefaultAsync(l => l.Id == leagueId) ?? throw new Exception();    
 }

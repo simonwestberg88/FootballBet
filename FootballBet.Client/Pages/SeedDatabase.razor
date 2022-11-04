@@ -1,4 +1,5 @@
 ﻿@page "/seedDatabase"
+@using FootballBet.Shared.Models.Admin
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @inject HttpClient Http
 
@@ -6,12 +7,32 @@
 
 <h1>Click to seed database</h1>
 
+<EditForm Model="@Seed" OnValidSubmit="@SeedDatabaseBtn">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <label>Year</label>
+    <InputText id="Year" @bind-Value="Seed.Year" />
+    <label>League Id</label>
+    <InputNumber id="LeagueId" @bind-Value="Seed.LeagueId" />
+    <button class="btn btn-primary">Click to seed DB</button>
+</EditForm>
 
-<button class="btn btn-primary" @onclick="SeedDatabaseBtn">Click to seed DB</button>
+@if (Result is not null)
+{
+    <p>@Result</p>
+}
+
 
 @code {
-    private async void SeedDatabaseBtn()
+    private string? Result { get; set; }
+    private SeedTeamsAndFixturesShared Seed { get; set; } = new();
+
+    async Task SeedDatabaseBtn()
     {
-        await Http.GetAsync("/FootballLeague/seed");
+        var response = await Http.PostAsJsonAsync($"/FootballLeague/seed", Seed);
+        if (response.IsSuccessStatusCode)
+        {
+            Result = await response.Content.ReadAsStringAsync();
+        }
     }
 }

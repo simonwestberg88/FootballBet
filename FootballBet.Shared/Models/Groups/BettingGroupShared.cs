@@ -9,6 +9,7 @@ namespace FootballBet.Shared.Models.Groups
         public string Name { get; set; }
         [Required]
         public string? Description { get; set; }
+        public LeagueShared? League { get; set; }
         public List<BettingGroupMemberShared>? Memberships { get; set; }
     }
 }
