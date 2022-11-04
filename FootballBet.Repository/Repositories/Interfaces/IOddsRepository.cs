@@ -4,5 +4,7 @@ namespace FootballBet.Repository.Repositories.Interfaces;
 
 public interface IOddsRepository
 {
-    public Task AddOddAsync(OddsEntity odds);
+    public Task AddOddsAsync(IEnumerable<OddsEntity> oddsList);
+    public Task<IEnumerable<OddsEntity>> GetOddsForMatchAsync(int matchId);
+    
 }
