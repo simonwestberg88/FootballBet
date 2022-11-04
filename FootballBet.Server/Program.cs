@@ -1,4 +1,5 @@
 using FootballBet.Infrastructure;
+using FootballBet.Infrastructure.Http;
 using FootballBet.Infrastructure.Interfaces;
 using FootballBet.Infrastructure.Services;
 using FootballBet.Infrastructure.Settings;
