@@ -24,7 +24,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-
         try
         {
             BettingGroups = await Http.GetFromJsonAsync<List<BettingGroupShared>>("/group") ?? new();
