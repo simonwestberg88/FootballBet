@@ -9,4 +9,6 @@
         public DateTime CreatedAt { get; set; }
         //TODO:needs a connection to competitions in the future
     }
+
+   
 }
