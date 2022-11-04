@@ -36,10 +36,10 @@ public class FootballApiService : IFootballAPIService
         var teamResult = await _footballRepository.CreateOrUpdateTeams(teams.Select(t => t.ToTeamEntity()));
         var fixtures = await _footballRepository.CreateOrUpdateMatches(matches.Select(m => m.ToMatchEntity()));
 
-            
+
         return $"Amount of teams added: {teamResult.Created}. Amount of teams updated: {teamResult.Updated}. " +
             $"Amount of fixtures added: {fixtures.Created}. Amount of fixtures updated: {fixtures.Created}";
-
+    }
     public IEnumerable<MatchDto> GetMatches(int leagueId)
         => _footballRepository.GetAllMatchesForLeagueId(leagueId).Select(e => e.ToMatchDto());
 }
