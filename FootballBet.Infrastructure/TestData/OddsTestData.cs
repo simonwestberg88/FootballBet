@@ -3,21 +3,13 @@ using FootballBet.Server.Data.Repositories.Interfaces;
 
 namespace FootballBet.Infrastructure.TestData;
 
-public class OddsTestData
+public static class OddsTestData
 {
-    private readonly IFootballRepository _footballRepository;
-
-    public OddsTestData(IFootballRepository footballRepository)
+    public static OddsRoot GenerateData(IEnumerable<int> matchIds)
     {
-        _footballRepository = footballRepository;
-    }
-
-    public OddsRoot GenerateData()
-    {
-        var matchIdList = _footballRepository.GetAllMatchesForLeagueId(1).Select(m => m.Id).ToList();
         return new OddsRoot
         {
-            Response = GenerateMatchData(matchIdList).ToList()
+            Response = GenerateMatchData(matchIds).ToList()
         };
     }
 
@@ -34,7 +26,7 @@ public class OddsTestData
             },
             Bookmakers = new List<Bookmaker>
             {
-                new ()
+                new()
                 {
                     Id = 8,
                     Name = "bet365",
