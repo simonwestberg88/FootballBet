@@ -22,6 +22,7 @@ public static class ServiceCollectionExtensions
             .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
             .AddTransient<IUserRepository, UserRepository>()
             .AddTransient<ITransactionService, TransactionService>()
+            .AddTransient<IBetService, BetService>()
             .AddRepositories();
 
     private static IServiceCollection AddRepositories(this IServiceCollection services)
