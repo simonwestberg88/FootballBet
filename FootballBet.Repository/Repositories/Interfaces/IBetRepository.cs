@@ -9,6 +9,6 @@ public interface IBetRepository
     public Task<IEnumerable<BetEntity>> GetBetsByUserIdAsync(string userId, string bettingGroupId);
     public Task<IEnumerable<BetEntity>> GetBetsByMatchIdAsync(int matchId, string bettingGroupId);
     public Task<IEnumerable<BetEntity>> GetBetsByUserIdAndMatchIdAsync(string userId, int matchId);
-    public Task PlaceBetAsync(BetEntity bet);
+    public Task<BetEntity> PlaceBetAsync(BetEntity bet);
     
 }

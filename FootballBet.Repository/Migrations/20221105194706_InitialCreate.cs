@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FootballBet.Repository.Migrations
 {
-    public partial class nullablefk : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -254,6 +254,32 @@ namespace FootballBet.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BetEntities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MatchId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BettingGroupId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OddsId = table.Column<int>(type: "int", nullable: true),
+                    WagerAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PaybackAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsWinningBet = table.Column<bool>(type: "bit", nullable: true),
+                    HasBeenPayed = table.Column<bool>(type: "bit", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BetEntities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BetEntities_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BettingGroups",
                 columns: table => new
                 {
@@ -388,48 +414,6 @@ namespace FootballBet.Repository.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "BetEntities",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MatchId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    BettingGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    OddsId = table.Column<int>(type: "int", nullable: true),
-                    WagerAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PaybackAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    IsWinningBet = table.Column<bool>(type: "bit", nullable: true),
-                    HasBeenPayed = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BetEntities", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BetEntities_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BetEntities_BettingGroups_BettingGroupId",
-                        column: x => x.BettingGroupId,
-                        principalTable: "BettingGroups",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_BetEntities_MatchEntities_MatchId",
-                        column: x => x.MatchId,
-                        principalTable: "MatchEntities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BetEntities_OddsEntities_OddsId",
-                        column: x => x.OddsId,
-                        principalTable: "OddsEntities",
-                        principalColumn: "Id");
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -470,24 +454,9 @@ namespace FootballBet.Repository.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BetEntities_BettingGroupId",
+                name: "IX_BetEntities_ApplicationUserId",
                 table: "BetEntities",
-                column: "BettingGroupId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BetEntities_MatchId",
-                table: "BetEntities",
-                column: "MatchId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BetEntities_OddsId",
-                table: "BetEntities",
-                column: "OddsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BetEntities_UserId",
-                table: "BetEntities",
-                column: "UserId");
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BettingGroupInvitations_BettingGroupEntityId",
@@ -604,16 +573,16 @@ namespace FootballBet.Repository.Migrations
                 name: "Keys");
 
             migrationBuilder.DropTable(
-                name: "PersistedGrants");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
                 name: "MatchEntities");
 
             migrationBuilder.DropTable(
                 name: "OddsEntities");
+
+            migrationBuilder.DropTable(
+                name: "PersistedGrants");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

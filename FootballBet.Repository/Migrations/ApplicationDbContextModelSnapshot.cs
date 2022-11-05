@@ -239,8 +239,11 @@ namespace FootballBet.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<Guid?>("BettingGroupId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("BettingGroupId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("HasBeenPayed")
                         .HasColumnType("bit");
@@ -249,7 +252,6 @@ namespace FootballBet.Repository.Migrations
                         .HasColumnType("bit");
 
                     b.Property<int?>("MatchId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("OddsId")
@@ -259,21 +261,14 @@ namespace FootballBet.Repository.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("WagerAmount")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BettingGroupId");
-
-                    b.HasIndex("MatchId");
-
-                    b.HasIndex("OddsId");
-
-                    b.HasIndex("UserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("BetEntities");
                 });
@@ -638,33 +633,9 @@ namespace FootballBet.Repository.Migrations
 
             modelBuilder.Entity("FootballBet.Repository.Entities.BetEntity", b =>
                 {
-                    b.HasOne("FootballBet.Repository.Entities.BettingGroupEntity", "BettingGroup")
-                        .WithMany()
-                        .HasForeignKey("BettingGroupId");
-
-                    b.HasOne("FootballBet.Repository.Entities.MatchEntity", "Match")
-                        .WithMany()
-                        .HasForeignKey("MatchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FootballBet.Repository.Entities.OddsEntity", "OddsEntity")
-                        .WithMany()
-                        .HasForeignKey("OddsId");
-
-                    b.HasOne("FootballBet.Repository.Entities.ApplicationUser", "User")
+                    b.HasOne("FootballBet.Repository.Entities.ApplicationUser", null)
                         .WithMany("Bets")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BettingGroup");
-
-                    b.Navigation("Match");
-
-                    b.Navigation("OddsEntity");
-
-                    b.Navigation("User");
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("FootballBet.Repository.Entities.BettingGroupEntity", b =>

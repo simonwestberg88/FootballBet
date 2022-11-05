@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace FootballBet.Repository.Entities;
 
 public class BetEntity

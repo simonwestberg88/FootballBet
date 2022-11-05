@@ -17,16 +17,10 @@ public static class ApiWebApplicationExtension
         });
 
         app.MapGet("/test/matches", (IFootballRepository repository) =>
-        {
-            var matches = repository.GetAllMatchesForLeagueId(1);
-            return matches;
-        });
+            repository.GetAllMatchesForLeagueId(1));
 
         app.MapGet("/test/leagues", async (IFootballApiClient client) =>
-        {
-            var league = await client.GetSpecificLeague("1");
-            return league;
-        });
+            client.GetSpecificLeague("1"));
 
         app.MapPost("test/seed",
             async (IFootballAPIService footballService) => { await footballService.SeedDatabase("2022", 1); });
@@ -38,11 +32,9 @@ public static class ApiWebApplicationExtension
 
         app.MapPost("test/bets/place",
             async (string userId, string groupId, BetDto bet, IBetService service) =>
-            {
-                await service.PlaceBetAsync(bet.OddsId, userId, bet.Amount, groupId);
-            });
+                await service.PlaceBetAsync(bet.OddsId, userId, bet.Amount, groupId));
 
-        app.MapPost("test/bets",
+        app.MapGet("test/bets",
             async (string userId, string groupId, IBetService service) =>
                 await service.GetBetsForUserAsync(userId, groupId));
 

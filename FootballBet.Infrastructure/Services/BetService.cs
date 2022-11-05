@@ -13,17 +13,15 @@ public class BetService : IBetService
     {
         _betRepository = betRepository;
     }
-    public async Task PlaceBetAsync(int oddsId, string userId, decimal amount, string groupId)
-    {
-        var bet = new BetEntity
+
+    public async Task<BetEntity> PlaceBetAsync(int oddsId, string userId, decimal amount, string groupId)
+        => await _betRepository.PlaceBetAsync(new BetEntity
         {
             OddsId = oddsId,
             UserId = userId,
             WagerAmount = amount,
             BettingGroupId = groupId
-        };
-        await _betRepository.PlaceBetAsync(bet);
-    }
+        });
 
     public async Task<IEnumerable<BetEntity>> GetBetsForUserAsync(string userId, string groupId)
         => await _betRepository.GetBetsByUserIdAsync(userId, groupId);
