@@ -12,6 +12,9 @@ public class OddsEntity
     public int? HomeTeamScore { get; set; }
     public int? AwayTeamScore { get; set; }
     public decimal Odds { get; set; }
-    public DateTime Created { get; set; }
     public OddsType OddsType { get; set; }
+    
+    public int? OddsGroupId { get; set; }
+    [ForeignKey("OddsGroupId")]
+    public virtual OddsGroupEntity OddsGroupEntity { get; set; }
 }

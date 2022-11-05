@@ -12,7 +12,6 @@ public static class OddsMapper
         
         return new OddsEntity
         {
-            Created = DateTime.Now,
             Odds = decimal.Parse(betValue.Odd),
             MatchId = matchId,
             OddsType = ParseOddsType(betValue.Prediction.ToString()),
