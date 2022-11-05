@@ -17,8 +17,11 @@ builder.Services.AddAuthentication()
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 var app = builder.Build();
+
 app.AddMatchesApi();
 app.AddUserApi();
+app.AddBetApi();
+app.AddOddsApi();
 
 if (app.Environment.IsDevelopment())
 {
