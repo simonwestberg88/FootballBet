@@ -93,7 +93,7 @@ public class FootballApiClient : IFootballApiClient
 
     public async Task<IEnumerable<OddsDto>> GetLatestOddsForMatch(int matchId)
     {
-        var odds = await _oddsRepository.GetLatestOddsByMatchIdAsync(matchId);
+        var odds = await _oddsRepository.GetLatestOddsAsync(matchId);
         return odds.Select(o => o.ToOddsDto());
     }
 

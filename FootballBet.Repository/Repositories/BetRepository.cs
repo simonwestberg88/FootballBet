@@ -16,15 +16,15 @@ public class BetRepository : IBetRepository
     public async Task<BetEntity> GetBetByIdAsync(int id)
         => await _context.BetEntities.FindAsync(id) ?? throw new InvalidOperationException("Bet not found");
 
-    public async Task<IEnumerable<BetEntity>> GetBetsByUserIdAsync(string userId, string bettingGroupId)
+    public async Task<IEnumerable<BetEntity>> GetBetsAsync(string userId, string bettingGroupId)
         => await _context.BetEntities.Where(b => b.UserId == userId && b.BettingGroupId == bettingGroupId)
             .ToListAsync();
 
-    public async Task<IEnumerable<BetEntity>> GetBetsByMatchIdAsync(int matchId, string bettingGroupId)
+    public async Task<IEnumerable<BetEntity>> GetBetsAsync(int matchId, string bettingGroupId)
         => await _context.BetEntities.Where(b => b.MatchId == matchId && b.BettingGroupId == bettingGroupId)
             .ToListAsync();
 
-    public async Task<IEnumerable<BetEntity>> GetBets(string userId, int matchId, string groupId)
+    public async Task<IEnumerable<BetEntity>> GetBetsAsync(string userId, int matchId, string groupId)
         => await _context.BetEntities.Where(b => b.UserId == userId && b.MatchId == matchId && b.BettingGroupId == groupId).ToListAsync();
 
     public async Task<BetEntity> PlaceBetAsync(BetEntity bet)

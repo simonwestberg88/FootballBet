@@ -41,7 +41,7 @@ namespace FootballBet.Server.Data.Services
 
         public async Task<BettingGroupShared> CreateBettingGroup(string creatorId, string description, string groupName, CancellationToken ct)
         {
-            var user = await _userRepository.GetApplicationUserById(creatorId, ct);
+            var user = await _userRepository.GetUserAsync(creatorId, ct);
             var league = await _footballRepository.GetLeague(1);
             if (user == null)
                 throw new KeyNotFoundException();
@@ -67,7 +67,7 @@ namespace FootballBet.Server.Data.Services
 
         public async Task ConsumeInvitation(string invitationId, string groupId, string userId, CancellationToken ct)
         {
-            var invitedUser = await _userRepository.GetApplicationUserById(userId, ct);
+            var invitedUser = await _userRepository.GetUserAsync(userId, ct);
             if (await ValidateInvitation(groupId, invitationId, invitedUser.Email, ct))
             {
                 var bettingGroupMember = CreateBettingGroupMember(invitedUser);

@@ -12,7 +12,7 @@ public class UserRepository : IUserRepository
         => _context = context;
 
     //this should be authorized later by role
-    public async Task<ApplicationUser?> GetApplicationUserById(string userId, CancellationToken ct)
+    public async Task<ApplicationUser?> GetUserAsync(string userId, CancellationToken ct)
         => await _context.Users.FirstOrDefaultAsync(x => x.Id == userId, ct);
 
     public async Task<decimal> GetBalanceAsync(string userId, CancellationToken ct)

@@ -23,8 +23,8 @@ public class BetService : IBetService
         });
 
     public async Task<IEnumerable<BetEntity>> GetBets(string userId, string groupId)
-        => await _betRepository.GetBetsByUserIdAsync(userId, groupId);
+        => await _betRepository.GetBetsAsync(userId, groupId);
     
     public async Task<IEnumerable<BetEntity>> GetBets(string userId, int matchId, string groupId)
-        => await _betRepository.GetBets(userId, matchId, groupId);
+        => await _betRepository.GetBetsAsync(userId, matchId, groupId);
 }
