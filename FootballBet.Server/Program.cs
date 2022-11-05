@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FootballBet.Infrastructure;
 using FootballBet.Infrastructure.Http;
 using FootballBet.Infrastructure.Interfaces;
@@ -11,6 +12,7 @@ using FootballBet.Server.Controllers;
 using FootballBet.Server.Data.Repositories.Interfaces;
 using FootballBet.Server.Data.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 

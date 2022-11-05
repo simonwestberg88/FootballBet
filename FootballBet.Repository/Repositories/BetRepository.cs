@@ -29,10 +29,8 @@ public class BetRepository : IBetRepository
 
     public async Task<IEnumerable<BetEntity>> GetBetsByMatchIdAsync(int matchId)
     {
-        var match = await _context.MatchEntities.FindAsync(matchId);
-        if (match == null)
-            throw new InvalidOperationException("Match not found");
-        return match.Bets;
+        var bets = await _context.BetEntities.Where(b => b.MatchId == matchId).ToListAsync();
+        return bets;
     }
 
     public Task<IEnumerable<BetEntity>> GetBetsByUserIdAndMatchIdAsync(int userId, int matchId)

@@ -99,7 +99,7 @@ public class FootballRepository : IFootballRepository
 
     public IEnumerable<MatchEntity> GetAllMatchesForLeagueId(int leagueId)
     {
-        var matches =  _context.MatchEntities.Where(m => m.League.Id == leagueId).Include("HomeTeam").Include("AwayTeam").ToList();
+        var matches =  _context.MatchEntities.Where(m => m.LeagueId == leagueId).Include("HomeTeam").Include("AwayTeam").ToList();
         
         var matchesByLeague = _context.LeagueEntities.FirstOrDefault(l => l.Id == leagueId)?.Matches;
         return matches;

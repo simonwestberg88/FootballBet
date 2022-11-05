@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FootballBet.Infrastructure;
 using FootballBet.Infrastructure.Http;
 using FootballBet.Infrastructure.Interfaces;
@@ -7,6 +8,7 @@ using FootballBet.Repository.Entities;
 using FootballBet.Repository.Repositories;
 using FootballBet.Repository.Repositories.Interfaces;
 using FootballBet.Server.Data.Repositories.Interfaces;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using TestProject.TestApi;
 
@@ -18,6 +20,10 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.SignIn.RequireConfirmedAccount = true;
 }).AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddIdentityServer()
