@@ -431,6 +431,25 @@ namespace FootballBet.Repository.Migrations
                     b.ToTable("MatchEntities");
                 });
 
+            modelBuilder.Entity("FootballBet.Repository.Entities.MatchOddsGroupEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("MatchId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OddsGroupEntities");
+                });
+
             modelBuilder.Entity("FootballBet.Repository.Entities.OddsEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -442,14 +461,10 @@ namespace FootballBet.Repository.Migrations
                     b.Property<int?>("AwayTeamScore")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("HomeTeamScore")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MatchId")
-                        .IsRequired()
+                    b.Property<int?>("MatchOddsGroupId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Odds")
@@ -460,7 +475,7 @@ namespace FootballBet.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MatchId");
+                    b.HasIndex("MatchOddsGroupId");
 
                     b.ToTable("OddsEntities");
                 });
@@ -721,13 +736,11 @@ namespace FootballBet.Repository.Migrations
 
             modelBuilder.Entity("FootballBet.Repository.Entities.OddsEntity", b =>
                 {
-                    b.HasOne("FootballBet.Repository.Entities.MatchEntity", "Match")
-                        .WithMany()
-                        .HasForeignKey("MatchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("FootballBet.Repository.Entities.MatchOddsGroupEntity", "MatchOddsGroupEntity")
+                        .WithMany("OddsEntities")
+                        .HasForeignKey("MatchOddsGroupId");
 
-                    b.Navigation("Match");
+                    b.Navigation("MatchOddsGroupEntity");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -801,6 +814,11 @@ namespace FootballBet.Repository.Migrations
             modelBuilder.Entity("FootballBet.Repository.Entities.MatchEntity", b =>
                 {
                     b.Navigation("Bets");
+                });
+
+            modelBuilder.Entity("FootballBet.Repository.Entities.MatchOddsGroupEntity", b =>
+                {
+                    b.Navigation("OddsEntities");
                 });
 #pragma warning restore 612, 618
         }

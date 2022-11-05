@@ -11,11 +11,11 @@ public class OddsRepository : IOddsRepository
         _context = context;
     }
     
-    public async Task<int> AddOddsGroupAsync(OddsGroupEntity oddsGroup)
+    public async Task<int> AddOddsGroupAsync(MatchOddsGroupEntity matchOddsGroup)
     {
-        await _context.OddsGroupEntities.AddAsync(oddsGroup);
+        await _context.OddsGroupEntities.AddAsync(matchOddsGroup);
         await _context.SaveChangesAsync();
-        return oddsGroup.Id;
+        return matchOddsGroup.Id;
     }
 
     public async Task AddOddsAsync(IEnumerable<OddsEntity> oddsEntities)

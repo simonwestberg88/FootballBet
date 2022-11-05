@@ -6,18 +6,17 @@ namespace FootballBet.Infrastructure.Mappers;
 
 public static class OddsMapper
 {
-    public static OddsEntity ToOddsEntity(this BetValue betValue, int matchId, int oddsGroupId)
+    public static OddsEntity ToOddsEntity(this BetValue betValue, int matchId, int MatchOddsGroupId)
     {
         var (homeGoals, awayGoals) = ParseExactResult(betValue.Prediction.ToString());
         
         return new OddsEntity
         {
             Odds = decimal.Parse(betValue.Odd),
-            MatchId = matchId,
             OddsType = ParseOddsType(betValue.Prediction.ToString()),
             HomeTeamScore = homeGoals,
             AwayTeamScore = awayGoals,
-            OddsGroupId = oddsGroupId
+            MatchOddsGroupId = MatchOddsGroupId
         };
     }
     

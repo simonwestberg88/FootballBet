@@ -5,6 +5,6 @@ namespace FootballBet.Repository.Repositories.Interfaces;
 public interface IOddsRepository
 {
     public Task AddOddsAsync(IEnumerable<OddsEntity> oddsEntities);
-    public Task<int> AddOddsGroupAsync(OddsGroupEntity oddsGroup);
+    public Task<int> AddOddsGroupAsync(MatchOddsGroupEntity matchOddsGroup);
 
 }

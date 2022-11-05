@@ -1,6 +1,6 @@
 namespace FootballBet.Repository.Entities;
 
-public class OddsGroupEntity
+public class MatchOddsGroupEntity
 {
     public int Id { get; set; }
     public int? MatchId { get; set; }

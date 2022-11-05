@@ -101,6 +101,20 @@ namespace FootballBet.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OddsGroupEntities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MatchId = table.Column<int>(type: "int", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OddsGroupEntities", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PersistedGrants",
                 columns: table => new
                 {
@@ -261,6 +275,28 @@ namespace FootballBet.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OddsEntities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HomeTeamScore = table.Column<int>(type: "int", nullable: true),
+                    AwayTeamScore = table.Column<int>(type: "int", nullable: true),
+                    Odds = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    OddsType = table.Column<int>(type: "int", nullable: false),
+                    MatchOddsGroupId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OddsEntities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OddsEntities_OddsGroupEntities_MatchOddsGroupId",
+                        column: x => x.MatchOddsGroupId,
+                        principalTable: "OddsGroupEntities",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MatchEntities",
                 columns: table => new
                 {
@@ -348,30 +384,6 @@ namespace FootballBet.Repository.Migrations
                         name: "FK_BettingGroupMembers_BettingGroups_BettingGroupEntityId",
                         column: x => x.BettingGroupEntityId,
                         principalTable: "BettingGroups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OddsEntities",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MatchId = table.Column<int>(type: "int", nullable: false),
-                    HomeTeamScore = table.Column<int>(type: "int", nullable: true),
-                    AwayTeamScore = table.Column<int>(type: "int", nullable: true),
-                    Odds = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OddsType = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OddsEntities", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OddsEntities_MatchEntities_MatchId",
-                        column: x => x.MatchId,
-                        principalTable: "MatchEntities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -534,9 +546,9 @@ namespace FootballBet.Repository.Migrations
                 column: "LeagueId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OddsEntities_MatchId",
+                name: "IX_OddsEntities_MatchOddsGroupId",
                 table: "OddsEntities",
-                column: "MatchId");
+                column: "MatchOddsGroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PersistedGrants_ConsumedTime",
@@ -598,6 +610,9 @@ namespace FootballBet.Repository.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "MatchEntities");
+
+            migrationBuilder.DropTable(
                 name: "OddsEntities");
 
             migrationBuilder.DropTable(
@@ -607,13 +622,13 @@ namespace FootballBet.Repository.Migrations
                 name: "BettingGroups");
 
             migrationBuilder.DropTable(
-                name: "MatchEntities");
+                name: "TeamEntities");
+
+            migrationBuilder.DropTable(
+                name: "OddsGroupEntities");
 
             migrationBuilder.DropTable(
                 name: "LeagueEntities");
-
-            migrationBuilder.DropTable(
-                name: "TeamEntities");
         }
     }
 }
