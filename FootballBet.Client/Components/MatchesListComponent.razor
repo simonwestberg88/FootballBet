@@ -52,13 +52,13 @@
 </MudPaper>
 
 @code {
-    IEnumerable<MatchDto>? _matches;
-    IEnumerable<MatchDto>? _groupMatches1;
-    IEnumerable<MatchDto>? _groupMatches2;
-    IEnumerable<MatchDto>? _eighthFinals;
-    IEnumerable<MatchDto>? _quarterFinals;
-    IEnumerable<MatchDto>? _semiFinals;
-    IEnumerable<MatchDto>? _final;
+    IEnumerable<MatchDto> _matches = new List<MatchDto>();
+    IEnumerable<MatchDto> _groupMatches1 = new List<MatchDto>();
+    IEnumerable<MatchDto> _groupMatches2 = new List<MatchDto>();
+    IEnumerable<MatchDto> _eighthFinals = new List<MatchDto>();
+    IEnumerable<MatchDto> _quarterFinals = new List<MatchDto>();
+    IEnumerable<MatchDto> _semiFinals = new List<MatchDto>();
+    IEnumerable<MatchDto> _final = new List<MatchDto>();
 
     protected override async Task OnInitializedAsync()
     {

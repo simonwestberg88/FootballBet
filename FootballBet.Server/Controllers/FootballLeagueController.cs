@@ -1,11 +1,12 @@
 ﻿using FootballBet.Infrastructure.Interfaces;
 using FootballBet.Shared.Models.Admin;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FootballBet.Server.Controllers
 {
 
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class FootballLeagueController : ControllerBase
