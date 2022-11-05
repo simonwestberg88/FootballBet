@@ -24,7 +24,7 @@ public static class OddsTestData
                 Timestamp = 0,
                 Timezone = "gmt"
             },
-            Bookmakers = new List<Bookmaker>
+            Bookmakers = new List<BookmakerOdds>
             {
                 new()
                 {
@@ -46,7 +46,7 @@ public static class OddsTestData
         {
             Id = 1,
             Name = "Match Winner",
-            Values = new List<Value>
+            Values = new List<BetValue>
             {
                 new()
                 {
@@ -73,7 +73,7 @@ public static class OddsTestData
         {
             Id = 10,
             Name = "Exact Score",
-            Values = new List<Value>
+            Values = new List<BetValue>
             {
                 new()
                 {
