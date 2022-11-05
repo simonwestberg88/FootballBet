@@ -25,7 +25,12 @@ public static class ApiWebApplicationExtension
         
         app.MapGet("test/saveOdds", async (IFootballApiClient client) =>
         {
-            await client.SaveOddsForLeague(3, "2022");
+            await client.SaveOddsForLeague(1, "2022");
         });
+        app.MapGet("test/match/{matchId:int}/odds", async (int matchId, IFootballApiClient client) =>
+        {
+            await client.GetLatestOddsForMatch(matchId);
+        });
+        
     }
 }

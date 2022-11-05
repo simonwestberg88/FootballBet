@@ -1,35 +1,56 @@
 using FootballBet.Infrastructure.ApiResponses.Odds;
 using FootballBet.Repository.Entities;
 using FootballBet.Repository.Enums;
-
+using FootballBet.Shared.Models.Odds;
 namespace FootballBet.Infrastructure.Mappers;
 
 public static class OddsMapper
 {
+    public static OddsDto ToOddsDto(this OddsEntity entity)
+        => new OddsDto
+        {
+            Odds = entity.Odds,
+            MatchWinner = MapMatchWinnerEnumDto(entity.MatchWinnerEntityEnum),
+            AwayTeamGoals = entity.AwayTeamGoals,
+            HomeTeamGoals = entity.HomeTeamGoals
+        };
+
+    private static MatchWinnerEnumDto MapMatchWinnerEnumDto(MatchWinnerEntityEnum matchWinnerEntityEnum)
+        => matchWinnerEntityEnum switch
+        {
+            MatchWinnerEntityEnum.Away => MatchWinnerEnumDto.Away,
+            MatchWinnerEntityEnum.Draw => MatchWinnerEnumDto.Draw,
+            _ => MatchWinnerEnumDto.Home
+        };
+
     public static OddsEntity ToOddsEntity(this BetValue betValue, int matchId, int MatchOddsGroupId)
     {
         var (homeGoals, awayGoals) = ParseExactResult(betValue.Prediction.ToString());
-        
+
         return new OddsEntity
         {
             Odds = decimal.Parse(betValue.Odd),
-            OddsType = ParseOddsType(betValue.Prediction.ToString()),
-            HomeTeamScore = homeGoals,
-            AwayTeamScore = awayGoals,
+            MatchWinnerEntityEnum = ParseMatchWinner(betValue.Prediction.ToString(), homeGoals, awayGoals),
+            HomeTeamGoals = homeGoals,
+            AwayTeamGoals = awayGoals,
             MatchOddsGroupId = MatchOddsGroupId
         };
     }
-    
-    private static OddsType ParseOddsType(string? prediction)
-    {
-        return prediction switch
+
+    private static MatchWinnerEntityEnum ParseMatchWinner(string? prediction, int homeGoals = 0, int awayGoals = 0)
+        => prediction switch
         {
-            "Draw" => OddsType.Draw,
-            "Home" => OddsType.HomeWin,
-            "Away" => OddsType.AwayWin,
-            _ => OddsType.ExactScore
+            "Draw" => MatchWinnerEntityEnum.Draw,
+            "Home" => MatchWinnerEntityEnum.Home,
+            "Away" => MatchWinnerEntityEnum.Away,
+            _ => ParseMatchWinnerFromExactScore(homeGoals, awayGoals)
         };
-    }
+
+    private static MatchWinnerEntityEnum ParseMatchWinnerFromExactScore(int homeGoals, int awayGoals)
+        => homeGoals > awayGoals ? MatchWinnerEntityEnum.Home :
+            homeGoals < awayGoals ? MatchWinnerEntityEnum.Away :
+            MatchWinnerEntityEnum.Draw;
+
 
     private static (int homeGoals, int awayGoals) ParseExactResult(string? prediction)
     {

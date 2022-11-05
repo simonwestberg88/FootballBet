@@ -25,7 +25,7 @@ public class OddsRepository : IOddsRepository
         await _context.SaveChangesAsync();
     }
     
-    public async Task<IEnumerable<OddsEntity>> GetOddsByMatchIdAsync(int matchId)
+    public async Task<IEnumerable<OddsEntity>> GetLatestOddsByMatchIdAsync(int matchId)
     {
         var groupId = _context.MatchOddsGroupEntities.OrderByDescending(x => x.Id)
             .Single(m => m.MatchId == matchId).Id;

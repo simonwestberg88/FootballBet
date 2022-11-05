@@ -6,5 +6,5 @@ public interface IOddsRepository
 {
     public Task AddOddsAsync(IEnumerable<OddsEntity> oddsEntities);
     public Task<int> AddOddsGroupAsync(MatchOddsGroupEntity matchOddsGroup);
-    public Task<IEnumerable<OddsEntity>> GetOddsByMatchIdAsync(int matchId);
+    public Task<IEnumerable<OddsEntity>> GetLatestOddsByMatchIdAsync(int matchId);
 }
