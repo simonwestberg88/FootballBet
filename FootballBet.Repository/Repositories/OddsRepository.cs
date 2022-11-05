@@ -1,5 +1,6 @@
 using FootballBet.Repository.Entities;
 using FootballBet.Repository.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace FootballBet.Repository.Repositories;
 
@@ -13,7 +14,7 @@ public class OddsRepository : IOddsRepository
     
     public async Task<int> AddOddsGroupAsync(MatchOddsGroupEntity matchOddsGroup)
     {
-        await _context.OddsGroupEntities.AddAsync(matchOddsGroup);
+        await _context.MatchOddsGroupEntities.AddAsync(matchOddsGroup);
         await _context.SaveChangesAsync();
         return matchOddsGroup.Id;
     }
@@ -22,5 +23,12 @@ public class OddsRepository : IOddsRepository
     {
         await _context.OddsEntities.AddRangeAsync(oddsEntities);
         await _context.SaveChangesAsync();
+    }
+    
+    public async Task<IEnumerable<OddsEntity>> GetOddsByMatchIdAsync(int matchId)
+    {
+        var groupId = _context.MatchOddsGroupEntities.OrderByDescending(x => x.Id)
+            .Single(m => m.MatchId == matchId).Id;
+        return await _context.OddsEntities.Where(x => x.MatchOddsGroupId == groupId).ToListAsync();
     }
 }

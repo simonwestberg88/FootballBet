@@ -16,7 +16,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<TeamEntity> TeamEntities => Set<TeamEntity>();
     public DbSet<BetEntity> BetEntities => Set<BetEntity>();
     public DbSet<OddsEntity> OddsEntities => Set<OddsEntity>();
-    public DbSet<MatchOddsGroupEntity> OddsGroupEntities => Set<MatchOddsGroupEntity>();
+    public DbSet<MatchOddsGroupEntity> MatchOddsGroupEntities => Set<MatchOddsGroupEntity>();
 
 
     public ApplicationDbContext(
