@@ -11,7 +11,7 @@ public static class UserApi
     {
         app.MapGet("/api/user/{userId}", async (string userId, IUserRepository userRepository, CancellationToken token) =>
         {
-            var user = await userRepository.GetApplicationUserById(userId, token);
+            var user = await userRepository.GetUserAsync(userId, token);
             return Results.Ok(user?.ToUserDto());
         });
         app.MapGet("/api/user/{userId}/balance", async (string userId, CancellationToken token, ITransactionService service) =>

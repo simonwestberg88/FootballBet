@@ -22,11 +22,14 @@ public static class ServiceCollectionExtensions
             .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
             .AddTransient<IUserRepository, UserRepository>()
             .AddTransient<ITransactionService, TransactionService>()
+            .AddTransient<IBetService, BetService>()
             .AddRepositories();
 
     private static IServiceCollection AddRepositories(this IServiceCollection services)
         => services.AddTransient<IGroupRepository, GroupRepository>()
             .AddTransient<IUserRepository, UserRepository>()
             .AddTransient<IGroupService, GroupService>()
-            .AddTransient<IOddsRepository, OddsRepository>();
+            .AddTransient<IOddsRepository, OddsRepository>()
+            .AddTransient<IMatchRepository, MatchRepository>()
+            .AddTransient<IBetRepository, BetRepository>();
 }

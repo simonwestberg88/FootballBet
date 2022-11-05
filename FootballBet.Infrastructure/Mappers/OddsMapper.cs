@@ -7,8 +7,9 @@ namespace FootballBet.Infrastructure.Mappers;
 public static class OddsMapper
 {
     public static OddsDto ToOddsDto(this OddsEntity entity)
-        => new OddsDto
+        => new ()
         {
+            Id = entity.Id,
             Odds = entity.Odds,
             MatchWinner = MapMatchWinnerEnumDto(entity.MatchWinnerEntityEnum),
             AwayTeamGoals = entity.AwayTeamGoals,
