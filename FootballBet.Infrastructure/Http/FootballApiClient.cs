@@ -57,7 +57,7 @@ public class FootballApiClient : IFootballApiClient
         }
     }
 
-    public async Task GetOddsForLeague(int leagueId, string season)
+    public async Task SaveOddsForLeague(int leagueId, string season)
     {
         try
         {
@@ -67,16 +67,13 @@ public class FootballApiClient : IFootballApiClient
             //add MatchOddsEntity for all matches
             foreach (var matchId in matchIds)
             {
-
                 var bookmakerOddsForMatch = matches
                     .SingleOrDefault(m => m.Match.Id == matchId)
                     .Bookmakers.SingleOrDefault(b => b.Id == Bet365);
                 
                 var oddsEntities = CreateOddsEntities(bookmakerOddsForMatch, matchId);
                 await _oddsRepository.AddOddsAsync(oddsEntities);
-                
             }
-            //add odds to db and tie them to groups and matches
             await _oddsRepository.SaveChangesAsync();
         }
         catch (Exception e)
@@ -88,7 +85,7 @@ public class FootballApiClient : IFootballApiClient
     private static IEnumerable<OddsEntity> CreateOddsEntities(BookmakerOdds bookmakerOdds, int matchId)
     {
         var betValues = bookmakerOdds.Bets
-            .SingleOrDefault(b => b.Name is "Match Winner" or "Exact Score").Values;
+            .Where(b => b.Name is "Match Winner" or "Exact Score").SelectMany(b => b.Values).ToList();
         return betValues.Select(w => w.ToOddsEntity(matchId)).ToList();
     }
 

@@ -5,6 +5,7 @@ using FootballBet.Infrastructure.Settings;
 using FootballBet.Repository;
 using FootballBet.Repository.Entities;
 using FootballBet.Repository.Repositories;
+using FootballBet.Repository.Repositories.Interfaces;
 using FootballBet.Server.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using TestProject.TestApi;
@@ -22,10 +23,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddIdentityServer()
     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 builder.Services.Configure<FootballApiSettings>(builder.Configuration.GetSection("FootballApi"));
-builder.Services.AddSingleton<IFootballApiClient, FootballApiClient>();
+builder.Services.AddScoped<IFootballApiClient, FootballApiClient>();
 builder.Services.AddHttpClient<FootballApiClient>();
 builder.Services.AddScoped<IFootballRepository, FootballRepository>();
 builder.Services.AddScoped<IFootballAPIService, FootballApiService>();
+builder.Services.AddScoped<IOddsRepository, OddsRepository>();
 var app = builder.Build();
 app.AddTestApi();
 

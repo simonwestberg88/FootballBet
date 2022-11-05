@@ -23,9 +23,9 @@ public static class ApiWebApplicationExtension
             await footballService.SeedDatabase("2022", 1);
         });
         
-        app.MapGet("test/odds", async (IFootballApiClient client) =>
+        app.MapGet("test/saveOdds", async (IFootballApiClient client) =>
         {
-            await client.GetOddsForLeague(1, "2022");
+            await client.SaveOddsForLeague(3, "2022");
         });
     }
 }

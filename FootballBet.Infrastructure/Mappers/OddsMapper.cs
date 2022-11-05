@@ -34,7 +34,8 @@ public static class OddsMapper
 
     private static (int homeGoals, int awayGoals) ParseExactResult(string? prediction)
     {
-        var split = prediction?.Split(':');
+        var split = prediction?.Split(':') ?? Array.Empty<string>();
+        if (split.Length != 2) return (0, 0);
         var homeGoals = int.Parse(split?[0] ?? "0");
         var awayGoals = int.Parse(split?[1] ?? "0");
         return (homeGoals, awayGoals);

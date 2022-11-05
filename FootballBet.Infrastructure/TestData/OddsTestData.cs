@@ -20,7 +20,7 @@ public static class OddsTestData
             Match = new Match
             {
                 Date = DateTime.Now,
-                Id = 1,
+                Id = id,
                 Timestamp = 0,
                 Timezone = "gmt"
             },

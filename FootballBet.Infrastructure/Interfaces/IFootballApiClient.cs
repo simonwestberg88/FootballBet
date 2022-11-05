@@ -7,6 +7,6 @@ public interface IFootballApiClient
 {
     public Task<LeaguesRoot> GetSpecificLeague(string id);
     Task<List<Match>> GetFixtures(int leagueId, string season);
-    public Task GetOddsForLeague(int leagueId, string season);
+    public Task SaveOddsForLeague(int leagueId, string season);
 
 }
