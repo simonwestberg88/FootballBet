@@ -42,6 +42,7 @@ builder.Services.AddTransient<IFootballAPIService, FootballApiService>();
 builder.Services.AddTransient<IFootballRepository, FootballRepository>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IOddsRepository, OddsRepository>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 builder.Services.AddHttpContextAccessor();

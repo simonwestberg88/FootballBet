@@ -48,11 +48,6 @@ public class BetRepository : IBetRepository
         throw new NotImplementedException();
     }
 
-    public Task PlaceBetAsync(int matchId, Prediction prediction, string userId, decimal amount)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task DeleteBetAsync(int id)
     {
         throw new NotImplementedException();
