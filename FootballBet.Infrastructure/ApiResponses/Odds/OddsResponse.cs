@@ -8,5 +8,5 @@ public record struct OddsResponse(
     Match Match,
     [property: JsonPropertyName("update")] DateTime Update,
     [property: JsonPropertyName("bookmakers")]
-    IReadOnlyList<Bookmaker> Bookmakers
+    IReadOnlyList<BookmakerOdds> Bookmakers
 );
