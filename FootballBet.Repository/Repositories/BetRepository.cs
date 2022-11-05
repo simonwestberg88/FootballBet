@@ -24,8 +24,8 @@ public class BetRepository : IBetRepository
         => await _context.BetEntities.Where(b => b.MatchId == matchId && b.BettingGroupId == bettingGroupId)
             .ToListAsync();
 
-    public async Task<IEnumerable<BetEntity>> GetBetsByUserIdAndMatchIdAsync(string userId, int matchId)
-        => await _context.BetEntities.Where(b => b.UserId == userId && b.MatchId == matchId).ToListAsync();
+    public async Task<IEnumerable<BetEntity>> GetBets(string userId, int matchId, string groupId)
+        => await _context.BetEntities.Where(b => b.UserId == userId && b.MatchId == matchId && b.BettingGroupId == groupId).ToListAsync();
 
     public async Task<BetEntity> PlaceBetAsync(BetEntity bet)
     {

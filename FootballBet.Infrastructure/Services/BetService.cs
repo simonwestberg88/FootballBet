@@ -1,7 +1,6 @@
 using FootballBet.Infrastructure.Interfaces;
 using FootballBet.Repository.Entities;
 using FootballBet.Repository.Repositories.Interfaces;
-using FootballBet.Shared.Models.Bets;
 
 namespace FootballBet.Infrastructure.Services;
 
@@ -23,6 +22,9 @@ public class BetService : IBetService
             BettingGroupId = groupId
         });
 
-    public async Task<IEnumerable<BetEntity>> GetBetsForUserAsync(string userId, string groupId)
+    public async Task<IEnumerable<BetEntity>> GetBets(string userId, string groupId)
         => await _betRepository.GetBetsByUserIdAsync(userId, groupId);
+    
+    public async Task<IEnumerable<BetEntity>> GetBets(string userId, int matchId, string groupId)
+        => await _betRepository.GetBets(userId, matchId, groupId);
 }

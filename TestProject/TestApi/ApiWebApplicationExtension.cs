@@ -46,7 +46,7 @@ public static class ApiWebApplicationExtension
 
         app.MapGet("test/bets",
             async (string userId, string groupId, IBetService service) =>
-                await service.GetBetsForUserAsync(userId, groupId));
+                await service.GetBets(userId, groupId));
 
         app.MapPost("test/bettingGroup/create",
             async (string userId, BettingGroupShared bettingGroup, IGroupService service) =>
