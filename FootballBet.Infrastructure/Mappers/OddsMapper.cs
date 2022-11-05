@@ -35,8 +35,8 @@ public static class OddsMapper
     {
         var split = prediction?.Split(':') ?? Array.Empty<string>();
         if (split.Length != 2) return (0, 0);
-        var homeGoals = int.Parse(split?[0] ?? "0");
-        var awayGoals = int.Parse(split?[1] ?? "0");
+        var homeGoals = int.Parse(split[0]);
+        var awayGoals = int.Parse(split[1]);
         return (homeGoals, awayGoals);
     }
 }
