@@ -5,5 +5,5 @@ namespace FootballBet.Repository.Repositories.Interfaces;
 public interface IMatchRepository
 {
     public Task<IEnumerable<MatchEntity>> GetMatchesForLeague(int leagueId);
-    public Task<MatchEntity?> GetMatch(int matchId);
+    public Task<MatchEntity?> GetMatchAsync(int matchId);
 }

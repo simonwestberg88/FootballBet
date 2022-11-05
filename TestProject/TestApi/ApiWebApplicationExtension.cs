@@ -1,4 +1,5 @@
 using FootballBet.Infrastructure.Interfaces;
+using FootballBet.Repository.Repositories.Interfaces;
 using FootballBet.Server.Data.Repositories.Interfaces;
 using FootballBet.Shared.Models.Bets;
 using FootballBet.Shared.Models.Groups;
@@ -15,10 +16,13 @@ public static class ApiWebApplicationExtension
             return fixtures;
         });
 
-        app.MapGet("/test/matches", (IFootballRepository repository) =>
-            repository.GetAllMatchesForLeagueId(1));
+        app.MapGet("/test/matches/all", (int leagueId, IFootballRepository repository) =>
+            repository.GetAllMatchesForLeagueId(leagueId));
+        
+        app.MapGet("/test/matches", (int matchId, IMatchRepository repository) =>
+            repository.GetMatchAsync(matchId));
 
-        app.MapGet("/test/leagues", async (IFootballApiClient client) =>
+        app.MapGet("/test/leagues", (IFootballApiClient client) =>
             client.GetSpecificLeague("1"));
 
         app.MapPost("test/seed/matches",
