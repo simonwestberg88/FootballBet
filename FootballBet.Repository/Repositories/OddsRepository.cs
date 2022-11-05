@@ -13,7 +13,7 @@ public class OddsRepository : IOddsRepository
 
     public async Task AddOddsAsync(IEnumerable<OddsEntity> oddsEntities)
     {
-        await _context.OddsEntities.AddRangeAsync();
+        await _context.OddsEntities.AddRangeAsync(oddsEntities);
     }
     public async Task SaveChangesAsync()
     {
