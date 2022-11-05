@@ -10,6 +10,7 @@ using FootballBet.Repository.Entities;
 using FootballBet.Repository.Repositories.Interfaces;
 using FootballBet.Server.Data.Repositories.Interfaces;
 using FootballBet.Server.Models.Football.ApiResponses.Leagues;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Match = FootballBet.Infrastructure.ApiResponses.Fixtures.Match;
 
@@ -20,17 +21,19 @@ public class FootballApiClient : IFootballApiClient
     private readonly HttpClient _client;
     private readonly IFootballRepository _footballRepository;
     private readonly IOddsRepository _oddsRepository;
+    private readonly ILogger<FootballApiClient> _logger;
     private const int Bet365 = 8;
 
     public FootballApiClient(
         IOptions<FootballApiSettings> options, 
         HttpClient client, 
         IFootballRepository footballRepository,
-        IOddsRepository oddsRepository)
+        IOddsRepository oddsRepository, ILogger<FootballApiClient> logger)
     {
         _client = client;
         _footballRepository = footballRepository;
         _oddsRepository = oddsRepository;
+        _logger = logger;
         client.BaseAddress = new Uri(options.Value.Url);
         client.DefaultRequestHeaders.Add("x-rapidapi-key", options.Value.Key);
         client.DefaultRequestHeaders.Add("x-rapidapi-host", options.Value.Host);
@@ -75,11 +78,12 @@ public class FootballApiClient : IFootballApiClient
                 
                 var oddsEntities = CreateOddsEntities(bookmakerOddsForMatch, matchId, oddsGroupId);
                 await _oddsRepository.AddOddsAsync(oddsEntities);
+                _logger.LogInformation("Saved odds for match {MatchId}", matchId);
             }
         }
         catch (Exception e)
         {
-            return;
+            _logger.LogError(e, "Error while saving odds for league");
         }
     }
 
