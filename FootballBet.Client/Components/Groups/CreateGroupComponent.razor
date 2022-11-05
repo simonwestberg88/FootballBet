@@ -6,7 +6,7 @@
 <MudItem xs="12" sm="6" md="4">
     <EditForm Model="@bettingGroup" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator />
-            <MudCard Elevation="25" Class="rounded-lg pb-4">
+        <MudCard Elevation="25" Class="rounded-lg pb-4">
             <MudCardHeader>
                 <CardHeaderContent>
                     <MudText Typo="Typo.h5" Align="Align.Center">Create new group</MudText>
@@ -19,16 +19,15 @@
                               @bind-Value="bettingGroup.Description" For="@(() => bettingGroup.Description)" />
             </MudCardContent>
             <MudCardActions>
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Create Group</MudButton>
+                @if (!RequestIsPending)
+                {
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Create Group</MudButton>
+                }
+                else
+                {
+                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary"  Disabled="true" Class="ml-auto">Sending...</MudButton>
+                }
             </MudCardActions>
-            @if (CreatedGroupSuccess == true)
-            {
-                <MudText Color="Color.Success">Success</MudText>
-            }
-            else
-            {
-                <MudText Color="Color.Success">Something went wrong</MudText>
-            }
         </MudCard>
 
     </EditForm>
@@ -41,9 +40,11 @@
     private string CreatedGroupUrl = "";
     [Parameter]
     public EventCallback GetBettingGroups { get; set; }
+    private bool RequestIsPending;
 
     private async void OnValidSubmit()
     {
+        RequestIsPending = true;
         var createdGroupResponse = await Http.PostAsJsonAsync("/group/", bettingGroup);
         if (createdGroupResponse.IsSuccessStatusCode)
         {
@@ -56,6 +57,7 @@
             CreatedGroupSuccess = false;
         }
         await GetBettingGroups.InvokeAsync();
+        RequestIsPending = false;
         StateHasChanged();
     }
 }
