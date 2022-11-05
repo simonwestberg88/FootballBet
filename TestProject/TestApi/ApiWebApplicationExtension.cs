@@ -36,18 +36,22 @@ public static class ApiWebApplicationExtension
         app.MapGet("test/match/{matchId:int}/odds", async (int matchId, IFootballApiClient client)
             => await client.GetLatestOddsForMatch(matchId));
 
-        app.MapPost("test/bet/{userId}/{groupId}/placebet",
+        app.MapPost("test/bets/place",
             async (string userId, string groupId, BetDto bet, IBetService service) =>
             {
                 await service.PlaceBetAsync(bet.OddsId, userId, bet.Amount, groupId);
             });
 
-        app.MapPost("test/bettingGroup/{userId}/create",
+        app.MapPost("test/bets",
+            async (string userId, string groupId, IBetService service) =>
+                await service.GetBetsForUserAsync(userId, groupId));
+
+        app.MapPost("test/bettingGroup/create",
             async (string userId, BettingGroupShared bettingGroup, IGroupService service) =>
                 await service.CreateBettingGroup(userId, bettingGroup.Description ?? "none", bettingGroup.Name,
                     CancellationToken.None));
-        
-        app.MapGet("/test/bettingGroup/{userId}/getall",
+
+        app.MapGet("/test/bettingGroup/all",
             async (string userId, IGroupService service) =>
                 await service.ListGroupsForUser(userId, CancellationToken.None));
     }
