@@ -8,11 +8,6 @@
 @inject HttpClient Http
 
 <!--This page can only be accessed manually whilst it is being reworked-->
-<PageTitle>Create Betting Group</PageTitle>
-
-<h1>Create Betting Group</h1>
-
-<CreateGroupComponent></CreateGroupComponent>
 
 
 <h1>Invite member</h1>
@@ -25,35 +20,10 @@
     <InputText id="invitedEmail" @bind-Value="bettingGroupInvitation.InvitedUserEmail" />
     <button type="submit">Ok</button>
 </EditForm>
-@if (bettingGroups == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var group in bettingGroups)
-            {
-                <tr>
-                    <td>@group.Name</td>
-                    <td>@group.Description</td>
-                    <td>@group.Id</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+
 
 
 @code {
-    private List<BettingGroupShared> bettingGroups = new();
     private BettingGroupInvitationShared bettingGroupInvitation = new();
 
     
@@ -62,18 +32,5 @@ else
         var invitation = await Http.PostAsJsonAsync("/group/invitation", bettingGroupInvitation);
         //add something to indicate invitation has been sent
     }
-
-    protected override async Task OnInitializedAsync()
-    {
-
-        try
-        {
-            bettingGroups = await Http.GetFromJsonAsync<List<BettingGroupShared>>("/group") ?? new();
-            await Http.GetAsync("/FootballLeague");
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-    }
+    
 }

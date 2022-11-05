@@ -8,7 +8,7 @@
 
 <MudContainer Class="mt-16">
     <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Betting Groups</MudText>
-    <MudText Align="Align.Center">These are the betting groups you are a member of</MudText>
+    <MudText Align="Align.Center">These are the betting groups you are a member of. You can only be a member of a total of 6 groups.</MudText>
     @if (BettingGroups?.Count > 0)
     {
         <MudGrid Class="mt-8">
@@ -16,19 +16,42 @@
             {
                 <GroupListItemComponent BettingGroup="bettingGroup"></GroupListItemComponent>
             }
+            @if (BettingGroups?.Count < 6)
+            {
+                <CreateGroupComponent GetBettingGroups=@( async ()=> { await GetBettingGroups(); })></CreateGroupComponent>
+            }
+        </MudGrid>
+    }
+    else if (HasGottenGroups && BettingGroups?.Count == 0)
+    {
+        <MudGrid Class="mt-8">
+            <CreateGroupComponent GetBettingGroups=@( async ()=> { await GetBettingGroups(); })></CreateGroupComponent>
+        </MudGrid>
+    }
+    else{
+        <MudGrid Class="mt-8">
+            <MudText Typo="Typo.h5" Align="Align.Center">...Loading</MudText>
         </MudGrid>
     }
 </MudContainer>
 
 @code {
     private List<BettingGroupShared> BettingGroups = new();
+    private bool HasGottenGroups;
 
     protected override async Task OnInitializedAsync()
+    {
+        await GetBettingGroups();
+    }
+
+    protected async Task GetBettingGroups()
     {
         try
         {
             BettingGroups = await Http.GetFromJsonAsync<List<BettingGroupShared>>("/group") ?? new();
             await Http.GetAsync("/FootballLeague");
+            HasGottenGroups = true;
+            StateHasChanged();
         }
         catch (AccessTokenNotAvailableException exception)
         {

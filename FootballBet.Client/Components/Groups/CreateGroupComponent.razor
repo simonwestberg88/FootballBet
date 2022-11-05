@@ -3,40 +3,44 @@
 @inject NavigationManager navigationManager
 @inject HttpClient Http
 
-<EditForm Model="@bettingGroup" OnValidSubmit="OnValidSubmit">
-    <DataAnnotationsValidator />
-    <MudGrid>
-        <MudItem xs="12" sm="7">
-            <MudCard>
-                <MudCardContent>
-                    <MudTextField Label="Group name" HelperText="Max. 20 characters"
-                                  @bind-Value="bettingGroup.Name" For="@(() => bettingGroup.Name)" />
-                    <MudTextField Label="Description" Class="mt-3"
-                                  @bind-Value="bettingGroup.Description" For="@(() => bettingGroup.Description)" />
-                </MudCardContent>
-                <MudCardActions>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Create Group</MudButton>
-                </MudCardActions>
-                @if (CreatedGroupSuccess == true)
-                {
-                    <MudText Color="Color.Success">Success</MudText>
-                    <MudLink Href="@CreatedGroupUrl">Click here to go to your group</MudLink>
-                }
-                else
-                {
-                    <MudText Color="@Color.Error">
-                        <ValidationSummary />
-                    </MudText>
-                }
-            </MudCard>
-        </MudItem>        
-    </MudGrid>
-</EditForm>
+<MudItem xs="12" sm="6" md="4">
+    <EditForm Model="@bettingGroup" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+            <MudCard Elevation="25" Class="rounded-lg pb-4">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h5" Align="Align.Center">Create new group</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudTextField Label="Group name" HelperText="Max. 20 characters"
+                              @bind-Value="bettingGroup.Name" For="@(() => bettingGroup.Name)" />
+                <MudTextField Label="Description" HelperText="Max. 50 characters" Class="mt-3"
+                              @bind-Value="bettingGroup.Description" For="@(() => bettingGroup.Description)" />
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Create Group</MudButton>
+            </MudCardActions>
+            @if (CreatedGroupSuccess == true)
+            {
+                <MudText Color="Color.Success">Success</MudText>
+            }
+            else
+            {
+                <MudText Color="Color.Success">Something went wrong</MudText>
+            }
+        </MudCard>
+
+    </EditForm>
+
+</MudItem>
 
 @code {
     private BettingGroupShared bettingGroup = new();
     private bool? CreatedGroupSuccess = null;
     private string CreatedGroupUrl = "";
+    [Parameter]
+    public EventCallback GetBettingGroups { get; set; }
 
     private async void OnValidSubmit()
     {
@@ -45,13 +49,13 @@
         {
             CreatedGroupSuccess = true;
             var betgroup = await createdGroupResponse.Content.ReadFromJsonAsync<BettingGroupShared>();
-            //navigationManager.NavigateTo($"/bettingGroup/{betgroup.Id}");
             CreatedGroupUrl = navigationManager.BaseUri + $"bettingGroup/{betgroup.Id}";
         }
         else
         {
             CreatedGroupSuccess = false;
         }
+        await GetBettingGroups.InvokeAsync();
         StateHasChanged();
     }
 }
