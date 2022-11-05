@@ -1,5 +1,8 @@
 using FootballBet.Infrastructure.Interfaces;
+using FootballBet.Repository.Repositories.Interfaces;
 using FootballBet.Server.Data.Repositories.Interfaces;
+using FootballBet.Shared.Models.Bets;
+using FootballBet.Shared.Models.Groups;
 
 namespace TestProject.TestApi;
 
@@ -12,30 +15,40 @@ public static class ApiWebApplicationExtension
             var fixtures = await client.GetFixtures(1, "2022");
             return fixtures;
         });
-        
-        app.MapGet("/test/matches",  (IFootballRepository repository) =>
+
+        app.MapGet("/test/matches", (IFootballRepository repository) =>
         {
             var matches = repository.GetAllMatchesForLeagueId(1);
             return matches;
         });
-        
+
         app.MapGet("/test/leagues", async (IFootballApiClient client) =>
         {
             var league = await client.GetSpecificLeague("1");
             return league;
         });
 
-        app.MapPost("test/seed", async (IFootballAPIService footballService) =>
-        {
-            await footballService.SeedDatabase("2022", 1);
-        });
-        
-        app.MapGet("test/saveOdds", async (IFootballApiClient client) =>
-        {
-            await client.SaveOddsForLeague(1, "2022");
-        });
-        app.MapGet("test/match/{matchId:int}/odds", async (int matchId, IFootballApiClient client) 
+        app.MapPost("test/seed",
+            async (IFootballAPIService footballService) => { await footballService.SeedDatabase("2022", 1); });
+
+        app.MapGet("test/saveOdds",
+            async (IFootballApiClient client) => { await client.SaveOddsForLeague(1, "2022"); });
+        app.MapGet("test/match/{matchId:int}/odds", async (int matchId, IFootballApiClient client)
             => await client.GetLatestOddsForMatch(matchId));
+
+        app.MapPost("test/bet/{userId}/{groupId}/placebet",
+            async (string userId, string groupId, BetDto bet, IBetService service) =>
+            {
+                await service.PlaceBetAsync(bet.OddsId, userId, bet.Amount, groupId);
+            });
+
+        app.MapPost("test/bettingGroup/{userId}/create",
+            async (string userId, BettingGroupShared bettingGroup, IGroupService service) =>
+                await service.CreateBettingGroup(userId, bettingGroup.Description ?? "none", bettingGroup.Name,
+                    CancellationToken.None));
         
+        app.MapGet("/test/bettingGroup/{userId}/getall",
+            async (string userId, IGroupService service) =>
+                await service.ListGroupsForUser(userId, CancellationToken.None));
     }
 }
