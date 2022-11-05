@@ -1,5 +1,4 @@
 using FootballBet.Infrastructure.Interfaces;
-using FootballBet.Repository.Repositories.Interfaces;
 using FootballBet.Server.Data.Repositories.Interfaces;
 using FootballBet.Shared.Models.Bets;
 using FootballBet.Shared.Models.Groups;
@@ -22,12 +21,19 @@ public static class ApiWebApplicationExtension
         app.MapGet("/test/leagues", async (IFootballApiClient client) =>
             client.GetSpecificLeague("1"));
 
-        app.MapPost("test/seed",
-            async (IFootballAPIService footballService) => { await footballService.SeedDatabase("2022", 1); });
+        app.MapPost("test/seed/matches",
+            async (string season, int leagueId, IFootballAPIService footballService) =>
+            {
+                await footballService.SeedDatabase(season, leagueId);
+            });
 
-        app.MapGet("test/saveOdds",
-            async (IFootballApiClient client) => { await client.SaveOddsForLeague(1, "2022"); });
-        app.MapGet("test/match/{matchId:int}/odds", async (int matchId, IFootballApiClient client)
+        app.MapPost("test/seed/odds",
+            async (string season, int leagueId, IFootballApiClient client) =>
+            {
+                await client.SaveOddsForLeague(leagueId, season);
+            });
+
+        app.MapGet("test/odds", async (int matchId, IFootballApiClient client)
             => await client.GetLatestOddsForMatch(matchId));
 
         app.MapPost("test/bets/place",
