@@ -1,4 +1,5 @@
-﻿@page "/bettingGroups"
+﻿@page "/bettingGroupOld"
+@using FootballBet.Client.Components.Groups
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using FootballBet.Shared
@@ -6,19 +7,13 @@
 @attribute [Authorize]
 @inject HttpClient Http
 
+<!--This page can only be accessed manually whilst it is being reworked-->
 <PageTitle>Create Betting Group</PageTitle>
 
 <h1>Create Betting Group</h1>
 
-<EditForm Model="@bettingGroup" OnValidSubmit="@HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <label>Group Name</label>
-    <InputText id="groupName" @bind-Value="bettingGroup.Name" />
-    <label>Description</label>
-    <InputText id="description" @bind-Value="bettingGroup.Description" />
-    <button type="submit">Ok</button>
-</EditForm>
+<CreateGroupComponent></CreateGroupComponent>
+
 
 <h1>Invite member</h1>
 <EditForm Model="@bettingGroupInvitation" OnValidSubmit="@HandleCreateInvitation">
@@ -56,15 +51,12 @@ else
     </table>
 }
 
+
 @code {
-    private BettingGroupShared bettingGroup = new();
     private List<BettingGroupShared> bettingGroups = new();
     private BettingGroupInvitationShared bettingGroupInvitation = new();
 
-    private async void HandleValidSubmit()
-    {
-        var createdGroup = await Http.PostAsJsonAsync("/group/", bettingGroup);
-    }
+    
     private async void HandleCreateInvitation()
     {
         var invitation = await Http.PostAsJsonAsync("/group/invitation", bettingGroupInvitation);
@@ -76,7 +68,7 @@ else
 
         try
         {
-            bettingGroups = await Http.GetFromJsonAsync<List<BettingGroupShared>>("/group") ?? new ();
+            bettingGroups = await Http.GetFromJsonAsync<List<BettingGroupShared>>("/group") ?? new();
             await Http.GetAsync("/FootballLeague");
         }
         catch (AccessTokenNotAvailableException exception)

@@ -17,13 +17,16 @@ namespace FootballBet.Server.Data.Services
         private readonly IUserRepository _userRepository;
         private readonly IEmailSender _emailSender;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IFootballRepository _footballRepository;
 
-        public GroupService(IGroupRepository groupRepository, IUserRepository userRepository, IEmailSender emailSender, IHttpContextAccessor httpContextAccessor)
+        public GroupService(IGroupRepository groupRepository, IUserRepository userRepository,
+            IEmailSender emailSender, IHttpContextAccessor httpContextAccessor, IFootballRepository footballRepository)
         {
             _groupRepository = groupRepository;
             _userRepository = userRepository;
             _emailSender = emailSender;
             _httpContextAccessor = httpContextAccessor;
+            _footballRepository = footballRepository;
         }
 
         public async Task<BettingGroupInvitationEntity> CreateInvitation(string groupId, string invitedUserEmail, string inviterUserId, CancellationToken ct)
@@ -36,14 +39,15 @@ namespace FootballBet.Server.Data.Services
             return invitation;
         }
 
-        public async Task<BettingGroupEntity> CreateBettingGroup(string creatorId, string description, string groupName, CancellationToken ct)
+        public async Task<BettingGroupShared> CreateBettingGroup(string creatorId, string description, string groupName, CancellationToken ct)
         {
             var user = await _userRepository.GetApplicationUserById(creatorId, ct);
+            var league = await _footballRepository.GetLeague(1);
             if (user == null)
-                throw new KeyNotFoundException(); //better exception needed
+                throw new KeyNotFoundException();
 
-            var newGroup = CreateBettingGroup(groupName, description, user);
-            return await _groupRepository.CreateGroup(user, newGroup, ct);
+            var newGroup = CreateBettingGroup(groupName, description, user, league);
+            return GroupMapper.Map(await _groupRepository.CreateGroup(user, newGroup, ct));
         }
 
         public async Task<List<BettingGroupShared>> ListGroupsForUser(string userId, CancellationToken ct)
@@ -97,7 +101,7 @@ namespace FootballBet.Server.Data.Services
                 InvitedUserEmail = invitedUserEmail
             };
 
-        private static BettingGroupEntity CreateBettingGroup(string groupName, string description, ApplicationUser creator)
+        private static BettingGroupEntity CreateBettingGroup(string groupName, string description, ApplicationUser creator, LeagueEntity league)
            => new()
            {
                Id = new Guid(),
@@ -107,7 +111,8 @@ namespace FootballBet.Server.Data.Services
                     {
                         CreateBettingGroupMember(creator)
                     },
-               CreatedAt = DateTime.UtcNow
+               CreatedAt = DateTime.UtcNow,
+               League = league
            };
 
         private static BettingGroupMemberEntity CreateBettingGroupMember(ApplicationUser user)

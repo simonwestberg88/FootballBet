@@ -38,7 +38,7 @@
             var result = await Http.PostAsJsonAsync<BettingGroupInvitationAcceptShared>($"/group/invitation/accept/", new BettingGroupInvitationAcceptShared() { InvitationId = this.InvitationId, GroupId = this.GroupId });
             if (result.IsSuccessStatusCode)
             {
-                navigationManager.NavigateTo("/bettingGroups");
+                navigationManager.NavigateTo("/bettingGroupOld");
             }
 
         }

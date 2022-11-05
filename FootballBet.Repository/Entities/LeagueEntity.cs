@@ -12,5 +12,6 @@ namespace FootballBet.Repository.Entities
         public string? LogoUrl { get; set; }
         public int? Season { get; set; }
         public ICollection<MatchEntity> Matches { get; set; }
+        public virtual ICollection<BettingGroupEntity> BettingGroups { get; set; }
     }
 }

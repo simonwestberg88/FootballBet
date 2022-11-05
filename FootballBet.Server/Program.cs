@@ -1,4 +1,6 @@
+using System.Text.Json.Serialization;
 using FootballBet.Infrastructure;
+using FootballBet.Infrastructure.Http;
 using FootballBet.Infrastructure.Interfaces;
 using FootballBet.Infrastructure.Services;
 using FootballBet.Infrastructure.Settings;
@@ -10,6 +12,7 @@ using FootballBet.Server.Controllers;
 using FootballBet.Server.Data.Repositories.Interfaces;
 using FootballBet.Server.Data.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,12 +44,13 @@ builder.Services.AddTransient<IFootballAPIService, FootballApiService>();
 builder.Services.AddTransient<IFootballRepository, FootballRepository>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IOddsRepository, OddsRepository>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 builder.Services.AddHttpContextAccessor();
 
-// builder.Services.AddAuthentication()
-//     .AddIdentityServerJwt();
+builder.Services.AddAuthentication()
+    .AddIdentityServerJwt();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -74,8 +78,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseIdentityServer();
-// app.UseAuthentication();
-// app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 
 app.MapRazorPages();

@@ -1,5 +1,5 @@
 ﻿using FootballBet.Infrastructure.Interfaces;
-using FootballBet.Shared.Models.Football;
+using FootballBet.Shared.Models.Admin;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FootballBet.Server.Controllers

@@ -14,11 +14,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FootballBet.Infrastructure", "FootballBet.Infrastructure\FootballBet.Infrastructure.csproj", "{C2731845-5D76-464A-868D-533989FBA91E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FootballBet.Infrastructure", "FootballBet.Infrastructure\FootballBet.Infrastructure.csproj", "{C2731845-5D76-464A-868D-533989FBA91E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FootballBet.Repository", "FootballBet.Repository\FootballBet.Repository.csproj", "{372DDE0A-081C-4331-9F3D-5B17DA669FA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FootballBet.Repository", "FootballBet.Repository\FootballBet.Repository.csproj", "{372DDE0A-081C-4331-9F3D-5B17DA669FA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{A11A8429-F768-44B5-9ED7-A6ABCA7F6054}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject", "TestProject\TestProject.csproj", "{A11A8429-F768-44B5-9ED7-A6ABCA7F6054}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

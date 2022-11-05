@@ -20,11 +20,9 @@ namespace FootballBet.Repository.Entities
         public MatchStatus MatchStatus { get; set; }
         public string Round { get; set; }
         public int? Season { get; set; }
-        public int LeagueId { get; set; }
-        public virtual LeagueEntity League { get; set; }
+        public int? LeagueId { get; set; }
         public virtual TeamEntity HomeTeam { get; set; }
         public virtual TeamEntity AwayTeam { get; set; }
-        public virtual ICollection<BetEntity> MatchBets { get; set; }
 
     }
     public enum MatchStatus
