@@ -13,7 +13,7 @@ public class MatchRepository : IMatchRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<MatchEntity>> GetMatchesForLeague(int leagueId)
+    public async Task<IEnumerable<MatchEntity>> GetMatches(int leagueId)
         => await _context.MatchEntities.Where(m => m.LeagueId == leagueId).ToListAsync();
 
     public async Task<MatchEntity?> GetMatchAsync(int matchId)
