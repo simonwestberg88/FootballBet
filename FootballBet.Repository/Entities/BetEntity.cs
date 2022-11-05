@@ -7,7 +7,7 @@ public class BetEntity
     public int Id { get; set; }
     public int? MatchId { get; set; }
     public string? UserId { get; set; }
-    public Guid? BettingGroupId { get; set; }
+    public string? BettingGroupId { get; set; }
     public int? OddsId { get; set; }
     public decimal WagerAmount { get; set; }
     public decimal PaybackAmount { get; set; }
