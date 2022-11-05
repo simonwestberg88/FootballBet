@@ -1,0 +1,27 @@
+@page "/OddsTestPage"
+@using FootballBet.Shared.Models.Odds
+<OddsComponent Odds="@_oddsList" />
+
+@code {
+
+    private List<OddsDto> _oddsList = new()
+    {
+        new OddsDto
+        {
+            Id = 1,
+            Odds = 10.2M,
+            MatchWinner = MatchWinnerEnumDto.Away,
+            AwayTeamGoals = 2,
+            HomeTeamGoals = 1
+        },
+        new OddsDto
+        {
+            Id = 2,
+            Odds = 10.2M,
+            MatchWinner = MatchWinnerEnumDto.Home,
+            AwayTeamGoals = 2,
+            HomeTeamGoals = 3
+        }
+    };
+
+}

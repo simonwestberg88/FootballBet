@@ -1,0 +1,22 @@
+@using FootballBet.Shared.Models.Odds
+<MudAutocomplete T="int" Label="Home Goals" @bind-Value="_homeGoals" SearchFunc="@Search"
+                         ResetValueOnEmptyText="@_resetValueOnEmptyText"
+                         CoerceText="@_coerceText" CoerceValue="@_coerceValue" />
+
+@code {
+    [Parameter] 
+    public int MatchId { get; set; }
+    [Parameter]
+    public static List<OddsDto>? Odds { get; set; }
+    private static int _homeGoals = 0;
+    private static int _awayGoals = 0;
+    private bool _resetValueOnEmptyText;
+    private bool _coerceText;
+    private bool _coerceValue;
+
+    private static async Task<IEnumerable<OddsDto>> Search(string homeGoals)
+    {
+        await Task.Delay(5);
+        return Odds.Where(o => o.HomeTeamGoals == _homeGoals && o.AwayTeamGoals == _awayGoals);
+    }
+}
