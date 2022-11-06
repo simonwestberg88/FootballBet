@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace FootballBet.Infrastructure.DependencyInjection;
 
@@ -12,6 +13,7 @@ public static class WebApplicationBuilderExtensions
 {
     public static void AddFootballBetDatabase(this WebApplicationBuilder builder)
     {
+        builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FootballBet.Repository")));

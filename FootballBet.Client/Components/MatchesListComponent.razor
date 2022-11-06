@@ -7,21 +7,21 @@
         @foreach (var round in _matches.Select(m => m.Round).Distinct())
         {
             <div align="center">
-                <MudText Typo="Typo.h4">@round</MudText>
-                @foreach (var date in GetUniqueDatesForRound(round))
+            <MudText Typo="Typo.h4">@round</MudText>
+            @foreach (var date in GetUniqueDatesForRound(round))
+            {
+                <MudText Typo="Typo.h5">@date.Date.ToString("dd/MM/yyyy")</MudText>
+                @foreach (var game in GetGamesForDate(date))
                 {
-                    <MudText Typo="Typo.h5">@date.Date.ToString("dd/MM/yyyy")</MudText>
-                    @foreach (var game in GetGamesForDate(date))
-                    {
-                        <MudListItem class="px-0">
-                            <MatchComponent MatchData="@game"></MatchComponent>
-                        </MudListItem>
-                    }
+                    <MudListItem class="px-0">
+                        <MatchComponent MatchData="@game"></MatchComponent>
+                    </MudListItem>
                 }
+            }
             </div>
         }
     </MudList>
-  
+
 </MudPaper>
 
 @code {
@@ -31,11 +31,6 @@
     {
         _matches = (await MatchService.GetMatchesAsync()).OrderBy(m => m.Date).ToList();
         await base.OnInitializedAsync();
-    }
-
-    private List<MatchDto> GetGamesForRound(string round)
-    {
-        return _matches.Where(m => m.Round == round).OrderBy(m => m.Date).ToList();
     }
 
     private List<DateTime> GetUniqueDatesForRound(string round)

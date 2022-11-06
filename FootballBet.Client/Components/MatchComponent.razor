@@ -1,6 +1,9 @@
 @using FootballBet.Shared.Models.Match
+@using FootballBet.Shared.Models.Odds
+@using FootballBet.Client.Services
+@inject IOddsService OddsService;
 
-<MudPaper Elevation="2" Style="margin: 10px">
+<MudPaper Elevation="2" Style="margin-top: 10px">
     <MudExpansionPanel @bind-IsExpanded="_isOpen" HideIcon="true">
         <TitleContent>
             <MudGrid>
@@ -22,20 +25,25 @@
             </MudGrid>
         </TitleContent>
         <ChildContent>
-            <MudButton Variant="Variant.Filled">Place bet</MudButton>
             <MudText Style="padding-top: 10px">@(MatchData.MatchStatus)</MudText>
-            </ChildContent>
-        </MudExpansionPanel>
-    </MudPaper>
+            <OddsComponent MatchId="MatchData.MatchId"></OddsComponent>
+        </ChildContent>
+    </MudExpansionPanel>
+</MudPaper>
 
-    @code {
+@code {
 
     [Parameter]
     public MatchDto MatchData { get; set; }
+    private IEnumerable<OddsDto>? _odds;
 
     bool _isOpen;
 
     private static int Width => 50;
     private int Height => 50;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
 
 }
