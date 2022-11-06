@@ -13,14 +13,14 @@
 @{
     if (BettingGroup is not null)
     {
-        <p>You have been invited to join @BettingGroup.Name</p>
+        <MudText Typo="Typo.h5">You have been invited to join @BettingGroup.Name</MudText>
     }
     else
     {
-        <p>Loading...</p>
+        <MudProgressCircular Color = "Color.Primary" Align = "Align.Center" Style = "height:70px;width:70px;" Indeterminate = "true" />
     }
 }
-<button @onclick="OnAccept">Accept invitation</button>
+<MudButton ButtonType="ButtonType.Submit" @onclick="OnAccept" Variant=" Variant.Filled" Color="Color.Primary" Class="ml-auto">Accept invitation</MudButton>
 
 @code {
 
@@ -38,7 +38,7 @@
             var result = await Http.PostAsJsonAsync<BettingGroupInvitationAcceptShared>($"/group/invitation/accept/", new BettingGroupInvitationAcceptShared() { InvitationId = this.InvitationId, GroupId = this.GroupId });
             if (result.IsSuccessStatusCode)
             {
-                navigationManager.NavigateTo("/bettingGroupOld");
+                navigationManager.NavigateTo($"/bettingGroup/{GroupId}");
             }
 
         }
