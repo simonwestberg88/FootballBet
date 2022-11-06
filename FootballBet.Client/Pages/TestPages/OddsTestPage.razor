@@ -1,10 +1,10 @@
 @page "/OddsTestPage"
 @using FootballBet.Shared.Models.Odds
-<OddsComponent Odds="@_oddsList" />
+<OddsComponent Odds="_oddsList" MatchId="1"/>
 
 @code {
 
-    private List<OddsDto> _oddsList = new()
+    private List<OddsDto>? _oddsList = new()
     {
         new OddsDto
         {
