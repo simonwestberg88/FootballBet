@@ -1,75 +1,46 @@
 @using FootballBet.Shared.Models.Match
 @using FootballBet.Client.Services
 @inject IMatchService MatchService;
+
 <MudPaper>
     <MudList>
-        <div align="center">
-            <MudText>Group Games</MudText>
-        </div>
-        @foreach (var match in _groupMatches1)
+        @foreach (var round in _matches.Select(m => m.Round).Distinct())
         {
-            <MudListItem>
-                <MatchComponent MatchData="@match"></MatchComponent>
-            </MudListItem>
-        }
-        <div align="center">
-            <MudText>8th Finals</MudText>
-        </div>
-        @foreach (var match in _eighthFinals)
-        {
-            <MudListItem>
-                <MatchComponent MatchData="@match"></MatchComponent>
-            </MudListItem>
-        }
-        <div align="center">
-            <MudText>Quarter Finals</MudText>
-        </div>
-        @foreach (var match in _quarterFinals)
-        {
-            <MudListItem>
-                <MatchComponent MatchData="@match"></MatchComponent>
-            </MudListItem>
-        }
-        <div align="center">
-            <MudText>Semi Finals</MudText>
-        </div>
-        @foreach (var match in _semiFinals)
-        {
-            <MudListItem>
-                <MatchComponent MatchData="@match"></MatchComponent>
-            </MudListItem>
-        }
-        <div align="center">
-            <MudText>Final</MudText>
-        </div>
-        @foreach (var match in _final)
-        {
-            <MudListItem>
-                <MatchComponent MatchData="@match"></MatchComponent>
-            </MudListItem>
+            <div align="center">
+            <MudText Typo="Typo.h4">@round</MudText>
+            @foreach (var date in GetUniqueDatesForRound(round))
+            {
+                <MudText Typo="Typo.h5">@date.Date.ToString("dd/MM/yyyy")</MudText>
+                @foreach (var game in GetGamesForDate(date))
+                {
+                    <MudListItem class="px-0">
+                        <MatchComponent MatchData="@game"></MatchComponent>
+                    </MudListItem>
+                }
+            }
+            </div>
         }
     </MudList>
+
 </MudPaper>
 
 @code {
     IEnumerable<MatchDto> _matches = new List<MatchDto>();
-    IEnumerable<MatchDto> _groupMatches1 = new List<MatchDto>();
-    IEnumerable<MatchDto> _groupMatches2 = new List<MatchDto>();
-    IEnumerable<MatchDto> _eighthFinals = new List<MatchDto>();
-    IEnumerable<MatchDto> _quarterFinals = new List<MatchDto>();
-    IEnumerable<MatchDto> _semiFinals = new List<MatchDto>();
-    IEnumerable<MatchDto> _final = new List<MatchDto>();
 
     protected override async Task OnInitializedAsync()
     {
-        _matches = (await MatchService.GetMatchesAsync()).ToList();
-        _groupMatches1 = _matches.Where(m => m.Round == "Group Stage - 1").ToList();
-        _groupMatches2 = _matches.Where(m => m.Round == "Group Stage - 2").ToList();
-        _eighthFinals = _matches.Where(m => m.Round == "8th Finals").ToList();
-        _quarterFinals = _matches.Where(m => m.Round == "Quarter-finals").ToList();
-        _semiFinals = _matches.Where(m => m.Round == "Semi-finals").ToList();
-        _final = _matches.Where(m => m.Round == "Final").ToList();
+        _matches = (await MatchService.GetMatchesAsync()).OrderBy(m => m.Date).ToList();
         await base.OnInitializedAsync();
+    }
+
+    private List<DateTime> GetUniqueDatesForRound(string round)
+    {
+        return _matches.Where(m => m.Round == round).Select(m => m.Date.Date).OrderBy(m => m.Date).Distinct().ToList();
+    }
+
+    private List<MatchDto> GetGamesForDate(DateTime date)
+    {
+        return _matches.Where(m => m.Date.Date == date.Date).OrderBy(m => m.Date).ToList();
     }
 
 }
