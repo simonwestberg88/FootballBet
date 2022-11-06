@@ -98,7 +98,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _matches = (await MatchService.GetMatchesAsync()).ToList();
+        _matches = (await MatchService.GetMatchesAsync()).OrderBy(m => m.Date).ToList();
         _groupMatches1 = _matches.Where(m => m.Round == "Group Stage - 1").ToList();
         _groupMatches2 = _matches.Where(m => m.Round == "Group Stage - 2").ToList();
         _groupMatches3 = _matches.Where(m => m.Round == "Group Stage - 3").ToList();

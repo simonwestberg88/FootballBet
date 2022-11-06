@@ -3,15 +3,18 @@
 <MudPaper Elevation="2" Style="margin: 10px">
     <MudExpansionPanel @bind-IsExpanded="_isOpen" HideIcon="true">
         <TitleContent>
-            <MudGrid >
+            <MudGrid>
                 <MudItem xs="3" Style="display: flex; flex-direction: column; justify-content: center; align-items: center">
-                    <div>
-                        <MudText>@MatchData.HomeTeamName</MudText>
-                        <MudImage Src="@MatchData.HomeTeamLogo" Width="Width" Height="Height"></MudImage>
-                    </div>
+                    <MudText>@MatchData.HomeTeamName</MudText>
+                    <MudImage Src="@MatchData.HomeTeamLogo" Width="Width" Height="Height"></MudImage>
                 </MudItem>
                 <MudItem xs="6" Style="display: flex; justify-content: center; align-items: center">
-                    <MudText>@MatchData.HomeCurrentGoals - @MatchData.AwayCurrentGoals</MudText>
+                    <MudItem style="display: block">
+                        <MudText Style="text-align: center">@MatchData.Date.ToString("dd/MM/yyyy")</MudText>
+                        <MudText Style="text-align: center">@MatchData.Date.ToString("H:mm")</MudText>
+                        <MudText Style="text-align: center">@MatchData.HomeCurrentGoals - @MatchData.AwayCurrentGoals</MudText>
+
+                    </MudItem>
                 </MudItem>
                 <MudItem xs="3" Style="display: flex; flex-direction: column; justify-content: center; align-items: center">
                     <MudText>@MatchData.AwayTeamName</MudText>
@@ -22,11 +25,11 @@
         <ChildContent>
             <MudButton Variant="Variant.Filled">Place bet</MudButton>
             <MudText Style="padding-top: 10px">@(MatchData.MatchStatus)</MudText>
-        </ChildContent>
-    </MudExpansionPanel>
-</MudPaper>
+            </ChildContent>
+        </MudExpansionPanel>
+    </MudPaper>
 
-@code {
+    @code {
 
     [Parameter]
     public MatchDto MatchData { get; set; }
