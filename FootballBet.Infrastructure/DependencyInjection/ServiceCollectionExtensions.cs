@@ -23,6 +23,7 @@ public static class ServiceCollectionExtensions
             .AddTransient<IUserRepository, UserRepository>()
             .AddTransient<ITransactionService, TransactionService>()
             .AddTransient<IBetService, BetService>()
+            .AddMemoryCache()
             .AddRepositories();
 
     private static IServiceCollection AddRepositories(this IServiceCollection services)
