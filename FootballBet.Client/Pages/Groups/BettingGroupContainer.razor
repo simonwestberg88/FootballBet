@@ -1,8 +1,25 @@
 ﻿@page "/BettingGroup/{groupId}"
+@using FootballBet.Client.Components.Groups
+@using FootballBet.Shared.Models.Groups
+@inject HttpClient Http
 
-<h3>BettingGroupContainer for group @GroupId</h3>
+@if (HasGottenGroup && BettingGroup.CurrentUserIsAdmin)
+{
+    <InviteMemberToGroupComponent ThisGroupId = "@GroupId"></InviteMemberToGroupComponent>
+}
+
+<MatchesListComponent></MatchesListComponent>
 
 @code {
     [Parameter]
     public string? GroupId { get; set; }
+    private BettingGroupShared BettingGroup { get; set; }
+    private bool HasGottenGroup;
+
+    protected override async Task OnInitializedAsync()
+    {
+        BettingGroup = await Http.GetFromJsonAsync<BettingGroupShared>($"/group/{GroupId}") ?? new();
+        HasGottenGroup = true;
+        StateHasChanged();
+    }
 }

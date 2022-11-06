@@ -31,6 +31,11 @@ namespace FootballBet.Server.Data.Services
 
         public async Task<BettingGroupInvitationEntity> CreateInvitation(string groupId, string invitedUserEmail, string inviterUserId, CancellationToken ct)
         {
+            var bettingGroupMembers = (await _groupRepository.GetGroupById(Guid.Parse(groupId), ct)).Memberships;
+            if(bettingGroupMembers?.Any(m => m.ApplicationUser.Email == invitedUserEmail) == true)
+            {
+                throw new InvalidOperationException("User is already a member of group");
+            }
             var invitation = await _groupRepository.CreateBettingGroupInvitation(CreateBettingGroupInvitation(Guid.Parse(groupId), inviterUserId, invitedUserEmail), ct);
 
             var callbackUrl = $"https://{_httpContextAccessor.HttpContext.Request.Host.Value}/invitation/{invitation.BettingGroupInvitationId}/{groupId}";
@@ -47,7 +52,7 @@ namespace FootballBet.Server.Data.Services
                 throw new KeyNotFoundException();
 
             var newGroup = CreateBettingGroup(groupName, description, user, league);
-            return GroupMapper.Map(await _groupRepository.CreateGroup(user, newGroup, ct));
+            return GroupMapper.Map(await _groupRepository.CreateGroup(user, newGroup, ct), user.Id);
         }
 
         public async Task<List<BettingGroupShared>> ListGroupsForUser(string userId, CancellationToken ct)
@@ -55,14 +60,11 @@ namespace FootballBet.Server.Data.Services
             var bettingGroupIds = (await _groupRepository.GetBettingGroupMemberByUserId(userId, ct)).Select(p => p.BettingGroupEntityId)
                 .ToList();
             var groupList = new List<BettingGroupEntity>();
-
             foreach (var id in bettingGroupIds)
             {
-                //wanted to do this by making a task list and awaiting all, but could not be done 
-                //this close to the context... will have to get back to it later
                 groupList.Add(await _groupRepository.GetGroupById(id, ct));
             }
-            return groupList.Select(g => GroupMapper.Map(g)).ToList();
+            return groupList.Select(g => GroupMapper.Map(g, userId)).ToList();
         }
 
         public async Task ConsumeInvitation(string invitationId, string groupId, string userId, CancellationToken ct)
@@ -78,14 +80,14 @@ namespace FootballBet.Server.Data.Services
                 throw new BadHttpRequestException("Validation of invitation failed");
         }
 
-        public async Task<BettingGroupShared> GetBettingGroupById(string groupId, CancellationToken ct)
-            => GroupMapper.Map(await _groupRepository.GetGroupById(Guid.Parse(groupId), ct) ?? throw new NotFoundException("Betting group not found"));
+        public async Task<BettingGroupShared> GetBettingGroupById(string groupId, string currentUserId, CancellationToken ct)
+            => GroupMapper.Map(await _groupRepository.GetGroupById(Guid.Parse(groupId), ct), currentUserId) ?? throw new NotFoundException("Betting group not found");
 
         private async Task<bool> ValidateInvitation(string groupId, string invitationId, string userEmail, CancellationToken ct)
         {
             var invitation = await _groupRepository.GetBettingGroupInvitationByIdAsync(Guid.Parse(invitationId), ct);
             var group = await _groupRepository.GetGroupById(Guid.Parse(groupId), ct);
-            //can make above calls at the same time and await both tasks
+
             if (invitation == null || group == null || invitation.InvitedUserEmail != userEmail || invitation.BettingGroupEntityId != Guid.Parse(groupId))
                 return false;
             return true;
@@ -111,6 +113,7 @@ namespace FootballBet.Server.Data.Services
                     {
                         CreateBettingGroupMember(creator)
                     },
+               Creator = creator,
                CreatedAt = DateTime.UtcNow,
                League = league
            };

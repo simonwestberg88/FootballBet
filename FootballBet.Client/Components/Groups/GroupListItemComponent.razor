@@ -3,7 +3,7 @@
 
 @if (BettingGroup == null)
 {
-    <MudText Typo="Typo.h5" Align="Align.Center">...Loading</MudText>
+    <MudProgressCircular Color="Color.Primary" Align="Align.Center" Style="height:70px;width:70px;" Indeterminate="true" />
 }
 else
 {
@@ -29,9 +29,6 @@ else
                         </MudList>
                     </div>
                 </MudCardContent>
-                <MudCardActions Class="d-flex justify-center">
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Style="width:50%;">Go to group</MudButton>
-                </MudCardActions>
         </MudCard>
     </MudItem>
 }
