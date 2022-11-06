@@ -31,7 +31,7 @@ namespace FootballBet.Server.Controllers
 
         [HttpGet("{bettingGroupId}")]
         public async Task<IActionResult> GetGroupById(string bettingGroupId, CancellationToken ct)
-            => Ok(await _groupService.GetBettingGroupById(bettingGroupId.ToString(), ct));
+            => Ok(await _groupService.GetBettingGroupById(bettingGroupId.ToString(), User.Identity.GetUserId(), ct));
 
         [HttpPost("invitation")]
         public async Task<IActionResult> CreateInvitation(BettingGroupInvitationShared invitation, CancellationToken ct)

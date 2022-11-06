@@ -5,13 +5,14 @@ namespace FootballBet.Infrastructure.Mappers;
 
 public static class GroupMapper
 {
-    public static BettingGroupShared Map(BettingGroupEntity bettingGroupEntity)
+    public static BettingGroupShared Map(BettingGroupEntity bettingGroupEntity, string currentUserId)
         => new()
         {
             Description = bettingGroupEntity.Description,
             Name = bettingGroupEntity.Name,
             Id = bettingGroupEntity.Id,
             Memberships = bettingGroupEntity?.Memberships?.Select(x => Map(x))?.ToList(),
+            CurrentUserIsAdmin = bettingGroupEntity?.Creator?.Id == currentUserId,
             League = Map(bettingGroupEntity?.League)
         };
 

@@ -30,7 +30,7 @@
     }
     else{
         <MudGrid Class="mt-8">
-            <MudText Typo="Typo.h5" Align="Align.Center">...Loading</MudText>
+            <MudProgressCircular Align="Align.Center" Color="Color.Primary" Style="height:70px;width:70px;" Indeterminate="true" />
         </MudGrid>
     }
 </MudContainer>
@@ -49,7 +49,6 @@
         try
         {
             BettingGroups = await Http.GetFromJsonAsync<List<BettingGroupShared>>("/group") ?? new();
-            await Http.GetAsync("/FootballLeague");
             HasGottenGroups = true;
             StateHasChanged();
         }
