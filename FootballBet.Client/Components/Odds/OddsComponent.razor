@@ -1,21 +1,73 @@
 @using FootballBet.Shared.Models.Odds
-@foreach(var odd in Odds)
-{
-    <MudPaper Style="flex-direction: column">
-        <MudText>@odd.HomeTeamGoals - @odd.AwayTeamGoals : @odd.Odds</MudText>
-    </MudPaper>
-}
-<MudText>we are in component</MudText>
+<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme"/>
+<MudGrid Spacing="3">
+    <MudItem xs="4">
+        <MudText Align="Align.Center" Style="padding-bottom:15px;padding-top: 10px">HomeWin</MudText>
+        @foreach (var odd in _homeOdds)
+        {
+            <MudPaper Style="display: flex; flex-direction: row; margin-bottom: 15px" Elevation="0">
+                <MudPaper Style="width: 50%;">
+                    <MudText Align="Align.Center">@odd.HomeTeamGoals - @odd.AwayTeamGoals</MudText>
+                </MudPaper>
+                <MudPaper Style="@($"background:{_theme.PaletteDark.Secondary}; width: 50%")">
+                    <MudText Align="Align.Center">@odd.Odds</MudText>
+                </MudPaper>
+            </MudPaper>
+        }
+    </MudItem>
+    <MudItem xs="4">
+        <MudText Align="Align.Center" Style="padding-bottom:15px;padding-top: 10px">Draw</MudText>
+        @foreach (var odd in _drawOdds)
+        {
+            <MudPaper Style="display: flex; flex-direction: row; margin-bottom: 15px" Elevation="0">
+                <MudPaper Style="width: 50%;">
+                    <MudText Align="Align.Center">@odd.HomeTeamGoals - @odd.AwayTeamGoals</MudText>
+                </MudPaper>
+                <MudPaper Style="@($"background:{_theme.PaletteDark.Secondary}; width: 50%")">
+                    <MudText Align="Align.Center">@odd.Odds</MudText>
+                </MudPaper>
+            </MudPaper>
+        }
+    </MudItem>
+    <MudItem xs="4">
+        <MudText Align="Align.Center" Style="padding-bottom:15px;padding-top: 10px">Away</MudText>
+        @foreach (var odd in _awayOdds)
+        {
+            <MudPaper Style="display: flex; flex-direction: row; margin-bottom: 15px" Elevation="0">
+                <MudPaper Style="width: 50%;">
+                    <MudText Align="Align.Center">@odd.HomeTeamGoals - @odd.AwayTeamGoals</MudText>
+                </MudPaper>
+                <MudPaper Style="@($"background:{_theme.PaletteDark.Secondary}; width: 50%")">
+                    <MudText Align="Align.Center">@odd.Odds</MudText>
+                </MudPaper>
+            </MudPaper>
+        }
+    </MudItem>
+</MudGrid>
 
 @code {
-    [Parameter] 
+
+    [Parameter]
     public int MatchId { get; set; }
+
     [Parameter]
     public List<OddsDto>? Odds { get; set; }
-    private int _homeGoals = 0;
-    private int _awayGoals = 0;
-    private bool _resetValueOnEmptyText;
-    private bool _coerceText;
-    private bool _coerceValue;
-    
+
+    private bool _isDarkMode = true;
+    private MudTheme _theme = new();
+
+
+    private static List<OddsDto>? _homeOdds;
+    private static List<OddsDto>? _awayOdds;
+    private static List<OddsDto>? _drawOdds;
+
+
+    protected override Task OnInitializedAsync()
+    {
+        _homeOdds = Odds?.Where(o => o.MatchWinner == MatchWinnerEnumDto.Home).ToList();
+        _awayOdds = Odds?.Where(o => o.MatchWinner == MatchWinnerEnumDto.Away).ToList();
+        _drawOdds = Odds?.Where(o => o.MatchWinner == MatchWinnerEnumDto.Draw).ToList();
+        return base.OnInitializedAsync();
+    }
+
 }
