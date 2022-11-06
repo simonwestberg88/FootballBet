@@ -1,0 +1,44 @@
+@using FootballBet.Shared.Models.Odds
+@using FootballBet.Client.Services
+@inject IOddsService OddsService;
+
+<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme"/>
+<MudExpansionPanels>
+    <MudText Typo="Typo.h5">Odds</MudText>
+    <MudExpansionPanel Text="Home">
+        <OddsPanel Odds="_homeOdds"></OddsPanel>
+    </MudExpansionPanel>
+    <MudExpansionPanel Text="Draw">
+        <OddsPanel Odds="_drawOdds"></OddsPanel>
+    </MudExpansionPanel>
+    <MudExpansionPanel Text="Away">
+        <OddsPanel Odds="_awayOdds"></OddsPanel>
+    </MudExpansionPanel>
+</MudExpansionPanels>
+
+@code {
+
+    [Parameter]
+    public int MatchId { get; set; }
+
+    [Parameter]
+    public List<OddsDto>? Odds { get; set; }
+
+    private bool _isDarkMode = true;
+    private MudTheme _theme = new();
+
+    private List<OddsDto> _odds = new();
+    private static List<OddsDto>? _homeOdds;
+    private static List<OddsDto>? _awayOdds;
+    private static List<OddsDto>? _drawOdds;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _odds = (await OddsService.GetOdds(MatchId) ?? Array.Empty<OddsDto>()).ToList();
+        _homeOdds = _odds.Where(o => o.MatchWinner == MatchWinnerEnumDto.Home).ToList();
+        _awayOdds = _odds.Where(o => o.MatchWinner == MatchWinnerEnumDto.Away).ToList();
+        _drawOdds = _odds.Where(o => o.MatchWinner == MatchWinnerEnumDto.Draw).ToList();
+        await base.OnInitializedAsync();
+    }
+
+}
