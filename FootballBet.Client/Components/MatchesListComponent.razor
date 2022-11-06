@@ -1,10 +1,11 @@
 @using FootballBet.Shared.Models.Match
 @using FootballBet.Client.Services
 @inject IMatchService MatchService;
+
 <MudPaper>
     <MudList>
         <div align="center">
-            <MudText>Group Games</MudText>
+            <MudText>Group Games Round 1</MudText>
         </div>
         @foreach (var match in _groupMatches1)
         {
@@ -12,6 +13,27 @@
                 <MatchComponent MatchData="@match"></MatchComponent>
             </MudListItem>
         }
+
+        <div align="center">
+            <MudText>Group Games Round 2</MudText>
+        </div>
+        @foreach (var match in _groupMatches2)
+        {
+            <MudListItem>
+                <MatchComponent MatchData="@match"></MatchComponent>
+            </MudListItem>
+        } 
+
+        <div align="center">
+            <MudText>Group Games Round 3</MudText>
+        </div>
+        @foreach (var match in _groupMatches3)
+        {
+            <MudListItem>
+                <MatchComponent MatchData="@match"></MatchComponent>
+            </MudListItem>
+        }
+
         <div align="center">
             <MudText>8th Finals</MudText>
         </div>
@@ -21,6 +43,7 @@
                 <MatchComponent MatchData="@match"></MatchComponent>
             </MudListItem>
         }
+
         <div align="center">
             <MudText>Quarter Finals</MudText>
         </div>
@@ -39,6 +62,17 @@
                 <MatchComponent MatchData="@match"></MatchComponent>
             </MudListItem>
         }
+
+        <div align="center">
+            <MudText>Bronze Final</MudText>
+        </div>
+        @foreach (var match in _bronzeGame)
+        {
+            <MudListItem>
+                <MatchComponent MatchData="@match"></MatchComponent>
+            </MudListItem>
+        }
+
         <div align="center">
             <MudText>Final</MudText>
         </div>
@@ -55,9 +89,11 @@
     IEnumerable<MatchDto> _matches = new List<MatchDto>();
     IEnumerable<MatchDto> _groupMatches1 = new List<MatchDto>();
     IEnumerable<MatchDto> _groupMatches2 = new List<MatchDto>();
+    IEnumerable<MatchDto> _groupMatches3 = new List<MatchDto>();
     IEnumerable<MatchDto> _eighthFinals = new List<MatchDto>();
     IEnumerable<MatchDto> _quarterFinals = new List<MatchDto>();
     IEnumerable<MatchDto> _semiFinals = new List<MatchDto>();
+    IEnumerable<MatchDto> _bronzeGame = new List<MatchDto>();
     IEnumerable<MatchDto> _final = new List<MatchDto>();
 
     protected override async Task OnInitializedAsync()
@@ -65,9 +101,11 @@
         _matches = (await MatchService.GetMatchesAsync()).ToList();
         _groupMatches1 = _matches.Where(m => m.Round == "Group Stage - 1").ToList();
         _groupMatches2 = _matches.Where(m => m.Round == "Group Stage - 2").ToList();
+        _groupMatches3 = _matches.Where(m => m.Round == "Group Stage - 3").ToList();
         _eighthFinals = _matches.Where(m => m.Round == "8th Finals").ToList();
         _quarterFinals = _matches.Where(m => m.Round == "Quarter-finals").ToList();
         _semiFinals = _matches.Where(m => m.Round == "Semi-finals").ToList();
+        _bronzeGame = _matches.Where(m => m.Round == "3rd Place Final").ToList();
         _final = _matches.Where(m => m.Round == "Final").ToList();
         await base.OnInitializedAsync();
     }
