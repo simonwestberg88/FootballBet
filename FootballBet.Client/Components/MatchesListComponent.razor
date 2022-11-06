@@ -4,110 +4,47 @@
 
 <MudPaper>
     <MudList>
-        <div align="center">
-            <MudText>Group Games Round 1</MudText>
-        </div>
-        @foreach (var match in _groupMatches1)
+        @foreach (var round in _rounds)
         {
-            <MudListItem class="px-0">
-                <MatchComponent MatchData="@match"></MatchComponent>
-            </MudListItem>
-        }
-
-        <div align="center">
-            <MudText>Group Games Round 2</MudText>
-        </div>
-        @foreach (var match in _groupMatches2)
-        {
-            <MudListItem class="px-0">
-                <MatchComponent MatchData="@match"></MatchComponent>
-            </MudListItem>
-        } 
-
-        <div align="center">
-            <MudText>Group Games Round 3</MudText>
-        </div>
-        @foreach (var match in _groupMatches3)
-        {
-            <MudListItem class="px-0">
-                <MatchComponent MatchData="@match"></MatchComponent>
-            </MudListItem>
-        }
-
-        <div align="center">
-            <MudText>8th Finals</MudText>
-        </div>
-        @foreach (var match in _eighthFinals)
-        {
-            <MudListItem class="px-0">
-                <MatchComponent MatchData="@match"></MatchComponent>
-            </MudListItem>
-        }
-
-        <div align="center">
-            <MudText>Quarter Finals</MudText>
-        </div>
-        @foreach (var match in _quarterFinals)
-        {
-            <MudListItem class="px-0">
-                <MatchComponent MatchData="@match"></MatchComponent>
-            </MudListItem>
-        }
-        <div align="center">
-            <MudText>Semi Finals</MudText>
-        </div>
-        @foreach (var match in _semiFinals)
-        {
-            <MudListItem class="px-0">
-                <MatchComponent MatchData="@match"></MatchComponent>
-            </MudListItem>
-        }
-
-        <div align="center">
-            <MudText>Bronze Final</MudText>
-        </div>
-        @foreach (var match in _bronzeGame)
-        {
-            <MudListItem class="px-0">
-                <MatchComponent MatchData="@match"></MatchComponent>
-            </MudListItem>
-        }
-
-        <div align="center">
-            <MudText>Final</MudText>
-        </div>
-        @foreach (var match in _final)
-        {
-            <MudListItem class="px-0">
-                <MatchComponent MatchData="@match"></MatchComponent>
-            </MudListItem>
+            <div align="center">
+                <MudText Typo="Typo.h4">@round</MudText>
+                @foreach (var date in GetUniqueDatesForRound(round))
+                {
+                    <MudText Typo="Typo.h5">@date.Date.ToString("dd/MM/yyyy")</MudText>
+                    @foreach (var game in GetGamesForDate(date))
+                    {
+                        <MudListItem class="px-0">
+                            <MatchComponent MatchData="@game"></MatchComponent>
+                        </MudListItem>
+                    }
+                }
+            </div>
         }
     </MudList>
+  
 </MudPaper>
 
 @code {
     IEnumerable<MatchDto> _matches = new List<MatchDto>();
-    IEnumerable<MatchDto> _groupMatches1 = new List<MatchDto>();
-    IEnumerable<MatchDto> _groupMatches2 = new List<MatchDto>();
-    IEnumerable<MatchDto> _groupMatches3 = new List<MatchDto>();
-    IEnumerable<MatchDto> _eighthFinals = new List<MatchDto>();
-    IEnumerable<MatchDto> _quarterFinals = new List<MatchDto>();
-    IEnumerable<MatchDto> _semiFinals = new List<MatchDto>();
-    IEnumerable<MatchDto> _bronzeGame = new List<MatchDto>();
-    IEnumerable<MatchDto> _final = new List<MatchDto>();
-
+    IEnumerable<string> _rounds = new List<string>();
     protected override async Task OnInitializedAsync()
     {
         _matches = (await MatchService.GetMatchesAsync()).OrderBy(m => m.Date).ToList();
-        _groupMatches1 = _matches.Where(m => m.Round == "Group Stage - 1").ToList();
-        _groupMatches2 = _matches.Where(m => m.Round == "Group Stage - 2").ToList();
-        _groupMatches3 = _matches.Where(m => m.Round == "Group Stage - 3").ToList();
-        _eighthFinals = _matches.Where(m => m.Round == "8th Finals").ToList();
-        _quarterFinals = _matches.Where(m => m.Round == "Quarter-finals").ToList();
-        _semiFinals = _matches.Where(m => m.Round == "Semi-finals").ToList();
-        _bronzeGame = _matches.Where(m => m.Round == "3rd Place Final").ToList();
-        _final = _matches.Where(m => m.Round == "Final").ToList();
+        _rounds = _matches.Select(m => m.Round).Distinct();
         await base.OnInitializedAsync();
+    }
+
+    private List<MatchDto> GetGamesForRound(string round)
+    {
+        return _matches.Where(m => m.Round == round).OrderBy(m => m.Date).ToList();
+    }
+    private List<DateTime> GetUniqueDatesForRound(string round)
+    {
+        return _matches.Where(m => m.Round == round).Select(m => m.Date.Date).OrderBy(m => m.Date).Distinct().ToList();
+    }
+    private List<MatchDto> GetGamesForDate(DateTime date)
+    {
+        return _matches.Where(m => m.Date.Date == date.Date).OrderBy(m => m.Date).ToList();
     }
 
 }
