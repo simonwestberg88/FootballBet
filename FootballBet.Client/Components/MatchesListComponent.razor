@@ -4,7 +4,7 @@
 
 <MudPaper>
     <MudList>
-        @foreach (var round in _rounds)
+        @foreach (var round in _matches.Select(m => m.Round).Distinct())
         {
             <div align="center">
                 <MudText Typo="Typo.h4">@round</MudText>
@@ -26,11 +26,10 @@
 
 @code {
     IEnumerable<MatchDto> _matches = new List<MatchDto>();
-    IEnumerable<string> _rounds = new List<string>();
+
     protected override async Task OnInitializedAsync()
     {
         _matches = (await MatchService.GetMatchesAsync()).OrderBy(m => m.Date).ToList();
-        _rounds = _matches.Select(m => m.Round).Distinct();
         await base.OnInitializedAsync();
     }
 
@@ -38,10 +37,12 @@
     {
         return _matches.Where(m => m.Round == round).OrderBy(m => m.Date).ToList();
     }
+
     private List<DateTime> GetUniqueDatesForRound(string round)
     {
         return _matches.Where(m => m.Round == round).Select(m => m.Date.Date).OrderBy(m => m.Date).Distinct().ToList();
     }
+
     private List<MatchDto> GetGamesForDate(DateTime date)
     {
         return _matches.Where(m => m.Date.Date == date.Date).OrderBy(m => m.Date).ToList();
