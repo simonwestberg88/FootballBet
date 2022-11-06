@@ -6,43 +6,13 @@
 <MudExpansionPanels>
     <MudText Typo="Typo.h5">Odds</MudText>
     <MudExpansionPanel Text="Home">
-        @foreach (var odd in _homeOdds)
-        {
-            <MudPaper Style="display: flex; flex-direction: row; margin-bottom: 15px" Elevation="0">
-                <MudPaper Style="width: 50%;">
-                    <MudText Align="Align.Center">@odd.HomeTeamGoals - @odd.AwayTeamGoals</MudText>
-                </MudPaper>
-                <MudPaper Style="@($"background:{_theme.PaletteDark.Secondary}; width: 50%")">
-                    <MudText Align="Align.Center">@odd.Odds</MudText>
-                </MudPaper>
-            </MudPaper>
-        }
+        <OddsPanel Odds="_homeOdds"></OddsPanel>
     </MudExpansionPanel>
     <MudExpansionPanel Text="Draw">
-        @foreach (var odd in _drawOdds)
-        {
-            <MudPaper Style="display: flex; flex-direction: row; margin-bottom: 15px" Elevation="0">
-                <MudPaper Style="width: 50%;">
-                    <MudText Align="Align.Center">@odd.HomeTeamGoals - @odd.AwayTeamGoals</MudText>
-                </MudPaper>
-                <MudPaper Style="@($"background:{_theme.PaletteDark.Secondary}; width: 50%")">
-                    <MudText Align="Align.Center">@odd.Odds</MudText>
-                </MudPaper>
-            </MudPaper>
-        }
+        <OddsPanel Odds="_drawOdds"></OddsPanel>
     </MudExpansionPanel>
     <MudExpansionPanel Text="Away">
-        @foreach (var odd in _awayOdds)
-        {
-            <MudPaper Style="display: flex; flex-direction: row; margin-bottom: 15px" Elevation="0">
-                <MudPaper Style="width: 50%;">
-                    <MudText Align="Align.Center">@odd.HomeTeamGoals - @odd.AwayTeamGoals</MudText>
-                </MudPaper>
-                <MudPaper Style="@($"background:{_theme.PaletteDark.Secondary}; width: 50%")">
-                    <MudText Align="Align.Center">@odd.Odds</MudText>
-                </MudPaper>
-            </MudPaper>
-        }
+        <OddsPanel Odds="_awayOdds"></OddsPanel>
     </MudExpansionPanel>
 </MudExpansionPanels>
 
@@ -61,10 +31,6 @@
     private static List<OddsDto>? _homeOdds;
     private static List<OddsDto>? _awayOdds;
     private static List<OddsDto>? _drawOdds;
-    private static OddsDto _homeWinner;
-    private static OddsDto _awayWinner;
-    private static OddsDto _draw;
-
 
     protected override async Task OnInitializedAsync()
     {
