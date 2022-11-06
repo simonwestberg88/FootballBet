@@ -26,12 +26,12 @@
         </TitleContent>
         <ChildContent>
             <MudText Style="padding-top: 10px">@(MatchData.MatchStatus)</MudText>
-            <OddsComponent MatchId="MatchData.MatchId" Odds="@_odds.ToList()"></OddsComponent>
-            </ChildContent>
-        </MudExpansionPanel>
-    </MudPaper>
+            <OddsComponent MatchId="MatchData.MatchId"></OddsComponent>
+        </ChildContent>
+    </MudExpansionPanel>
+</MudPaper>
 
-    @code {
+@code {
 
     [Parameter]
     public MatchDto MatchData { get; set; }
@@ -43,7 +43,6 @@
     private int Height => 50;
     protected override async Task OnInitializedAsync()
     {
-        _odds = await OddsService.GetOdds(MatchData.MatchId);
         await base.OnInitializedAsync();
     }
 
