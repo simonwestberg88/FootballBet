@@ -32,7 +32,7 @@ public class GroupRepository : IGroupRepository
     }
 
     public async Task<BettingGroupEntity> GetGroupById(Guid groupId, CancellationToken ct)
-        => await _context.BettingGroups.Include(group => group.Memberships).Include(group => group.League).Include(group => group.Creator).FirstOrDefaultAsync(x => x.Id == groupId, ct);
+        => await _context.BettingGroups.Include(group => group.Memberships).ThenInclude(m => m.ApplicationUser).Include(group => group.League).FirstOrDefaultAsync(x => x.Id == groupId, ct);
 
     public async Task<BettingGroupInvitationEntity> CreateBettingGroupInvitation(BettingGroupInvitationEntity invitationEntity, CancellationToken ct)
     {

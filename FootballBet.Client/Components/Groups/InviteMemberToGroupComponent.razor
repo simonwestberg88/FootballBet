@@ -1,0 +1,65 @@
+﻿@using FootballBet.Client.Components.Groups
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using FootballBet.Shared
+@using FootballBet.Shared.Models.Groups
+@inject HttpClient Http
+@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+
+
+<MudItem xs="12" sm="12" md="12">
+    <EditForm Model="@bettingGroupInvitation" OnValidSubmit="@HandleCreateInvitation">
+        <MudCard Elevation="25" Class="rounded-lg pb-4">
+            <DataAnnotationsValidator />
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h5" Align="Align.Center">Invite user to group</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudTextField T="string" Label="Email" Required="true" RequiredError="Email is required!"
+                              @bind-Value="bettingGroupInvitation.InvitedUserEmail"
+                              Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
+            </MudCardContent>
+            <MudCardActions>
+                @if(!IsSuccess)
+                {
+                    <MudAlert Severity="Severity.Error">Something went wrong</MudAlert>
+                }
+                @if (!RequestIsPending)
+                {
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Invite</MudButton>
+                }
+                else
+                {
+                    <MudProgressCircular Color="Color.Primary" Class="ml-auto" Indeterminate="true" />
+                }
+            </MudCardActions>
+        </MudCard>
+
+    </EditForm>
+
+</MudItem>
+
+
+@code {
+    private BettingGroupInvitationShared bettingGroupInvitation = new();
+    [Parameter]
+    public string ThisGroupId { get; set; }
+    private bool RequestIsPending;
+    private bool IsSuccess = true;
+
+    private async void HandleCreateInvitation()
+    {
+        RequestIsPending = true;
+        IsSuccess = true;
+        bettingGroupInvitation.BettingGroupId = ThisGroupId;
+        var invitation = await Http.PostAsJsonAsync("/group/invitation", bettingGroupInvitation);
+        IsSuccess = invitation.IsSuccessStatusCode;
+        RequestIsPending = false;
+        //would be nice to get an error message stating what went wrong..
+        StateHasChanged();
+    }
+
+}

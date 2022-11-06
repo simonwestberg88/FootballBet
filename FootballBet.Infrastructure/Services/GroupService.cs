@@ -31,6 +31,11 @@ namespace FootballBet.Server.Data.Services
 
         public async Task<BettingGroupInvitationEntity> CreateInvitation(string groupId, string invitedUserEmail, string inviterUserId, CancellationToken ct)
         {
+            var bettingGroupMembers = (await _groupRepository.GetGroupById(Guid.Parse(groupId), ct)).Memberships;
+            if(bettingGroupMembers?.Any(m => m.ApplicationUser.Email == invitedUserEmail) == true)
+            {
+                throw new InvalidOperationException("User is already a member of group");
+            }
             var invitation = await _groupRepository.CreateBettingGroupInvitation(CreateBettingGroupInvitation(Guid.Parse(groupId), inviterUserId, invitedUserEmail), ct);
 
             var callbackUrl = $"https://{_httpContextAccessor.HttpContext.Request.Host.Value}/invitation/{invitation.BettingGroupInvitationId}/{groupId}";
