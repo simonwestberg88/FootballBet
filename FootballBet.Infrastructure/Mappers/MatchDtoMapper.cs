@@ -8,6 +8,7 @@ public static class MatchDtoMapper
     public static MatchDto ToMatchDto(this MatchEntity entity)
         => new()
         {
+            MatchId = entity.Id,
             Date = entity.Date,
             Round = entity.Round,
             MatchStatus = entity.MatchStatus.ToStatusString(),

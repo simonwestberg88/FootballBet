@@ -13,4 +13,5 @@ namespace FootballBet.Shared.Models.Match;
  string? HomeTeamLogo,
  string? AwayTeamLogo,
  string MatchStatus, 
- string Round);
+ string Round,
+ int MatchId);
