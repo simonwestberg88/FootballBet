@@ -15,7 +15,6 @@
                     <MudItem style="display: block">
                         <MudText Style="text-align: center">@MatchData.Date.ToString("H:mm")</MudText>
                         <MudText Style="text-align: center">@MatchData.HomeCurrentGoals - @MatchData.AwayCurrentGoals</MudText>
-
                     </MudItem>
                 </MudItem>
                 <MudItem xs="3" Style="display: flex; flex-direction: column; justify-content: center; align-items: center">
@@ -26,7 +25,7 @@
         </TitleContent>
         <ChildContent>
             <MudText Style="padding-top: 10px">@(MatchData.MatchStatus)</MudText>
-            <OddsComponent MatchId="MatchData.MatchId"></OddsComponent>
+            @*<OddsComponent MatchId="MatchData.MatchId"></OddsComponent>*@
         </ChildContent>
     </MudExpansionPanel>
 </MudPaper>

@@ -21,7 +21,6 @@
             </div>
         }
     </MudList>
-
 </MudPaper>
 
 @code {
@@ -34,13 +33,10 @@
     }
 
     private List<DateTime> GetUniqueDatesForRound(string round)
-    {
-        return _matches.Where(m => m.Round == round).Select(m => m.Date.Date).OrderBy(m => m.Date).Distinct().ToList();
-    }
+        => _matches.Where(m => m.Round == round).Select(m => m.Date.Date).OrderBy(m => m.Date).Distinct().ToList();
+
 
     private List<MatchDto> GetGamesForDate(DateTime date)
-    {
-        return _matches.Where(m => m.Date.Date == date.Date).OrderBy(m => m.Date).ToList();
-    }
+        => _matches.Where(m => m.Date.Date == date.Date).OrderBy(m => m.Date).ToList();  
 
 }

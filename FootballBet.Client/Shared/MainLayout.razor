@@ -1,23 +1,10 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager navigationManager
+
 <MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
-@*<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
 
-    <main>
-        <div class="top-row px-4 auth">
-            <LoginDisplay />
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-
-        <article>
-            @Body
-        </article>
-    </main>
-</div>*@
 <MudLayout>
     <MudMainContent Class="pt-0">
         <div class="top-row px-4 auth">
@@ -30,10 +17,15 @@
         </article>
     </MudMainContent>
     <MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
         <MudSpacer />
-        <MudIconButton Icon="@Icons.Material.Filled.FavoriteBorder" Color="Color.Inherit" Edge="Edge.End" />
-        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+        <MudIconButton @onclick="NavigateToMyGroups" Icon="@Icons.Sharp.SportsSoccer" Color="Color.Secondary" />
+        <MudSpacer />
     </MudAppBar>
-
 </MudLayout>
+
+@code {
+    private void NavigateToMyGroups()
+    {
+        navigationManager.NavigateTo($"/mygroups");
+    }
+}
