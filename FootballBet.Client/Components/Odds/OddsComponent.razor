@@ -2,7 +2,6 @@
 @using FootballBet.Client.Services
 @inject IOddsService OddsService;
 
-<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme"/>
 <MudExpansionPanels>
     <MudText Typo="Typo.h5">Odds</MudText>
     <MudExpansionPanel Text="Home">
@@ -23,9 +22,6 @@
 
     [Parameter]
     public List<OddsDto>? Odds { get; set; }
-
-    private bool _isDarkMode = true;
-    private MudTheme _theme = new();
 
     private List<OddsDto> _odds = new();
     private static List<OddsDto>? _homeOdds;

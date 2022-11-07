@@ -5,16 +5,31 @@
 
 <PageTitle>Seed Database</PageTitle>
 
-<h1>Click to seed database</h1>
 
-<EditForm Model="@Seed" OnValidSubmit="@SeedDatabaseBtn">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <label>Year</label>
-    <InputText id="Year" @bind-Value="Seed.Year" />
-    <label>League Id</label>
-    <InputNumber id="LeagueId" @bind-Value="Seed.LeagueId" />
-    <button class="btn btn-primary">Click to seed DB</button>
+<EditForm Model="@Seed" OnValidSubmit="SeedDatabaseBtn">
+    <MudCard Elevation="25" Class="rounded-lg pb-4">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h5" Align="Align.Center">Seed Database</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudTextField Label="Year" 
+                          @bind-Value="Seed.Year" For="@(() => Seed.Year)" />
+            <MudNumericField Label="League Id" Class="mt-3" @bind-Value="Seed.LeagueId" For="@(() => Seed.LeagueId)" />
+        </MudCardContent>
+        <MudCardActions>
+            @if (!RequestIsPending)
+            {
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Click to seed DB</MudButton>
+            }
+            else
+            {
+                <MudProgressCircular Color="Color.Primary" Class="ml-auto" Indeterminate="true" />
+            }
+        </MudCardActions>
+    </MudCard>
+
 </EditForm>
 
 @if (Result is not null)
@@ -26,13 +41,17 @@
 @code {
     private string? Result { get; set; }
     private SeedTeamsAndFixturesShared Seed { get; set; } = new();
+    private bool RequestIsPending = false;
 
     async Task SeedDatabaseBtn()
     {
+        RequestIsPending = true;
         var response = await Http.PostAsJsonAsync($"/FootballLeague/seed", Seed);
         if (response.IsSuccessStatusCode)
         {
             Result = await response.Content.ReadAsStringAsync();
         }
+        RequestIsPending = false;
+        StateHasChanged();
     }
 }
