@@ -41,6 +41,11 @@ public class GroupRepository : IGroupRepository
         return invitationEntity;
     }
 
+    public async Task DeleteBettingGroupInvitationsByEmailAndGroupId(string email, string groupId)
+    {
+        _context.BettingGroupInvitations.RemoveRange(_context.BettingGroupInvitations.Where(i => i.InvitedUserEmail == email && i.BettingGroupEntityId.ToString() == groupId));
+        await _context.SaveChangesAsync();
+    }
     public async Task<BettingGroupInvitationEntity> GetBettingGroupInvitationByIdAsync(Guid invitationId, CancellationToken ct)
         => await _context.BettingGroupInvitations.FirstOrDefaultAsync(x => x.BettingGroupInvitationId == invitationId, ct);
 
