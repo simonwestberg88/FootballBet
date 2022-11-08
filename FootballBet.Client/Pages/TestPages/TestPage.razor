@@ -1,0 +1,13 @@
+@page "/TestPage"
+@inject HttpClient Http
+
+<h3>TestPage</h3>
+<MudButton OnClick="Test">Test getting userName
+</MudButton>
+@code {
+    private async Task Test()
+    {
+        var userName = await Http.GetStringAsync("/api/test");
+        Console.WriteLine(userName);
+    }
+}
