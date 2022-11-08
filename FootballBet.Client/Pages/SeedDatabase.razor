@@ -1,7 +1,9 @@
 ﻿@page "/seedDatabase"
 @using FootballBet.Shared.Models.Admin
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @inject HttpClient Http
+@attribute [Authorize]
 
 <PageTitle>Seed Database</PageTitle>
 
