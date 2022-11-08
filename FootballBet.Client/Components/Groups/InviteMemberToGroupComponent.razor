@@ -23,9 +23,14 @@
                               Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
             </MudCardContent>
             <MudCardActions>
-                @if(!IsSuccess)
+                @if (!IsSuccess)
                 {
                     <MudAlert Severity="Severity.Error">Something went wrong</MudAlert>
+                }
+                else if (IsSuccess && invitationResponse != null)
+                {
+                    <MudAlert Severity="Severity.Success">Invite sent!</MudAlert>
+
                 }
                 @if (!RequestIsPending)
                 {
@@ -49,14 +54,15 @@
     public string ThisGroupId { get; set; }
     private bool RequestIsPending;
     private bool IsSuccess = true;
+    private HttpResponseMessage invitationResponse = null;
 
     private async void HandleCreateInvitation()
     {
         RequestIsPending = true;
         IsSuccess = true;
         bettingGroupInvitation.BettingGroupId = ThisGroupId;
-        var invitation = await Http.PostAsJsonAsync("/group/invitation", bettingGroupInvitation);
-        IsSuccess = invitation.IsSuccessStatusCode;
+        invitationResponse = await Http.PostAsJsonAsync("/group/invitation", bettingGroupInvitation);
+        IsSuccess = invitationResponse.IsSuccessStatusCode;
         RequestIsPending = false;
         //would be nice to get an error message stating what went wrong..
         StateHasChanged();
