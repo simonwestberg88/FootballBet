@@ -4,7 +4,7 @@
 @inject IOddsService OddsService;
 
 <MudPaper Elevation="2" Style="margin-top: 10px">
-    <MudExpansionPanel @bind-IsExpanded="_isOpen" HideIcon="true">
+    <MudExpansionPanel @bind-IsExpanded="_isOpen" @onclick="GetOddsForGame" HideIcon="true">
         <TitleContent>
             <MudGrid>
                 <MudItem xs="3" Style="display: flex; flex-direction: column; justify-content: center; align-items: center">
@@ -25,21 +25,33 @@
         </TitleContent>
         <ChildContent>
             <MudText Style="padding-top: 10px">@(MatchData.MatchStatus)</MudText>
-            <OddsComponent MatchId="MatchData.MatchId"></OddsComponent>
-        </ChildContent>
-    </MudExpansionPanel>
-</MudPaper>
+                @if(Odds != null){
+                    <OddsComponent Odds="Odds"></OddsComponent>
+                }
+            </ChildContent>
+        </MudExpansionPanel>
+    </MudPaper>
 
-@code {
-
+    @code {
     [Parameter]
     public MatchDto MatchData { get; set; }
-    private IEnumerable<OddsDto>? _odds;
+    private List<OddsDto>? Odds { get; set; }
 
     bool _isOpen;
+    bool HasLoadedOddsForGame;
 
     private static int Width => 50;
     private int Height => 50;
+
+    private async void GetOddsForGame()
+    {
+        if (!HasLoadedOddsForGame)
+        {
+            Odds = (await OddsService.GetOdds(MatchData.MatchId) ?? Array.Empty<OddsDto>()).ToList();
+            StateHasChanged();
+        }
+        HasLoadedOddsForGame = true;
+    }
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();

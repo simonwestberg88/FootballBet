@@ -1,6 +1,6 @@
 @using FootballBet.Shared.Models.Match
 @using FootballBet.Client.Services
-@inject IMatchService MatchService;
+
 
 <MudPaper>
     <MudList>
@@ -24,11 +24,11 @@
 </MudPaper>
 
 @code {
-    IEnumerable<MatchDto> _matches = new List<MatchDto>();
+    [Parameter]
+    public List<MatchDto> _matches { get; set; } = new List<MatchDto>();
 
     protected override async Task OnInitializedAsync()
     {
-        _matches = (await MatchService.GetMatchesAsync()).OrderBy(m => m.Date).ToList();
         await base.OnInitializedAsync();
     }
 

@@ -1,26 +1,47 @@
 ﻿@page "/BettingGroup/{groupId}"
 @using FootballBet.Client.Components.Groups
 @using FootballBet.Client.Components.Matches
+@using FootballBet.Client.Services
 @using FootballBet.Shared.Models.Groups
+@using FootballBet.Shared.Models.Match
 @inject HttpClient Http
+@inject IMatchService MatchService
 
-@if (HasGottenGroup && BettingGroup.CurrentUserIsAdmin)
-{
-    <InviteMemberToGroupComponent ThisGroupId = "@GroupId"></InviteMemberToGroupComponent>
-}
 
-<MatchesListComponent></MatchesListComponent>
 
+<MudTabs Elevation="1" Rounded="true" Centered="true" PanelClass="pa-12">
+    <MudTabPanel Icon="@Icons.Filled.Scoreboard" class="px-0">    
+        <ChildContent>
+            <MudText>Custom tab content only</MudText>
+            <MatchesListComponent _matches="_matches"></MatchesListComponent>
+        </ChildContent>
+    </MudTabPanel>
+    <MudTabPanel Icon="@Icons.Filled.FormatListNumbered" class="px-0">
+        <ChildContent>
+            <MudText>Will be filled with ranking of $</MudText>
+        </ChildContent>
+    </MudTabPanel>
+    <MudTabPanel Icon="@Icons.Filled.Settings" class="px-0">
+        <ChildContent>
+            @if (HasGottenGroup && BettingGroup.CurrentUserIsAdmin)
+            {
+                <InviteMemberToGroupComponent ThisGroupId="@GroupId"></InviteMemberToGroupComponent>
+            }
+        </ChildContent>
+    </MudTabPanel>
+</MudTabs>
 @code {
     [Parameter]
     public string? GroupId { get; set; }
     private BettingGroupShared BettingGroup { get; set; }
     private bool HasGottenGroup;
+    private List<MatchDto> _matches = new List<MatchDto>();
 
     protected override async Task OnInitializedAsync()
     {
         BettingGroup = await Http.GetFromJsonAsync<BettingGroupShared>($"/group/{GroupId}") ?? new();
         HasGottenGroup = true;
+        _matches = (await MatchService.GetMatchesAsync()).OrderBy(m => m.Date).ToList();
         StateHasChanged();
     }
 }
