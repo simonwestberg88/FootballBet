@@ -23,14 +23,20 @@ public class BetRepository : IBetRepository
     public async Task<IEnumerable<BetEntity>> GetBetsAsync(int matchId, string bettingGroupId)
         => throw new NotImplementedException();
 
-    public async Task<BetEntity> GetBetAsync(string userId, int matchId, string groupId)
+    public async Task<BetEntity?> GetBetAsync(string userId, int matchId, string groupId)
     {
-        var bet = await _context.BetEntities.SingleOrDefaultAsync(b => b.UserId == userId && b.BettingGroupId == groupId);
+        var bet = await _context.BetEntities.SingleOrDefaultAsync(
+            b => b.UserId == userId && b.BettingGroupId == groupId && b.MatchId == matchId);
         return bet;
     }
 
     public async Task<BetEntity> PlaceBetAsync(BetEntity bet)
     {
+        //check if bet for user and match already exists
+        var existingBet = await _context.BetEntities.SingleOrDefaultAsync(b =>
+            b.UserId == bet.UserId && b.MatchId == bet.MatchId && b.BettingGroupId == bet.BettingGroupId);
+        if(existingBet is not null)
+            throw new InvalidOperationException("Bet already exists");
         await _context.BetEntities.AddAsync(bet);
         await _context.SaveChangesAsync();
         return bet;

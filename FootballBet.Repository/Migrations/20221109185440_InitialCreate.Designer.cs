@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FootballBet.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221105194706_InitialCreate")]
+    [Migration("20221109185440_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -245,6 +245,7 @@ namespace FootballBet.Repository.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("BettingGroupId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("HasBeenPayed")
@@ -253,16 +254,14 @@ namespace FootballBet.Repository.Migrations
                     b.Property<bool?>("IsWinningBet")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("MatchId")
+                    b.Property<int>("MatchId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("OddsId")
+                    b.Property<int>("OddsId")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("PaybackAmount")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("WagerAmount")
@@ -284,6 +283,9 @@ namespace FootballBet.Repository.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("CreatorId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -295,6 +297,8 @@ namespace FootballBet.Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
 
                     b.HasIndex("LeagueId");
 
@@ -464,7 +468,10 @@ namespace FootballBet.Repository.Migrations
                     b.Property<int>("HomeTeamGoals")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MatchOddsGroupId")
+                    b.Property<int?>("MatchOddsGroupEntityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MatchOddsGroupId")
                         .HasColumnType("int");
 
                     b.Property<int>("MatchWinnerEntityEnum")
@@ -475,7 +482,7 @@ namespace FootballBet.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MatchOddsGroupId");
+                    b.HasIndex("MatchOddsGroupEntityId");
 
                     b.ToTable("OddsEntities");
                 });
@@ -642,11 +649,17 @@ namespace FootballBet.Repository.Migrations
 
             modelBuilder.Entity("FootballBet.Repository.Entities.BettingGroupEntity", b =>
                 {
+                    b.HasOne("FootballBet.Repository.Entities.ApplicationUser", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId");
+
                     b.HasOne("FootballBet.Repository.Entities.LeagueEntity", "League")
                         .WithMany("BettingGroups")
                         .HasForeignKey("LeagueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Creator");
 
                     b.Navigation("League");
                 });
@@ -708,11 +721,9 @@ namespace FootballBet.Repository.Migrations
 
             modelBuilder.Entity("FootballBet.Repository.Entities.OddsEntity", b =>
                 {
-                    b.HasOne("FootballBet.Repository.Entities.MatchOddsGroupEntity", "MatchOddsGroupEntity")
+                    b.HasOne("FootballBet.Repository.Entities.MatchOddsGroupEntity", null)
                         .WithMany("OddsEntities")
-                        .HasForeignKey("MatchOddsGroupId");
-
-                    b.Navigation("MatchOddsGroupEntity");
+                        .HasForeignKey("MatchOddsGroupEntityId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

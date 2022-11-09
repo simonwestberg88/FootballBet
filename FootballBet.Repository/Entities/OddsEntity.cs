@@ -11,7 +11,5 @@ public class OddsEntity
     public decimal Odds { get; set; }
     public MatchWinnerEntityEnum MatchWinnerEntityEnum { get; set; }
     
-    public int? MatchOddsGroupId { get; set; }
-    [ForeignKey("MatchOddsGroupId")]
-    public virtual MatchOddsGroupEntity MatchOddsGroupEntity { get; set; }
+    public int MatchOddsGroupId { get; set; }
 }
