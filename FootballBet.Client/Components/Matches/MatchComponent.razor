@@ -92,24 +92,15 @@
         _hasLoadedOddsForGame = true;
     }
 
-    private OddsDto _selectedOdds;
-
-
-    private bool _isDarkMode = true;
-    private readonly MudTheme _theme = new();
-
     protected override async Task OnInitializedAsync()
     {
         UserBet = await BetService.GetBetAsync(MatchData.MatchId, MyNavigationManager.Uri.Split("/").Last());
         await base.OnInitializedAsync();
     }
-    
+
     protected void UserHasMadeBet(BetResponse bet)
     {
         Console.WriteLine("user bet changed");
         UserBet = bet;
     }
-
-    MudListItem selectedItem;
-    object selectedValue = 1;
 }
