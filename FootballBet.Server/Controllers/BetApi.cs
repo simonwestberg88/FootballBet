@@ -13,7 +13,7 @@ public static class BetApi
             async (BetRequest bet, IBetService service, ClaimsPrincipal user) =>
                 await service.PlaceBetAsync(bet.OddsId,  bet.MatchId, user.Identity.GetUserId(), bet.Amount, bet.GroupId));
 
-        app.MapGet("api/bet/match",
+        app.MapGet("api/bets/match",
             async (int matchId, string groupId, IBetService service, ClaimsPrincipal user) => 
                 await service.GetBet(user.Identity.GetUserId(), matchId, groupId));
 

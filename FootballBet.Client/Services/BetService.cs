@@ -2,22 +2,26 @@ using System.Net.Http.Json;
 using FootballBet.Shared.Models.Bets;
 
 namespace FootballBet.Client.Services;
+
 public interface IBetService
 {
-    Task<IEnumerable<BetRequest>> GetBetsAsync(string groupId);
+    Task<BetResponse> GetBetAsync(int matchId, string groupId);
     public Task<BetRequest> PlaceBetAsync(int oddsId, int matchId, decimal amount, string groupId);
 }
+
 public class BetService : IBetService
 {
     private readonly HttpClient _httpClient;
+
     public BetService(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
-    
-    public Task<IEnumerable<BetRequest>> GetBetsAsync(string groupId)
+
+    public async Task<BetResponse> GetBetAsync(int matchId, string groupId)
     {
-        throw new NotImplementedException();
+        var bet =  await _httpClient.GetFromJsonAsync<BetResponse>($"/api/bets/match?matchId={matchId}&groupId={groupId}");
+        return bet;
     }
 
     public async Task<BetRequest> PlaceBetAsync(int oddsId, int matchId, decimal amount, string groupId)
