@@ -1,5 +1,6 @@
 @using FootballBet.Shared.Models.Odds
 @using FootballBet.Client.Services
+@using FootballBet.Shared.Models.Bets
 @inject IBetService BetService;
 @inject NavigationManager MyNavigationManager;
 
@@ -42,18 +43,20 @@
 
     [Parameter]
     public int MatchId { get; set; }
+    [Parameter] public BetResponse? UserBet { get; set; }
 
     private async Task Submit()
     {
         await BetService.PlaceBetAsync(Odds.Id, MatchId, amount: 100, _groupId);
+        UserBet = await BetService.GetBetAsync(MatchId, _groupId);
         MudDialog.Close(DialogResult.Ok(true));
+        StateHasChanged();
     }
 
     protected override async Task OnInitializedAsync()
     {
         _groupId = MyNavigationManager.Uri.Split("/").Last();
-        var bet = await BetService.GetBetAsync(MatchId, _groupId);
-        if (bet is not null)
+        if (UserBet is not null)
         {
             _betPlaced = true;
         }

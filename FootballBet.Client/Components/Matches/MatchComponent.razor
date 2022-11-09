@@ -1,8 +1,11 @@
 @using FootballBet.Shared.Models.Match
 @using FootballBet.Shared.Models.Odds
 @using FootballBet.Client.Services
+@using FootballBet.Shared.Models.Bets
 @using NuGet.Common
 @inject IOddsService OddsService;
+@inject IBetService BetService;
+@inject NavigationManager MyNavigationManager;
 
 <MudPaper Elevation="2" Style="margin-top: 10px">
     <MudExpansionPanel @bind-IsExpanded="_isOpen" @onclick="GetOddsForGame" HideIcon="true">
@@ -23,6 +26,11 @@
                     <MudImage Src="@MatchData.AwayTeamLogo" Width="Width" Height="Height"></MudImage>
                 </MudItem>
             </MudGrid>
+            @if (UserBet is not null)
+            {
+                <MudText>My bet: @UserBet.Value.Amount</MudText>
+                <MudText>Potential Win: @UserBet.Value.PotentialWin</MudText>
+            }
         </TitleContent>
         <ChildContent>
             <MudText Style="padding-top: 10px">@(MatchData.MatchStatus)</MudText>
@@ -61,16 +69,18 @@
     private static List<OddsDto>? _homeOdds;
     private static List<OddsDto>? _awayOdds;
     private static List<OddsDto>? _drawOdds;
+    
+    private BetResponse? UserBet { get; set; }
 
     bool _isOpen;
-    bool HasLoadedOddsForGame;
+    bool _hasLoadedOddsForGame;
 
     private static int Width => 50;
     private int Height => 50;
 
     private async void GetOddsForGame()
     {
-        if (!HasLoadedOddsForGame)
+        if (!_hasLoadedOddsForGame)
         {
             Odds = (await OddsService.GetOdds(MatchData.MatchId) ?? Array.Empty<OddsDto>()).ToList();
             _homeOdds = Odds.Where(o => o.MatchWinner == MatchWinnerEnumDto.Home).OrderBy(o => o.Odds).Skip(1).ToList();
@@ -78,7 +88,7 @@
             _drawOdds = Odds.Where(o => o.MatchWinner == MatchWinnerEnumDto.Draw).OrderBy(o => o.Odds).Skip(1).ToList();
             StateHasChanged();
         }
-        HasLoadedOddsForGame = true;
+        _hasLoadedOddsForGame = true;
     }
 
     private OddsDto _selectedOdds;
@@ -89,6 +99,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        UserBet = await BetService.GetBetAsync(MatchData.MatchId, MyNavigationManager.Uri.Split("/").Last());
         await base.OnInitializedAsync();
     }
 
