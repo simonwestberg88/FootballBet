@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FootballBet.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221105194706_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20221109133422_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -259,9 +259,6 @@ namespace FootballBet.Repository.Migrations
                     b.Property<int?>("OddsId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("PaybackAmount")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
@@ -284,6 +281,9 @@ namespace FootballBet.Repository.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("CreatorId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -295,6 +295,8 @@ namespace FootballBet.Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
 
                     b.HasIndex("LeagueId");
 
@@ -642,11 +644,17 @@ namespace FootballBet.Repository.Migrations
 
             modelBuilder.Entity("FootballBet.Repository.Entities.BettingGroupEntity", b =>
                 {
+                    b.HasOne("FootballBet.Repository.Entities.ApplicationUser", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId");
+
                     b.HasOne("FootballBet.Repository.Entities.LeagueEntity", "League")
                         .WithMany("BettingGroups")
                         .HasForeignKey("LeagueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Creator");
 
                     b.Navigation("League");
                 });

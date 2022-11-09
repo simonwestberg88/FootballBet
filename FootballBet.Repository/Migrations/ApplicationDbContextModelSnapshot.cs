@@ -257,9 +257,6 @@ namespace FootballBet.Repository.Migrations
                     b.Property<int?>("OddsId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("PaybackAmount")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
