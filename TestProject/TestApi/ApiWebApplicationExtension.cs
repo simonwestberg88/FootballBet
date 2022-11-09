@@ -41,8 +41,8 @@ public static class ApiWebApplicationExtension
             => await client.GetLatestOddsForMatch(matchId));
 
         app.MapPost("test/bets/place",
-            async (string userId, string groupId, BetDto bet, IBetService service) =>
-                await service.PlaceBetAsync(bet.OddsId, userId, bet.Amount, groupId));
+            async (string userId, int matchId, string groupId, BetRequest bet, IBetService service) =>
+                await service.PlaceBetAsync(bet.OddsId, matchId, userId, bet.Amount, groupId));
 
         app.MapGet("test/bets",
             async (string userId, string groupId, IBetService service) =>
