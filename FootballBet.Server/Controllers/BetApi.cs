@@ -1,5 +1,7 @@
 using System.Security.Claims;
 using FootballBet.Infrastructure.Interfaces;
+using FootballBet.Infrastructure.Mappers;
+using FootballBet.Repository.Repositories.Interfaces;
 using FootballBet.Shared.Models.Bets;
 using Microsoft.AspNet.Identity;
 
@@ -10,9 +12,14 @@ public static class BetApi
     public static void AddBetApi(this WebApplication app)
     {
         app.MapPost("api/bets/place",
-            async (BetRequest bet, IBetService service, ClaimsPrincipal user) =>
-                await service.PlaceBetAsync(bet.OddsId, bet.MatchId, user.Identity.GetUserId(), bet.Amount,
-                    bet.GroupId));
+            async (BetRequest bet, IBetService service, ClaimsPrincipal user, IOddsRepository oddsRepository) =>
+            {
+                var placedBet = await service.PlaceBetAsync(bet.OddsId, bet.MatchId, user.Identity.GetUserId(), bet.Amount,
+                    bet.GroupId);
+                var odds = await oddsRepository.GetOddsAsync(bet.OddsId);
+                return odds == null ? Results.NotFound() : Results.Ok(placedBet.ToBetDto(odds));
+            });
+                
 
         app.MapGet("api/bets/match",
             async (int matchId, string groupId, IBetService service, ClaimsPrincipal user) =>

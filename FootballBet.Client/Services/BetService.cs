@@ -6,7 +6,7 @@ namespace FootballBet.Client.Services;
 public interface IBetService
 {
     Task<BetResponse?> GetBetAsync(int matchId, string groupId);
-    public Task<BetRequest> PlaceBetAsync(int oddsId, int matchId, decimal amount, string groupId);
+    public Task<BetResponse> PlaceBetAsync(int oddsId, int matchId, decimal amount, string groupId);
 }
 
 public class BetService : IBetService
@@ -28,7 +28,7 @@ public class BetService : IBetService
         return null;
     }
 
-    public async Task<BetRequest> PlaceBetAsync(int oddsId, int matchId, decimal amount, string groupId)
+    public async Task<BetResponse> PlaceBetAsync(int oddsId, int matchId, decimal amount, string groupId)
     {
         var bet = new BetRequest
         {
@@ -38,6 +38,6 @@ public class BetService : IBetService
             MatchId = matchId
         };
         var response = await _httpClient.PostAsJsonAsync($"api/bets/place", bet);
-        return await response.Content.ReadFromJsonAsync<BetRequest>();
+        return await response.Content.ReadFromJsonAsync<BetResponse>();
     }
 }
