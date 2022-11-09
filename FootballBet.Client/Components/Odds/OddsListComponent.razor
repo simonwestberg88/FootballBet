@@ -1,0 +1,48 @@
+@using FootballBet.Shared.Models.Odds
+@inject IDialogService DialogService
+<style>
+table {
+  width: 100%;
+  text-align: center;
+}
+
+th, td {
+  text-align: right;
+  padding-top: 10px;
+  justify-content: center;
+}
+</style>
+<MudSimpleTable>
+    <thead>
+    <tr>
+        <th>Score</th>
+        <th>Odds</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var row in Odds)
+    {
+        <tr>
+            <td>@row.HomeTeamGoals - @row.AwayTeamGoals</td>
+            <td @onclick="() => OpenDialog(row)" style="@($"background:{_theme.PaletteDark.Secondary};")">@row.Odds</td>
+        </tr>
+    }
+    </tbody>
+</MudSimpleTable>
+
+
+@code {
+
+    [Parameter]
+    public List<OddsDto> Odds { get; set; }
+
+    private readonly MudTheme _theme = new();
+
+    private void OpenDialog(OddsDto odds)
+    {
+        var parameters = new DialogParameters { { "Odds", odds } };
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        DialogService.Show<BetDialog>("Place bet", parameters, options);
+    }
+
+}

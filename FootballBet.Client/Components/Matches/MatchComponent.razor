@@ -3,7 +3,6 @@
 @using FootballBet.Client.Services
 @using NuGet.Common
 @inject IOddsService OddsService;
-@inject IDialogService DialogService
 
 <MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme"/>
 <MudPaper Elevation="2" Style="margin-top: 10px">
@@ -30,65 +29,18 @@
             <MudText Style="padding-top: 10px">@(MatchData.MatchStatus)</MudText>
             @if (Odds != null)
             {
-                <MudSimpleTable Style="overflow-x: auto;">
-
-                    <MudText Typo="Typo.h5">Odds</MudText>
-                    <MudExpansionPanels>
-                        <MudExpansionPanel Text="Home">
-                            <thead>
-                            <tr>
-                                <th>Score</th>
-                                <th>Odds</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach (var row in _homeOdds)
-                            {
-                                <tr>
-                                    <td>@row.HomeTeamGoals - @row.AwayTeamGoals</td>
-                                    <td @onclick="() => OpenDialog(row)" style="@($"background:{_theme.PaletteDark.Secondary};")">@row.Odds</td>
-                                </tr>
-                            }
-                            </tbody>
-                        </MudExpansionPanel>
-                        <MudExpansionPanel Text="Draw">
-                            <thead>
-                            <tr>
-                                <th>Score</th>
-                                <th>Odds</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach (var row in _drawOdds)
-                            {
-                                <tr>
-                                    <td>@row.HomeTeamGoals - @row.AwayTeamGoals</td>
-                                    <td>@row.Odds</td>
-                                </tr>
-                            }
-                            </tbody>
-                        </MudExpansionPanel>
-                        <MudExpansionPanel Text="Away">
-                            <thead>
-                            <tr>
-                                <th>Home Goals</th>
-                                <th>Away Goals</th>
-                                <th>Odds</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach (var row in _homeOdds)
-                            {
-                                <tr>
-                                    <td>@row.HomeTeamGoals</td>
-                                    <td>@row.AwayTeamGoals</td>
-                                    <td>@row.Odds</td>
-                                </tr>
-                            }
-                            </tbody>
-                        </MudExpansionPanel>
-                    </MudExpansionPanels>
-                </MudSimpleTable>
+                <MudText Typo="Typo.h5">Odds</MudText>
+                <MudExpansionPanels>
+                    <MudExpansionPanel Text="Home">
+                        <OddsListComponent Odds="_homeOdds"/>
+                    </MudExpansionPanel>
+                    <MudExpansionPanel Text="Draw">
+                        <OddsListComponent Odds="_drawOdds"/>
+                    </MudExpansionPanel>
+                    <MudExpansionPanel Text="Away">
+                        <OddsListComponent Odds="_awayOdds"/>a
+                    </MudExpansionPanel>
+                </MudExpansionPanels>
             }
         </ChildContent>
     </MudExpansionPanel>
@@ -122,15 +74,10 @@
         }
         HasLoadedOddsForGame = true;
     }
-    
+
     private OddsDto _selectedOdds;
 
-    private void OpenDialog(OddsDto odds)
-    {
-        var parameters = new DialogParameters { { "Odds", odds } };
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-        DialogService.Show<BetDialog>( "Place bet", parameters, options);
-    }
+
     private bool _isDarkMode = true;
     private readonly MudTheme _theme = new();
 
