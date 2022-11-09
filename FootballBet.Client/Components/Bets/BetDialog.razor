@@ -20,10 +20,11 @@
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
     [Parameter] public OddsDto Odds { get; set; }
+    [Parameter] public int MatchId { get; set; }
     private async Task Submit()
     {
         var groupId = MyNavigationManager.Uri.Split("/").Last();
-        await BetService.PlaceBetAsync(Odds.Id, 100, groupId);
+        await BetService.PlaceBetAsync(Odds.Id,  MatchId, amount: 100, groupId);
         MudDialog.Close(DialogResult.Ok(true));
     }
     void Cancel() => MudDialog.Cancel();

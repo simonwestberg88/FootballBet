@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FootballBet.Repository.Migrations
 {
-    public partial class Init : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -259,10 +259,10 @@ namespace FootballBet.Repository.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MatchId = table.Column<int>(type: "int", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BettingGroupId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OddsId = table.Column<int>(type: "int", nullable: true),
+                    MatchId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BettingGroupId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OddsId = table.Column<int>(type: "int", nullable: false),
                     WagerAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsWinningBet = table.Column<bool>(type: "bit", nullable: true),
                     HasBeenPayed = table.Column<bool>(type: "bit", nullable: false),

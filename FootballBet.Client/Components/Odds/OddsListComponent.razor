@@ -35,12 +35,13 @@ th, td {
 
     [Parameter]
     public List<OddsDto> Odds { get; set; }
+    [Parameter] public int MatchId { get; set; }
 
     private readonly MudTheme _theme = new();
 
     private void OpenDialog(OddsDto odds)
     {
-        var parameters = new DialogParameters { { "Odds", odds } };
+        var parameters = new DialogParameters { { "Odds", odds }, { "MatchId", MatchId } };
         var options = new DialogOptions { CloseOnEscapeKey = true };
         DialogService.Show<BetDialog>("Place bet", parameters, options);
     }

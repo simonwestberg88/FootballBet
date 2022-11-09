@@ -5,7 +5,7 @@ namespace FootballBet.Client.Services;
 public interface IBetService
 {
     Task<IEnumerable<BetRequest>> GetBetsAsync(string groupId);
-    Task<BetRequest> PlaceBetAsync(int oddsId, decimal amount, string groupId);
+    public Task<BetRequest> PlaceBetAsync(int oddsId, int matchId, decimal amount, string groupId);
 }
 public class BetService : IBetService
 {
@@ -20,14 +20,16 @@ public class BetService : IBetService
         throw new NotImplementedException();
     }
 
-    public async Task<BetRequest> PlaceBetAsync(int oddsId, decimal amount, string groupId)
+    public async Task<BetRequest> PlaceBetAsync(int oddsId, int matchId, decimal amount, string groupId)
     {
         var bet = new BetRequest
         {
             OddsId = oddsId,
-            Amount = amount
+            Amount = amount,
+            GroupId = groupId,
+            MatchId = matchId
         };
-        var response = await _httpClient.PostAsJsonAsync($"api/bets/place?groupId={groupId}", bet);
+        var response = await _httpClient.PostAsJsonAsync($"api/bets/place", bet);
         return await response.Content.ReadFromJsonAsync<BetRequest>();
     }
 }

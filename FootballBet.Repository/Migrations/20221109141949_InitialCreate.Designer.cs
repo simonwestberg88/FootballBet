@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FootballBet.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221109133422_Init")]
-    partial class Init
+    [Migration("20221109141949_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -245,6 +245,7 @@ namespace FootballBet.Repository.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("BettingGroupId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("HasBeenPayed")
@@ -253,13 +254,14 @@ namespace FootballBet.Repository.Migrations
                     b.Property<bool?>("IsWinningBet")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("MatchId")
+                    b.Property<int>("MatchId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("OddsId")
+                    b.Property<int>("OddsId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("WagerAmount")
