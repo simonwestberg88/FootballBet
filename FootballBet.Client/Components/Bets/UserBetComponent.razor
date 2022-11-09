@@ -1,0 +1,9 @@
+@using FootballBet.Shared.Models.Bets
+<MudText>My bet: @UserBet?.MatchWinner</MudText>
+                <MudText>Max win: @UserBet?.PotentialWin</MudText>
+                <MudText>@BaseWinString</MudText>
+
+@code {
+    [Parameter] public BetResponse? UserBet { get; set; }
+    [Parameter] public string? BaseWinString { get; set; }
+}
