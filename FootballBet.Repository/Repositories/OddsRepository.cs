@@ -1,4 +1,5 @@
 using FootballBet.Repository.Entities;
+using FootballBet.Repository.Enums;
 using FootballBet.Repository.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,4 +36,17 @@ public class OddsRepository : IOddsRepository
 
     public async Task<OddsEntity?> GetOddsAsync(int oddsId)
         => await _context.OddsEntities.FindAsync(oddsId);
+
+    public async Task<OddsEntity?> GetBaseOddsAsync(int oddsId, MatchWinnerEntityEnum winner)
+    {
+        var oddsEntity = await _context.OddsEntities.FindAsync(oddsId);
+        if (oddsEntity == null)
+            return null;
+        var oddsGroupId = oddsEntity.MatchOddsGroupId;
+        var baseOdds = _context.OddsEntities
+            .Where(o => o.MatchOddsGroupId == oddsGroupId)
+            .OrderBy(o => o.Odds)
+            .FirstOrDefault(x => x.MatchWinnerEntityEnum == winner);
+        return baseOdds;
+    }
 }

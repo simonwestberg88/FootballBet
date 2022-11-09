@@ -17,7 +17,16 @@ public static class BetApi
                 var placedBet = await service.PlaceBetAsync(bet.OddsId, bet.MatchId, user.Identity.GetUserId(), bet.Amount,
                     bet.GroupId);
                 var odds = await oddsRepository.GetOddsAsync(bet.OddsId);
-                return odds == null ? Results.NotFound() : Results.Ok(placedBet.ToBetDto(odds));
+                if (odds is null)
+                {
+                    return Results.NotFound("Odds not found");
+                }
+                var baseOdds = await oddsRepository.GetBaseOddsAsync(bet.OddsId, odds.MatchWinnerEntityEnum);
+                if(baseOdds is null)
+                {
+                    return Results.NotFound("Base odds not found");
+                }
+                return Results.Ok(placedBet.ToBetDto(odds, baseOdds));
             });
                 
 

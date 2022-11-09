@@ -42,6 +42,9 @@ public class BetService : IBetService
         var odds = await _oddsRepository.GetOddsAsync(bet.OddsId);
         if (odds is null)
             throw new InvalidOperationException("Odds not found");
-        return bet.ToBetDto(odds);
+        var baseOdds = await _oddsRepository.GetBaseOddsAsync(bet.OddsId, odds.MatchWinnerEntityEnum);
+        if(baseOdds is null)
+            throw new InvalidOperationException("Base odds not found");
+        return bet.ToBetDto(odds, baseOdds);
     }
 }

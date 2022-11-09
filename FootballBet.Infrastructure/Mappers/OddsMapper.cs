@@ -18,7 +18,7 @@ public static class OddsMapper
             HomeTeamGoals = entity.HomeTeamGoals
         };
 
-    private static MatchWinnerEnumDto MapMatchWinnerEnumDto(MatchWinnerEntityEnum matchWinnerEntityEnum)
+    public static MatchWinnerEnumDto MapMatchWinnerEnumDto(MatchWinnerEntityEnum matchWinnerEntityEnum)
         => matchWinnerEntityEnum switch
         {
             MatchWinnerEntityEnum.Away => MatchWinnerEnumDto.Away,
