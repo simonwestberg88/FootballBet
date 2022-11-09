@@ -21,11 +21,13 @@ public class BetRepository : IBetRepository
             .ToListAsync();
 
     public async Task<IEnumerable<BetEntity>> GetBetsAsync(int matchId, string bettingGroupId)
-        => await _context.BetEntities.Where(b => b.MatchId == matchId && b.BettingGroupId == bettingGroupId)
-            .ToListAsync();
+        => throw new NotImplementedException();
 
-    public async Task<IEnumerable<BetEntity>> GetBetsAsync(string userId, int matchId, string groupId)
-        => await _context.BetEntities.Where(b => b.UserId == userId && b.MatchId == matchId && b.BettingGroupId == groupId).ToListAsync();
+    public async Task<BetEntity> GetBetAsync(string userId, int matchId, string groupId)
+    {
+        var bet = await _context.BetEntities.SingleOrDefaultAsync(b => b.UserId == userId && b.BettingGroupId == groupId);
+        return bet;
+    }
 
     public async Task<BetEntity> PlaceBetAsync(BetEntity bet)
     {
