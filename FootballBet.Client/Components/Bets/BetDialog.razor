@@ -48,9 +48,8 @@
     private async Task Submit()
     {
         var response = await BetService.PlaceBetAsync(Odds.Id, MatchId, amount: 100, _groupId);
-        await UserHasMadeBet.InvokeAsync(new BetResponse{Amount = 100, OddsId = Odds.Id, PotentialWin = response.PotentialWin});
+        await UserHasMadeBet.InvokeAsync(response);
         MudDialog.Close(DialogResult.Ok(true));
-        StateHasChanged();
     }
 
     protected override async Task OnInitializedAsync()
