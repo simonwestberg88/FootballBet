@@ -20,5 +20,6 @@ builder.Services.AddMudServices();
 builder.Services.AddScoped<IMatchService, MatchService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOddsService, OddsService>();
+builder.Services.AddScoped<IBetService, BetService>();
 
 await builder.Build().RunAsync();
