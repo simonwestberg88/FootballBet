@@ -1,6 +1,8 @@
 @using FootballBet.Shared.Models.Odds
 @using FootballBet.Client.Services
 @inject IBetService BetService;
+@inject NavigationManager MyNavigationManager;
+
 <MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme"/>
 <MudDialog>
     <DialogContent>
@@ -20,7 +22,8 @@
     [Parameter] public OddsDto Odds { get; set; }
     private async Task Submit()
     {
-        await BetService.PlaceBetAsync(Odds.Id, 100);
+        var groupId = MyNavigationManager.Uri.Split("/").Last();
+        await BetService.PlaceBetAsync(Odds.Id, 100, groupId);
         MudDialog.Close(DialogResult.Ok(true));
     }
     void Cancel() => MudDialog.Cancel();
