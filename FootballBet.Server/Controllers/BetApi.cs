@@ -10,8 +10,12 @@ public static class BetApi
     public static void AddBetApi(this WebApplication app)
     {
         app.MapPost("api/bets/place",
-            async (string groupId, BetDto bet, IBetService service, ClaimsPrincipal user) =>
-                await service.PlaceBetAsync(bet.OddsId, user.Identity.GetUserId(), bet.Amount, groupId));
+            async (string groupId, int matchId, BetRequest bet, IBetService service, ClaimsPrincipal user) =>
+                await service.PlaceBetAsync(bet.OddsId,  matchId, user.Identity.GetUserId(), bet.Amount, groupId));
+
+        app.MapGet("api/bet/match",
+            async (int matchId, string groupId, IBetService service, ClaimsPrincipal user) => 
+                await service.GetBet(user.Identity.GetUserId(), matchId, groupId));
 
         app.MapGet("api/bets",
             async (string groupId, IBetService service, ClaimsPrincipal user) =>
