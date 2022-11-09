@@ -5,7 +5,7 @@ namespace FootballBet.Client.Services;
 
 public interface IBetService
 {
-    Task<BetResponse> GetBetAsync(int matchId, string groupId);
+    Task<BetResponse?> GetBetAsync(int matchId, string groupId);
     public Task<BetRequest> PlaceBetAsync(int oddsId, int matchId, decimal amount, string groupId);
 }
 
@@ -18,10 +18,14 @@ public class BetService : IBetService
         _httpClient = httpClient;
     }
 
-    public async Task<BetResponse> GetBetAsync(int matchId, string groupId)
+    public async Task<BetResponse?> GetBetAsync(int matchId, string groupId)
     {
-        var bet =  await _httpClient.GetFromJsonAsync<BetResponse>($"/api/bets/match?matchId={matchId}&groupId={groupId}");
-        return bet;
+        var response =  await _httpClient.GetAsync($"/api/bets/match?matchId={matchId}&groupId={groupId}");
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadFromJsonAsync<BetResponse>();
+        }
+        return null;
     }
 
     public async Task<BetRequest> PlaceBetAsync(int oddsId, int matchId, decimal amount, string groupId)

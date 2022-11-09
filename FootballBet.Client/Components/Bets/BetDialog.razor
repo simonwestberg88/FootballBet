@@ -3,29 +3,62 @@
 @inject IBetService BetService;
 @inject NavigationManager MyNavigationManager;
 
-<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme"/>
 <MudDialog>
     <DialogContent>
-        <MudText> Score @Odds.HomeTeamGoals - @Odds.AwayTeamGoals</MudText>
-        <MudText style="@($"background:{_theme.PaletteDark.Secondary};")">@Odds.Odds</MudText>
+        @if (_betPlaced)
+        {
+            <MudText>Bet already placed on match</MudText>
+        }
+        else
+        {
+            <MudText> Score @Odds.HomeTeamGoals - @Odds.AwayTeamGoals</MudText>
+            <MudText style="@($"background:{_theme.PaletteDark.Secondary};")">@Odds.Odds</MudText>
+        }
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+        @if (_betPlaced)
+        {
+        <MudButton OnClick="Cancel">Close</MudButton>
+        }
+        else
+        {
+            <MudButton OnClick="Cancel">Cancel</MudButton>
+            <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+        }
     </DialogActions>
-</MudDialog>
-@code {
-    private bool _isDarkMode = true;
-    private readonly MudTheme _theme = new();
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-    [Parameter] public OddsDto Odds { get; set; }
-    [Parameter] public int MatchId { get; set; }
+</MudDialog>
+
+@code {
+    private readonly MudTheme _theme = new();
+    private bool _betPlaced;
+    private string _groupId;
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public OddsDto Odds { get; set; }
+
+    [Parameter]
+    public int MatchId { get; set; }
+
     private async Task Submit()
     {
-        var groupId = MyNavigationManager.Uri.Split("/").Last();
-        await BetService.PlaceBetAsync(Odds.Id,  MatchId, amount: 100, groupId);
+        await BetService.PlaceBetAsync(Odds.Id, MatchId, amount: 100, _groupId);
         MudDialog.Close(DialogResult.Ok(true));
     }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _groupId = MyNavigationManager.Uri.Split("/").Last();
+        var bet = await BetService.GetBetAsync(MatchId, _groupId);
+        if (bet is not null)
+        {
+            _betPlaced = true;
+        }
+        await base.OnInitializedAsync();
+    }
+
     void Cancel() => MudDialog.Cancel();
 }
