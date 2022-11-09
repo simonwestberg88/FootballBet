@@ -466,7 +466,10 @@ namespace FootballBet.Repository.Migrations
                     b.Property<int>("HomeTeamGoals")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MatchOddsGroupId")
+                    b.Property<int?>("MatchOddsGroupEntityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MatchOddsGroupId")
                         .HasColumnType("int");
 
                     b.Property<int>("MatchWinnerEntityEnum")
@@ -477,7 +480,7 @@ namespace FootballBet.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MatchOddsGroupId");
+                    b.HasIndex("MatchOddsGroupEntityId");
 
                     b.ToTable("OddsEntities");
                 });
@@ -716,11 +719,9 @@ namespace FootballBet.Repository.Migrations
 
             modelBuilder.Entity("FootballBet.Repository.Entities.OddsEntity", b =>
                 {
-                    b.HasOne("FootballBet.Repository.Entities.MatchOddsGroupEntity", "MatchOddsGroupEntity")
+                    b.HasOne("FootballBet.Repository.Entities.MatchOddsGroupEntity", null)
                         .WithMany("OddsEntities")
-                        .HasForeignKey("MatchOddsGroupId");
-
-                    b.Navigation("MatchOddsGroupEntity");
+                        .HasForeignKey("MatchOddsGroupEntityId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

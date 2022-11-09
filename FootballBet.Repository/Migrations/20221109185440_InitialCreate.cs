@@ -315,14 +315,15 @@ namespace FootballBet.Repository.Migrations
                     AwayTeamGoals = table.Column<int>(type: "int", nullable: false),
                     Odds = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     MatchWinnerEntityEnum = table.Column<int>(type: "int", nullable: false),
-                    MatchOddsGroupId = table.Column<int>(type: "int", nullable: true)
+                    MatchOddsGroupId = table.Column<int>(type: "int", nullable: false),
+                    MatchOddsGroupEntityId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OddsEntities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OddsEntities_MatchOddsGroupEntities_MatchOddsGroupId",
-                        column: x => x.MatchOddsGroupId,
+                        name: "FK_OddsEntities_MatchOddsGroupEntities_MatchOddsGroupEntityId",
+                        column: x => x.MatchOddsGroupEntityId,
                         principalTable: "MatchOddsGroupEntities",
                         principalColumn: "Id");
                 });
@@ -525,9 +526,9 @@ namespace FootballBet.Repository.Migrations
                 column: "LeagueEntityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OddsEntities_MatchOddsGroupId",
+                name: "IX_OddsEntities_MatchOddsGroupEntityId",
                 table: "OddsEntities",
-                column: "MatchOddsGroupId");
+                column: "MatchOddsGroupEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PersistedGrants_ConsumedTime",
