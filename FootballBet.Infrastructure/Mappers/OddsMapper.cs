@@ -2,6 +2,8 @@ using FootballBet.Infrastructure.ApiResponses.Odds;
 using FootballBet.Repository.Entities;
 using FootballBet.Repository.Enums;
 using FootballBet.Shared.Models.Odds;
+using System.Globalization;
+
 namespace FootballBet.Infrastructure.Mappers;
 
 public static class OddsMapper
@@ -27,10 +29,9 @@ public static class OddsMapper
     public static OddsEntity ToOddsEntity(this BetValue betValue, int matchId, int MatchOddsGroupId)
     {
         var (homeGoals, awayGoals) = ParseExactResult(betValue.Prediction.ToString());
-
         return new OddsEntity
         {
-            Odds = decimal.Parse(betValue.Odd),
+            Odds = decimal.Parse(betValue.Odd, CultureInfo.InvariantCulture),
             MatchWinnerEntityEnum = ParseMatchWinner(betValue.Prediction.ToString(), homeGoals, awayGoals),
             HomeTeamGoals = homeGoals,
             AwayTeamGoals = awayGoals,

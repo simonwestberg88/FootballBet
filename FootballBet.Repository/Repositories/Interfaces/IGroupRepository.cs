@@ -9,6 +9,7 @@ namespace FootballBet.Server.Data.Repositories.Interfaces
         Task<BettingGroupEntity> GetGroupById(Guid groupId, CancellationToken ct);
         Task JoinGroup(Guid groupId, BettingGroupMemberEntity memberEntity, CancellationToken ct);
         Task<BettingGroupInvitationEntity> CreateBettingGroupInvitation(BettingGroupInvitationEntity invitationEntity, CancellationToken ct);
+        Task DeleteBettingGroupInvitationsByEmailAndGroupId(string email, string groupId);
         Task<BettingGroupInvitationEntity> GetBettingGroupInvitationByIdAsync(Guid invitationId, CancellationToken ct);
         Task DeleteBettingGroupInvitation(Guid invitationId, CancellationToken ct);
     }

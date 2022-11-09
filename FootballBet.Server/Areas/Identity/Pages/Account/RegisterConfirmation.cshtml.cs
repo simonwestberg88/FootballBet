@@ -44,7 +44,7 @@ namespace FootballBet.Server.Areas.Identity.Pages.Account
         {
             if (email == null)
             {
-                return RedirectToPage("/Index");
+                return RedirectToPage("/");
             }
             returnUrl = returnUrl ?? Url.Content("~/");
 

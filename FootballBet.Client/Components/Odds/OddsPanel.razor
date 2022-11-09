@@ -1,5 +1,5 @@
 @using FootballBet.Shared.Models.Odds
-<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme"/>
+
 <MudPaper Style="display: flex; flex-direction: row; margin-bottom: 15px" Elevation="0">
     <MudPaper Style="width: 50%;">
         <MudText Align="Align.Center">Base</MudText>
@@ -27,8 +27,6 @@
 
     [Parameter]
     public string? PanelText { get; set; }
-
-    private bool _isDarkMode = true;
     private readonly MudTheme _theme = new();
     private bool _isFirst = true;
 
