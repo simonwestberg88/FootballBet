@@ -1,0 +1,30 @@
+@using FootballBet.Shared.Models.Odds
+@using FootballBet.Client.Services
+@inject IBetService BetService;
+@inject NavigationManager MyNavigationManager;
+
+<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme"/>
+<MudDialog>
+    <DialogContent>
+        <MudText> Score @Odds.HomeTeamGoals - @Odds.AwayTeamGoals</MudText>
+        <MudText style="@($"background:{_theme.PaletteDark.Secondary};")">@Odds.Odds</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    private bool _isDarkMode = true;
+    private readonly MudTheme _theme = new();
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public OddsDto Odds { get; set; }
+    private async Task Submit()
+    {
+        var groupId = MyNavigationManager.Uri.Split("/").Last();
+        await BetService.PlaceBetAsync(Odds.Id, 100, groupId);
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+    void Cancel() => MudDialog.Cancel();
+}

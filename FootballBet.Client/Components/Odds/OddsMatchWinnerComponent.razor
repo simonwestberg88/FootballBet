@@ -1,0 +1,41 @@
+<style>
+    .matchWinner{
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center
+    }
+    .oddsText{
+    background:@_theme.PaletteDark.Secondary; 
+    padding: 3px
+    }
+</style>
+<MudContainer Style="display: flex; flex-direction:row;width:100%;justify-content: space-between;">
+    <div class="matchWinner">
+        <MudText>1</MudText>
+        <MudText class="oddsText">@HomeOdds</MudText>
+    </div>
+    <div class="matchWinner">
+        <MudText>x</MudText>
+        <MudText class="oddsText">@DrawOdds</MudText>
+    </div>
+    <div class="matchWinner">
+        <MudText>2</MudText>
+        <MudText class="oddsText">@AwayOdds</MudText>
+    </div>
+</MudContainer>
+
+@code {
+
+    [Parameter]
+    public decimal HomeOdds { get; set; }
+
+    [Parameter]
+    public decimal DrawOdds { get; set; }
+
+    [Parameter]
+    public decimal AwayOdds { get; set; }
+
+    MudTheme _theme = new();
+
+}

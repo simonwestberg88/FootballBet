@@ -1,6 +1,7 @@
 @using FootballBet.Shared.Models.Match
 @using FootballBet.Shared.Models.Odds
 @using FootballBet.Client.Services
+@using NuGet.Common
 @inject IOddsService OddsService;
 
 <MudPaper Elevation="2" Style="margin-top: 10px">
@@ -25,17 +26,41 @@
         </TitleContent>
         <ChildContent>
             <MudText Style="padding-top: 10px">@(MatchData.MatchStatus)</MudText>
-                @if(Odds != null){
-                    <OddsComponent Odds="Odds"></OddsComponent>
-                }
-            </ChildContent>
-        </MudExpansionPanel>
-    </MudPaper>
+            @if (Odds != null)
+            {
+                <MudDivider Style="margin-top: 10px; margin-bottom: 10px" />
+                <MudText Typo="Typo.h6" Style="padding-top: 10px">Base Odds</MudText>
+                <OddsMatchWinnerComponent
+                    HomeOdds="@_homeOdds.OrderBy(o => o.Odds).FirstOrDefault().Odds"
+                    AwayOdds="@_awayOdds.OrderBy(o => o.Odds).FirstOrDefault().Odds"
+                    DrawOdds="@_drawOdds.OrderBy(o => o.Odds).FirstOrDefault().Odds"/>
+                <MudDivider Style="margin-top: 10px; margin-bottom: 10px" />
+                <MudText Typo="Typo.h6">Exact odds</MudText>
+                <MudExpansionPanels>
+                    <MudExpansionPanel Text="Home">
+                        <OddsListComponent Odds="_homeOdds"/>
+                    </MudExpansionPanel>
+                    <MudExpansionPanel Text="Draw">
+                        <OddsListComponent Odds="_drawOdds"/>
+                    </MudExpansionPanel>
+                    <MudExpansionPanel Text="Away">
+                        <OddsListComponent Odds="_awayOdds"/>a
+                    </MudExpansionPanel>
+                </MudExpansionPanels>
+            }
+        </ChildContent>
+    </MudExpansionPanel>
+</MudPaper>
 
-    @code {
+@code {
+
     [Parameter]
     public MatchDto MatchData { get; set; }
+
     private List<OddsDto>? Odds { get; set; }
+    private static List<OddsDto>? _homeOdds;
+    private static List<OddsDto>? _awayOdds;
+    private static List<OddsDto>? _drawOdds;
 
     bool _isOpen;
     bool HasLoadedOddsForGame;
@@ -48,13 +73,25 @@
         if (!HasLoadedOddsForGame)
         {
             Odds = (await OddsService.GetOdds(MatchData.MatchId) ?? Array.Empty<OddsDto>()).ToList();
+            _homeOdds = Odds.Where(o => o.MatchWinner == MatchWinnerEnumDto.Home).ToList();
+            _awayOdds = Odds.Where(o => o.MatchWinner == MatchWinnerEnumDto.Away).ToList();
+            _drawOdds = Odds.Where(o => o.MatchWinner == MatchWinnerEnumDto.Draw).ToList();
             StateHasChanged();
         }
         HasLoadedOddsForGame = true;
     }
+
+    private OddsDto _selectedOdds;
+
+
+    private bool _isDarkMode = true;
+    private readonly MudTheme _theme = new();
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
     }
 
+    MudListItem selectedItem;
+    object selectedValue = 1;
 }

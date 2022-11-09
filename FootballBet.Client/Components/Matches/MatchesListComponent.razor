@@ -11,12 +11,11 @@
             @foreach (var date in GetUniqueDatesForRound(round))
             {
                 <MudText Typo="Typo.h5">@date.Date.ToString("dd/MM/yyyy")</MudText>
-                @foreach (var game in GetGamesForDate(date))
-                {
+                <Virtualize Items="@GetGamesForDate(date)" Context="game">
                     <MudListItem class="px-0">
                         <MatchComponent MatchData="@game"></MatchComponent>
                     </MudListItem>
-                }
+                </Virtualize>
             }
             </div>
         }
