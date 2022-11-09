@@ -1,9 +1,28 @@
 @using FootballBet.Shared.Models.Bets
-<MudText>My bet: @UserBet?.MatchWinner</MudText>
-                <MudText>Max win: @UserBet?.PotentialWin</MudText>
-                <MudText>@BaseWinString</MudText>
+<MudSimpleTable Style="display: flex; flex-direction: row">
+    <thead>
+    <tr>
+        <th>Score</th>
+        <th>Base win</th>
+        <th>Max win</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>@($"{UserBet?.HomeGoals}  - {UserBet?.AwayGoals}")</td>
+        <td>@UserBet?.PotentialBaseWin</td>
+        <td>@UserBet?.PotentialWin</td>
+    </tr>
+    </tbody>
+</MudSimpleTable>
+
 
 @code {
-    [Parameter] public BetResponse? UserBet { get; set; }
-    [Parameter] public string? BaseWinString { get; set; }
+
+    [Parameter]
+    public BetResponse? UserBet { get; set; }
+
+    [Parameter]
+    public string? BaseWinString { get; set; }
+
 }

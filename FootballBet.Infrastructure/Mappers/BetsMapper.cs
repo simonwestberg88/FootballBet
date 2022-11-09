@@ -11,6 +11,8 @@ public static class BetsMapper
             WagerAmount = bet.WagerAmount,
             PotentialWin = bet.WagerAmount * odds.Odds,
             MatchWinner = OddsMapper.MapMatchWinnerEnumDto(odds.MatchWinnerEntityEnum),
-            PotentialBaseWin = baseOdds.Odds * bet.WagerAmount
+            PotentialBaseWin = baseOdds.Odds * bet.WagerAmount,
+            HomeGoals = odds.HomeTeamGoals,
+            AwayGoals = odds.AwayTeamGoals
         };
 }
