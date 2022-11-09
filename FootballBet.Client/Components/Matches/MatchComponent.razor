@@ -46,7 +46,7 @@
                 <MudText Typo="Typo.h6">Exact odds</MudText>
                 <MudExpansionPanels>
                     <MudExpansionPanel Text="Home">
-                        <OddsListComponent Odds="_homeOdds" MatchId="MatchData.MatchId"/>
+                        <OddsListComponent Odds="_homeOdds" MatchId="MatchData.MatchId" UserHasMadeBet="UserHasMadeBet"/>
                     </MudExpansionPanel>
                     <MudExpansionPanel Text="Draw">
                         <OddsListComponent Odds="_drawOdds" MatchId="MatchData.MatchId"/>
@@ -70,6 +70,7 @@
     private static List<OddsDto>? _awayOdds;
     private static List<OddsDto>? _drawOdds;
     
+
     private BetResponse? UserBet { get; set; }
 
     bool _isOpen;
@@ -101,6 +102,12 @@
     {
         UserBet = await BetService.GetBetAsync(MatchData.MatchId, MyNavigationManager.Uri.Split("/").Last());
         await base.OnInitializedAsync();
+    }
+    
+    protected void UserHasMadeBet(BetResponse bet)
+    {
+        Console.WriteLine("user bet changed");
+        UserBet = bet;
     }
 
     MudListItem selectedItem;

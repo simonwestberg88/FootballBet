@@ -37,13 +37,14 @@ th, td {
     [Parameter]
     public List<OddsDto> Odds { get; set; }
     [Parameter] public int MatchId { get; set; }
-    [Parameter] public BetResponse? UserBet { get; set; }
+    [Parameter] public EventCallback<BetResponse> UserHasMadeBet { get; set; }
+    private BetResponse UserBet { get; set; }
 
     private readonly MudTheme _theme = new();
 
     private void OpenDialog(OddsDto odds)
     {
-        var parameters = new DialogParameters { { "Odds", odds }, { "MatchId", MatchId }, {"UserBet", UserBet} };
+        var parameters = new DialogParameters { { "Odds", odds }, { "MatchId", MatchId }, {"UserHasMadeBet", UserHasMadeBet} };
         var options = new DialogOptions { CloseOnEscapeKey = true };
         DialogService.Show<BetDialog>("Place bet", parameters, options);
     }

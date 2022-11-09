@@ -43,12 +43,12 @@
 
     [Parameter]
     public int MatchId { get; set; }
-    [Parameter] public BetResponse? UserBet { get; set; }
+    [Parameter] public EventCallback<BetResponse> UserHasMadeBet { get; set; }
 
     private async Task Submit()
     {
         await BetService.PlaceBetAsync(Odds.Id, MatchId, amount: 100, _groupId);
-        UserBet = await BetService.GetBetAsync(MatchId, _groupId);
+        await UserHasMadeBet.InvokeAsync(new BetResponse{Amount = 100, OddsId = Odds.Id, PotentialWin = 100020});
         MudDialog.Close(DialogResult.Ok(true));
         StateHasChanged();
     }
@@ -56,7 +56,8 @@
     protected override async Task OnInitializedAsync()
     {
         _groupId = MyNavigationManager.Uri.Split("/").Last();
-        if (UserBet is not null)
+        var userBet = await BetService.GetBetAsync(MatchId, _groupId);
+        if (userBet is not null)
         {
             _betPlaced = true;
         }
