@@ -4,7 +4,6 @@
 @using NuGet.Common
 @inject IOddsService OddsService;
 
-<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme"/>
 <MudPaper Elevation="2" Style="margin-top: 10px">
     <MudExpansionPanel @bind-IsExpanded="_isOpen" @onclick="GetOddsForGame" HideIcon="true">
         <TitleContent>
@@ -29,7 +28,14 @@
             <MudText Style="padding-top: 10px">@(MatchData.MatchStatus)</MudText>
             @if (Odds != null)
             {
-                <MudText Typo="Typo.h5">Odds</MudText>
+                <MudDivider Style="margin-top: 10px; margin-bottom: 10px" />
+                <MudText Typo="Typo.h6" Style="padding-top: 10px">Base Odds</MudText>
+                <OddsMatchWinnerComponent
+                    HomeOdds="@_homeOdds.OrderBy(o => o.Odds).FirstOrDefault().Odds"
+                    AwayOdds="@_awayOdds.OrderBy(o => o.Odds).FirstOrDefault().Odds"
+                    DrawOdds="@_drawOdds.OrderBy(o => o.Odds).FirstOrDefault().Odds"/>
+                <MudDivider Style="margin-top: 10px; margin-bottom: 10px" />
+                <MudText Typo="Typo.h6">Exact odds</MudText>
                 <MudExpansionPanels>
                     <MudExpansionPanel Text="Home">
                         <OddsListComponent Odds="_homeOdds"/>
