@@ -76,11 +76,16 @@ namespace FootballBet.Infrastructure.Services
                 });
             }
 
-            return new GameDayStatsContainerShared() 
-            { 
-                GameDayStats = gameDayStats, 
+            return new GameDayStatsContainerShared()
+            {
+                GameDayStats = gameDayStats,
                 GameDates = gameDays.ToList(),
-                Members = members.Select(x => new UserDto() { Id = x.UserId, UserName = x.Nickname}).ToList() 
+                Members = members.Select(x => new UserDto()
+                {
+                    Id = x.UserId,
+                    UserName = x.Nickname,
+                    Balance = (_betRepository.GetUserBalanceForGroupAsync(x.UserId, groupId)).Result.Balance
+                }).ToList()
             };
         }
 

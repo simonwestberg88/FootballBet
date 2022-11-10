@@ -14,5 +14,6 @@ public interface IBetRepository
     public Task ProcessExactWinAsync(int betId);
     public Task ProcessBaseWinAsync(int betId);
     public Task ProcessLossAsync(int betId);
+    public Task<UserBalanceEntity> GetUserBalanceForGroupAsync(string userId, string groupId);
 
 }

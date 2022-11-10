@@ -2,27 +2,42 @@
 @using FootballBet.Shared.Models.Users
 @inject HttpClient Http
 
-    @if(GameDayStat != null)
-    {
-        <MudChart ChartType="ChartType.Line" ChartSeries="@Series"  XAxisLabels="@XAxisLabels" Width="100%" Height="700px" ChartOptions="chartOptions"></MudChart>
-    }
+@if (GameDayStat != null)
+{
+    <MudTable Items="@TableElements" Hover="true" SortLabel="Sort By">
+        <HeaderContent>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserDto, object>(x=>x.UserName)">User</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel Enabled="@enabled" SortBy="new Func<UserDto, object>(x=>x.Balance)">Balance</MudTableSortLabel></MudTh>
+
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="User">@context.UserName</MudTd>
+            <MudTd DataLabel="Balance">@context.Balance</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+        </PagerContent>
+    </MudTable>
+
+    <MudChart ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="700px" ChartOptions="chartOptions"></MudChart>
+}
 
 @code {
     [Parameter]
     public string? ThisGroupId { get; set; }
-    private GameDayStatsContainerShared GameDayStat { get; set; }
+    private GameDayStatsContainerShared? GameDayStat { get; set; }
     public ChartOptions chartOptions = new ChartOptions();
-
     public List<ChartSeries> Series = new List<ChartSeries>();
-
     public string[] XAxisLabels = new string[] { };
+    public bool enabled = true;
+    public IEnumerable<UserDto> TableElements = new List<UserDto>();
 
-    Random random = new Random();
     protected override async Task OnInitializedAsync()
     {
         GameDayStat = await Http.GetFromJsonAsync<GameDayStatsContainerShared>($"/groupStats/{ThisGroupId}") ?? new();
         CreateSeries(GameDayStat.GameDayStats, GameDayStat.Members);
         CreateXAxis(GameDayStat.GameDates);
+        TableElements = GameDayStat.Members.OrderByDescending(x => x.Balance);
         StateHasChanged();
     }
 
@@ -53,5 +68,5 @@
     {
         XAxisLabels = gameDates.Select(d => d.ToString("dd/MM")).ToArray();
     }
-    
+
 }
