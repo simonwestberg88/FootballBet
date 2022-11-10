@@ -14,6 +14,12 @@ public class OddsRepository : IOddsRepository
         _context = context;
     }
 
+    public async Task AddBaseOddsAsync(IEnumerable<BaseOddsEntity> baseOddsEntities)
+    {
+        await _context.BaseOddsEntities.AddRangeAsync(baseOddsEntities);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<int> AddOddsGroupAsync(MatchOddsGroupEntity matchOddsGroup)
     {
         await _context.MatchOddsGroupEntities.AddAsync(matchOddsGroup);

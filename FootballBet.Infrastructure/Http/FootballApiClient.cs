@@ -80,8 +80,9 @@ public class FootballApiClient : IFootballApiClient
                 var oddsGroupId = await _oddsRepository.AddOddsGroupAsync(new MatchOddsGroupEntity
                     { MatchId = matchId, Created = DateTime.Now });
 
-                var oddsEntities = CreateOddsEntities(bookmakerOddsForMatch, matchId, oddsGroupId);
-                await _oddsRepository.AddOddsAsync(oddsEntities);
+                var (exactScoreOdds, baseOdds) = CreateOddsEntities(bookmakerOddsForMatch, matchId, oddsGroupId);
+                await _oddsRepository.AddOddsAsync(exactScoreOdds);
+                await _oddsRepository.AddBaseOddsAsync(baseOdds);
                 _logger.LogInformation("Saved odds for match {MatchId}", matchId);
             }
         }
@@ -97,12 +98,16 @@ public class FootballApiClient : IFootballApiClient
         return odds.Select(o => o.ToOddsDto());
     }
 
-    private static IEnumerable<OddsEntity> CreateOddsEntities(BookmakerOdds bookmakerOdds, int matchId,
+    private static (IEnumerable<OddsEntity>, IEnumerable<BaseOddsEntity>) CreateOddsEntities(BookmakerOdds bookmakerOdds, int matchId,
         int matchOddsGroupId)
     {
-        var betValues = bookmakerOdds.Bets
-            .Where(b => b.Name is "Match Winner" or "Exact Score").SelectMany(b => b.Values).ToList();
-        return betValues.Select(w => w.ToOddsEntity(matchId, matchOddsGroupId)).ToList();
+        var exactScore = bookmakerOdds.Bets
+            .Where(b => b.Name == "Exact Score").SelectMany(b => b.Values).ToList();
+        var baseOdds = bookmakerOdds.Bets
+            .Where(b => b.Name == "Match Winner").SelectMany(b => b.Values).ToList();
+        var exactScoreEntity = exactScore.Select(w => w.ToOddsEntity(matchOddsGroupId)).ToList();
+        var baseOddsEntity = baseOdds.Select(w => w.ToBaseOddsEntity(matchOddsGroupId)).ToList();
+        return (exactScoreEntity, baseOddsEntity);
     }
 
     private static async Task<T?> HandleResponse<T>(HttpResponseMessage response)

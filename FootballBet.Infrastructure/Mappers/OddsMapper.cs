@@ -26,27 +26,18 @@ public static class OddsMapper
             _ => MatchWinnerEnumDto.Home
         };
 
-    public static OddsEntity ToOddsEntity(this BetValue betValue, int matchId, int MatchOddsGroupId)
+    public static OddsEntity ToOddsEntity(this BetValue betValue, int matchOddsGroupId)
     {
         var (homeGoals, awayGoals) = ParseExactResult(betValue.Prediction.ToString());
         return new OddsEntity
         {
             Odds = decimal.Parse(betValue.Odd, CultureInfo.InvariantCulture),
-            MatchWinnerEntityEnum = ParseMatchWinner(betValue.Prediction.ToString(), homeGoals, awayGoals),
+            MatchWinnerEntityEnum = ParseMatchWinnerFromExactScore(homeGoals, awayGoals),
             HomeTeamGoals = homeGoals,
             AwayTeamGoals = awayGoals,
-            MatchOddsGroupId = MatchOddsGroupId
+            MatchOddsGroupId = matchOddsGroupId
         };
     }
-
-    private static MatchWinnerEntityEnum ParseMatchWinner(string? prediction, int homeGoals = 0, int awayGoals = 0)
-        => prediction switch
-        {
-            "Draw" => MatchWinnerEntityEnum.Draw,
-            "Home" => MatchWinnerEntityEnum.Home,
-            "Away" => MatchWinnerEntityEnum.Away,
-            _ => ParseMatchWinnerFromExactScore(homeGoals, awayGoals)
-        };
 
     private static MatchWinnerEntityEnum ParseMatchWinnerFromExactScore(int homeGoals, int awayGoals)
         => homeGoals > awayGoals ? MatchWinnerEntityEnum.Home :
