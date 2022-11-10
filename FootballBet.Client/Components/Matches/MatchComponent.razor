@@ -38,9 +38,9 @@
                 <MudDivider Style="margin-top: 10px; margin-bottom: 10px"/>
                 <MudText Typo="Typo.h6" Style="padding-top: 10px">Base Odds</MudText>
                 <OddsMatchWinnerComponent
-                    HomeOdds="@_baseHome?.Odds"
-                    AwayOdds="@_baseAway?.Odds"
-                    DrawOdds="@_baseDraw?.Odds"/>
+                    HomeOdds="@_baseOdds?.Home.Odds"
+                    AwayOdds="@_baseOdds?.Away.Odds"
+                    DrawOdds="@_baseOdds?.Draw.Odds"/>
                 <MudDivider Style="margin-top: 10px; margin-bottom: 10px"/>
                 <MudText Typo="Typo.h6">Exact odds</MudText>
                 <MudExpansionPanels>
@@ -64,13 +64,11 @@
     [Parameter]
     public MatchDto MatchData { get; set; }
 
-    private List<OddsDto>? Odds { get; set; }
-    private List<OddsDto>? _homeOdds;
-    private List<OddsDto>? _awayOdds;
-    private List<OddsDto>? _drawOdds;
-    private OddsDto? _baseHome;
-    private OddsDto? _baseAway;
-    private OddsDto? _baseDraw;
+    private List<ExactScoreOddsDto>? Odds { get; set; }
+    private List<ExactScoreOddsDto>? _homeOdds;
+    private List<ExactScoreOddsDto>? _awayOdds;
+    private List<ExactScoreOddsDto>? _drawOdds;
+    private BaseOddsResponse? _baseOdds;
     private string _baseWinString = "";
 
     private BetResponse? UserBet { get; set; }
@@ -85,13 +83,11 @@
     {
         if (!_hasLoadedOddsForGame)
         {
-            Odds = (await OddsService.GetOdds(MatchData.MatchId) ?? Array.Empty<OddsDto>()).ToList();
-            _homeOdds = Odds.Where(o => o.MatchWinner == MatchWinnerEnumDto.Home).OrderBy(o => o.Odds).Skip(1).ToList();
-            _awayOdds = Odds.Where(o => o.MatchWinner == MatchWinnerEnumDto.Away).OrderBy(o => o.Odds).Skip(1).ToList();
-            _drawOdds = Odds.Where(o => o.MatchWinner == MatchWinnerEnumDto.Draw).OrderBy(o => o.Odds).Skip(1).ToList();
-            _baseHome = _homeOdds.OrderBy(o => o.Odds).FirstOrDefault();
-            _baseAway = _awayOdds.OrderBy(o => o.Odds).FirstOrDefault();
-            _baseDraw = _drawOdds.OrderBy(o => o.Odds).FirstOrDefault();
+            Odds = (await OddsService.GetExactScoreOdds(MatchData.MatchId) ?? Array.Empty<ExactScoreOddsDto>()).ToList();
+            _homeOdds = Odds.Where(o => o.MatchWinner == MatchWinnerEnumDto.Home).OrderBy(o => o.Odds).ToList();
+            _awayOdds = Odds.Where(o => o.MatchWinner == MatchWinnerEnumDto.Away).OrderBy(o => o.Odds).ToList();
+            _drawOdds = Odds.Where(o => o.MatchWinner == MatchWinnerEnumDto.Draw).OrderBy(o => o.Odds).ToList();
+            _baseOdds = await OddsService.GetBaseOdds(MatchData.MatchId);
             StateHasChanged();
         }
         _hasLoadedOddsForGame = true;

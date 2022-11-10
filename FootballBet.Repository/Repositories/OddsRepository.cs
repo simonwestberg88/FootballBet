@@ -14,6 +14,12 @@ public class OddsRepository : IOddsRepository
         _context = context;
     }
 
+    public async Task AddBaseOddsAsync(IEnumerable<BaseOddsEntity> baseOddsEntities)
+    {
+        await _context.BaseOddsEntities.AddRangeAsync(baseOddsEntities);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<int> AddOddsGroupAsync(MatchOddsGroupEntity matchOddsGroup)
     {
         await _context.MatchOddsGroupEntities.AddAsync(matchOddsGroup);
@@ -21,31 +27,37 @@ public class OddsRepository : IOddsRepository
         return matchOddsGroup.Id;
     }
 
-    public async Task AddOddsAsync(IEnumerable<OddsEntity> oddsEntities)
+    public async Task AddOddsAsync(IEnumerable<ExactScoreOddsEntity> oddsEntities)
     {
-        await _context.OddsEntities.AddRangeAsync(oddsEntities);
+        await _context.ExactScoreOddsEntities.AddRangeAsync(oddsEntities);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<OddsEntity>> GetLatestOddsAsync(int matchId)
+    public async Task<IEnumerable<ExactScoreOddsEntity>> GetLatestExactScoreOddsAsync(int matchId)
     {
         var groupId = _context.MatchOddsGroupEntities.OrderByDescending(x => x.Id)
             .Single(m => m.MatchId == matchId).Id;
-        return await _context.OddsEntities.Where(x => x.MatchOddsGroupId == groupId).ToListAsync();
+        return await _context.ExactScoreOddsEntities.Where(x => x.MatchOddsGroupId == groupId).ToListAsync();
     }
 
-    public async Task<OddsEntity?> GetOddsAsync(int oddsId)
-        => await _context.OddsEntities.FindAsync(oddsId);
-
-    public async Task<OddsEntity?> GetBaseOddsAsync(int oddsId, MatchWinnerEntityEnum winner)
+    public async Task<IEnumerable<BaseOddsEntity>> GetLatestBaseOddsAsync(int matchId)
     {
-        var oddsEntity = await _context.OddsEntities.FindAsync(oddsId);
-        if (oddsEntity == null)
+        var groupId = _context.MatchOddsGroupEntities.OrderByDescending(x => x.Id)
+            .Single(m => m.MatchId == matchId).Id;
+        return await _context.BaseOddsEntities.Where(x => x.MatchOddsGroupId == groupId).ToListAsync();
+    }
+
+    public async Task<ExactScoreOddsEntity?> GetOddsAsync(int exactOddsId)
+        => await _context.ExactScoreOddsEntities.FindAsync(exactOddsId);
+
+    public async Task<BaseOddsEntity?> GetBaseOddsAsync(int exactOddsId, MatchWinnerEntityEnum winner)
+    {
+        var exactScoreOddsEntity = await _context.ExactScoreOddsEntities.FindAsync(exactOddsId);
+        if (exactScoreOddsEntity == null)
             return null;
-        var oddsGroupId = oddsEntity.MatchOddsGroupId;
-        var baseOdds = _context.OddsEntities
+        var oddsGroupId = exactScoreOddsEntity.MatchOddsGroupId;
+        var baseOdds = _context.BaseOddsEntities
             .Where(o => o.MatchOddsGroupId == oddsGroupId)
-            .OrderBy(o => o.Odds)
             .FirstOrDefault(x => x.MatchWinnerEntityEnum == winner);
         return baseOdds;
     }

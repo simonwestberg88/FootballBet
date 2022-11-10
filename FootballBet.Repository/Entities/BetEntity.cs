@@ -9,5 +9,5 @@ public class BetEntity
     public int OddsId { get; set; }
     public decimal WagerAmount { get; set; }
     public bool? IsWinningBet { get; set; }
-    public bool HasBeenPayed { get; set; }
+    public bool Processed { get; set; }
 }

@@ -1,6 +1,6 @@
 namespace FootballBet.Shared.Models.Odds;
 
-public readonly record struct OddsDto
+public readonly record struct ExactScoreOddsDto
 (
     int Id,
     MatchWinnerEnumDto MatchWinner,
@@ -8,5 +8,3 @@ public readonly record struct OddsDto
     int HomeTeamGoals,
     int AwayTeamGoals
 );
-
-public enum MatchWinnerEnumDto{ Home, Away, Draw }

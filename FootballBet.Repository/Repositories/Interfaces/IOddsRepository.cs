@@ -5,9 +5,11 @@ namespace FootballBet.Repository.Repositories.Interfaces;
 
 public interface IOddsRepository
 {
-    public Task AddOddsAsync(IEnumerable<OddsEntity> oddsEntities);
+    public Task AddOddsAsync(IEnumerable<ExactScoreOddsEntity> oddsEntities);
+    public Task AddBaseOddsAsync(IEnumerable<BaseOddsEntity> baseOddsEntities);
     public Task<int> AddOddsGroupAsync(MatchOddsGroupEntity matchOddsGroup);
-    public Task<IEnumerable<OddsEntity>> GetLatestOddsAsync(int matchId);
-    public Task<OddsEntity?> GetOddsAsync(int oddsId);
-    public Task<OddsEntity?> GetBaseOddsAsync(int oddsId, MatchWinnerEntityEnum winner);
+    public Task<IEnumerable<ExactScoreOddsEntity>> GetLatestExactScoreOddsAsync(int matchId);
+    public Task<IEnumerable<BaseOddsEntity>> GetLatestBaseOddsAsync(int matchId);
+    public Task<ExactScoreOddsEntity?> GetOddsAsync(int exactOddsId);
+    public Task<BaseOddsEntity?> GetBaseOddsAsync(int exactOddsId, MatchWinnerEntityEnum winner);
 }

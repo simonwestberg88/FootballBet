@@ -13,8 +13,20 @@ public class GroupRepository : IGroupRepository
     public async Task<BettingGroupEntity> CreateGroup(ApplicationUser user, BettingGroupEntity newGroupEntity, CancellationToken ct)
     {
         await _context.BettingGroups.AddAsync(newGroupEntity, ct);
+        await AddUserBalanceAsync(user.Id, newGroupEntity.Id.ToString(), ct);
         await _context.SaveChangesAsync(ct);
         return newGroupEntity;
+    }
+
+    private async Task AddUserBalanceAsync(string userId, string groupId, CancellationToken ct)
+    {
+        var userBalance = new UserBalanceEntity
+        {
+            Balance = 0,
+            GroupId = groupId,
+            UserId = userId
+        };
+        await _context.UserBalanceEntities.AddAsync(userBalance, ct);
     }
 
 
@@ -27,6 +39,7 @@ public class GroupRepository : IGroupRepository
         if (memberEntity != null && group != null)
         {
             group.Memberships.Add(memberEntity);
+            await AddUserBalanceAsync(memberEntity.UserId, groupId.ToString(), ct);
             await _context.SaveChangesAsync(ct);
         }
     }

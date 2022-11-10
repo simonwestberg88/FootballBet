@@ -5,14 +5,14 @@ namespace FootballBet.Infrastructure.Mappers;
 
 public static class BetsMapper
 {
-    public static BetResponse ToBetDto(this BetEntity bet, OddsEntity odds, OddsEntity baseOdds)
+    public static BetResponse ToBetDto(this BetEntity bet, ExactScoreOddsEntity exactScoreOdds, BaseOddsEntity baseOdds)
         => new ()
         {
             WagerAmount = bet.WagerAmount,
-            PotentialWin = bet.WagerAmount * odds.Odds,
-            MatchWinner = OddsMapper.MapMatchWinnerEnumDto(odds.MatchWinnerEntityEnum),
+            PotentialWin = bet.WagerAmount * exactScoreOdds.Odds,
+            MatchWinner = OddsMapper.MapMatchWinnerEnumDto(exactScoreOdds.MatchWinnerEntityEnum),
             PotentialBaseWin = baseOdds.Odds * bet.WagerAmount,
-            HomeGoals = odds.HomeTeamGoals,
-            AwayGoals = odds.AwayTeamGoals
+            HomeGoals = exactScoreOdds.HomeTeamGoals,
+            AwayGoals = exactScoreOdds.AwayTeamGoals
         };
 }
