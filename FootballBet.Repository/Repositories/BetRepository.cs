@@ -36,7 +36,12 @@ public class BetRepository : IBetRepository
         var existingBet = await _context.BetEntities.SingleOrDefaultAsync(b =>
             b.UserId == bet.UserId && b.MatchId == bet.MatchId && b.BettingGroupId == bet.BettingGroupId);
         if (existingBet is not null)
-            throw new InvalidOperationException("Bet already exists");
+            throw new InvalidOperationException("Already placed bet on match");
+        var match = await _context.MatchEntities.FindAsync(bet.MatchId);
+        if (match is null)
+            throw new InvalidOperationException("Match not found");
+        if (match.MatchStatus != MatchStatus.NS)
+            throw new InvalidOperationException("Can only place bets on matches that are not started yet");
         await _context.BetEntities.AddAsync(bet);
         await _context.SaveChangesAsync();
         return bet;
