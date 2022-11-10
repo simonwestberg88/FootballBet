@@ -6,7 +6,6 @@
 
 <MudDialog>
     <DialogContent>
-        <MudText>Bet already placed on match</MudText>
         <MudText> Score @ExactScoreOdds.HomeTeamGoals - @ExactScoreOdds.AwayTeamGoals</MudText>
         <MudText style="@($"background:{_theme.PaletteDark.Secondary};")">@ExactScoreOdds.Odds</MudText>
     </DialogContent>
@@ -29,7 +28,9 @@
 
     [Parameter]
     public int MatchId { get; set; }
-    [Parameter] public EventCallback<BetResponse> UserHasMadeBet { get; set; }
+
+    [Parameter]
+    public EventCallback<BetResponse> UserHasMadeBet { get; set; }
 
     private async Task Submit()
     {

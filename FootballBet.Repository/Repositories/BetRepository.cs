@@ -40,6 +40,12 @@ public class BetRepository : IBetRepository
             _context.BetEntities.Attach(existingBet);
             _context.BetEntities.Remove(existingBet);
         }
+        var match = await _context.MatchEntities.FindAsync(bet.MatchId);
+        if (match is null)
+            throw new InvalidOperationException("Match not found");
+        if (match.MatchStatus != MatchStatus.NS)
+            throw new InvalidOperationException("Can only place bets on matches that are not started yet");
+        
         await _context.BetEntities.AddAsync(bet);
         await _context.SaveChangesAsync();
         return bet;
