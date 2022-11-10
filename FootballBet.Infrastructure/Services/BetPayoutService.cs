@@ -6,7 +6,7 @@ namespace FootballBet.Infrastructure.Services;
 
 public interface IBetPayoutService
 {
-    public Task PayoutBetsAsync();
+    public Task ProcessBetsAsync();
 }
 
 public class BetPayoutService : IBetPayoutService
@@ -24,7 +24,7 @@ public class BetPayoutService : IBetPayoutService
         _matchRepository = matchRepository;
     }
 
-    public async Task PayoutBetsAsync()
+    public async Task ProcessBetsAsync()
     {
         // Get all matches that have finished
         var unprocessedMatches = (await _matchRepository.GetUnprocessedMatchesAsync()).ToList();
