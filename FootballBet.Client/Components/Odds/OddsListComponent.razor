@@ -23,9 +23,9 @@ th, td {
     <tbody>
     @foreach (var row in Odds)
     {
-        <tr>
+        <tr @onclick="() => OpenDialog(row)">
             <td>@row.HomeTeamGoals - @row.AwayTeamGoals</td>
-            <td @onclick="() => OpenDialog(row)" style="@($"background:{_theme.PaletteDark.Secondary};")">@row.Odds</td>
+            <td style="@($"background:{_theme.PaletteDark.Secondary};")">@row.Odds</td>
         </tr>
     }
     </tbody>
