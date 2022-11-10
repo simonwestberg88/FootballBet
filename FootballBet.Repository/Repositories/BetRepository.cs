@@ -36,7 +36,10 @@ public class BetRepository : IBetRepository
         var existingBet = await _context.BetEntities.SingleOrDefaultAsync(b =>
             b.UserId == bet.UserId && b.MatchId == bet.MatchId && b.BettingGroupId == bet.BettingGroupId);
         if (existingBet is not null)
-            throw new InvalidOperationException("Bet already exists");
+        {
+            _context.BetEntities.Attach(existingBet);
+            _context.BetEntities.Remove(existingBet);
+        }
         await _context.BetEntities.AddAsync(bet);
         await _context.SaveChangesAsync();
         return bet;
