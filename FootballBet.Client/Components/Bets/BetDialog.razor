@@ -6,33 +6,18 @@
 
 <MudDialog>
     <DialogContent>
-        @if (_betPlaced)
-        {
-            <MudText>Bet already placed on match</MudText>
-        }
-        else
-        {
-            <MudText> Score @ExactScoreOdds.HomeTeamGoals - @ExactScoreOdds.AwayTeamGoals</MudText>
-            <MudText style="@($"background:{_theme.PaletteDark.Secondary};")">@ExactScoreOdds.Odds</MudText>
-        }
+        <MudText> Score @ExactScoreOdds.HomeTeamGoals - @ExactScoreOdds.AwayTeamGoals</MudText>
+        <MudText style="@($"background:{_theme.PaletteDark.Secondary};")">@ExactScoreOdds.Odds</MudText>
     </DialogContent>
     <DialogActions>
-        @if (_betPlaced)
-        {
-        <MudButton OnClick="Cancel">Close</MudButton>
-        }
-        else
-        {
-            <MudButton OnClick="Cancel">Cancel</MudButton>
-            <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
-        }
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
     </DialogActions>
 
 </MudDialog>
 
 @code {
     private readonly MudTheme _theme = new();
-    private bool _betPlaced;
     private string _groupId;
 
     [CascadingParameter]
@@ -43,7 +28,9 @@
 
     [Parameter]
     public int MatchId { get; set; }
-    [Parameter] public EventCallback<BetResponse> UserHasMadeBet { get; set; }
+
+    [Parameter]
+    public EventCallback<BetResponse> UserHasMadeBet { get; set; }
 
     private async Task Submit()
     {
@@ -55,11 +42,6 @@
     protected override async Task OnInitializedAsync()
     {
         _groupId = MyNavigationManager.Uri.Split("/").Last();
-        var userBet = await BetService.GetBetAsync(MatchId, _groupId);
-        if (userBet is not null)
-        {
-            _betPlaced = true;
-        }
         await base.OnInitializedAsync();
     }
 
