@@ -44,7 +44,7 @@ th, td {
 
     private void OpenDialog(ExactScoreOddsDto exactScoreOdds)
     {
-        var parameters = new DialogParameters { { "Odds", exactScoreOdds }, { "MatchId", MatchId }, {"UserHasMadeBet", UserHasMadeBet} };
+        var parameters = new DialogParameters { { "ExactScoreOdds", exactScoreOdds }, { "MatchId", MatchId }, {"UserHasMadeBet", UserHasMadeBet} };
         var options = new DialogOptions { CloseOnEscapeKey = true };
         DialogService.Show<BetDialog>("Place bet", parameters, options);
     }
