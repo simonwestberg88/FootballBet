@@ -27,8 +27,6 @@ public class MatchRepository : IMatchRepository
             (int)MatchStatus.AET,
             (int)MatchStatus.PEN
         };
-        var test = await _context.MatchEntities.FirstOrDefaultAsync();
-        var testFinished = finishedStatus.Any(f => f == (int)test.MatchStatus);
         var finished = await _context.MatchEntities
             .Where(m =>
                 finishedStatus.Any(f => f == (int)m.MatchStatus)
@@ -36,5 +34,16 @@ public class MatchRepository : IMatchRepository
                 && m.BetsPayed == false)
             .ToListAsync();
         return finished;
+    }
+
+    public async Task SetProcessedAsync(int matchId)
+    {
+        var match = _context.MatchEntities.SingleOrDefault(m => m.Id == matchId);
+        if (match != null)
+        {
+            match.BetsPayed = true;
+            _context.MatchEntities.Update(match);
+            await _context.SaveChangesAsync();
+        }
     }
 }
