@@ -16,7 +16,7 @@ public static class MatchesApi
                     return cachedMatches;
                 }
                 var matches = footballApiService.GetMatches(leagueId).ToList();
-                cache.Set(leagueId, matches, TimeSpan.FromHours(1));
+                cache.Set(leagueId, matches, TimeSpan.FromMinutes(1));
                 return matches;
             }).AllowAnonymous();
     }

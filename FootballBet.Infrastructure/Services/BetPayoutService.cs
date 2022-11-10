@@ -49,6 +49,7 @@ public class BetPayoutService : IBetPayoutService
                     await _betRepository.ProcessLossAsync(bet.Id);
                 }
             }
+            await _matchRepository.SetProcessedAsync(match.Id);
         }
     }
 
