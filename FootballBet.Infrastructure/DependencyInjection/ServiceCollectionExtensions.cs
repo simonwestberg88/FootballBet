@@ -1,3 +1,4 @@
+using FootballBet.Infrastructure.BackgroundServices;
 using FootballBet.Infrastructure.Http;
 using FootballBet.Infrastructure.Interfaces;
 using FootballBet.Infrastructure.Services;
@@ -24,6 +25,7 @@ public static class ServiceCollectionExtensions
             .AddTransient<IBetService, BetService>()
             .AddTransient<IBetPayoutService, BetPayoutService>()
             .AddHostedService<BetPayoutBackgroundService>()
+            .AddHostedService<SeedMatchesBackgroundService>()
             .AddMemoryCache()
             .AddRepositories();
 
