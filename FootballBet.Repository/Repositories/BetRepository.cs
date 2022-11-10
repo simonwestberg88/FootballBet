@@ -44,4 +44,22 @@ public class BetRepository : IBetRepository
 
     public async Task<IEnumerable<BetEntity>> GetUnprocessedBetsAsync(int matchId)
         => await _context.BetEntities.Where(b => b.MatchId == matchId).ToListAsync();
+
+    public async Task PayoutExactWinAsync(int betId)
+    {
+        var bet = await _context.BetEntities.FindAsync(betId);
+        if (bet is null)
+            throw new InvalidOperationException("Bet not found");
+        var oddsForBet = await _context.ExactScoreOddsEntities.FindAsync(bet.OddsId);
+        if (oddsForBet is null)
+            throw new InvalidOperationException("Odds not found");
+        var payoutAmount = bet.WagerAmount * oddsForBet.Odds;
+        var userBalance = await _context.UserBalanceEntities.FindAsync(bet.UserId);
+        if (userBalance is null)
+            throw new InvalidOperationException("User balance not found");
+        userBalance.Balance+= payoutAmount;
+        bet.Processed = true;
+        bet.IsWinningBet = true;
+        await _context.SaveChangesAsync();  
+    }
 }
