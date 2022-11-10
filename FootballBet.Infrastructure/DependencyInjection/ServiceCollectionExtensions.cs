@@ -23,6 +23,7 @@ public static class ServiceCollectionExtensions
             .AddTransient<IUserRepository, UserRepository>()
             .AddTransient<IBetService, BetService>()
             .AddTransient<IBetPayoutService, BetPayoutService>()
+            .AddHostedService<BetPayoutBackgroundService>()
             .AddMemoryCache()
             .AddRepositories();
 

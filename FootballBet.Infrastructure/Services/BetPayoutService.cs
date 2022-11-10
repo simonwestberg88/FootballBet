@@ -1,6 +1,8 @@
 using FootballBet.Repository.Entities;
 using FootballBet.Repository.Enums;
 using FootballBet.Repository.Repositories.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace FootballBet.Infrastructure.Services;
 
@@ -8,20 +10,18 @@ public interface IBetPayoutService
 {
     public Task ProcessBetsAsync();
 }
-
 public class BetPayoutService : IBetPayoutService
 {
     private readonly IBetRepository _betRepository;
     private readonly IOddsRepository _oddsRepository;
     private readonly IMatchRepository _matchRepository;
 
-    public BetPayoutService(IBetRepository betRepository, IOddsRepository oddsRepository,
-        IMatchRepository matchRepository)
+    public BetPayoutService(IMatchRepository matchRepository, IOddsRepository oddsRepository, IBetRepository betRepository)
 
     {
-        _betRepository = betRepository;
-        _oddsRepository = oddsRepository;
         _matchRepository = matchRepository;
+        _oddsRepository = oddsRepository;
+        _betRepository = betRepository;
     }
 
     public async Task ProcessBetsAsync()

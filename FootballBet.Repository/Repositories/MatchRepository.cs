@@ -21,15 +21,17 @@ public class MatchRepository : IMatchRepository
 
     public async Task<IEnumerable<MatchEntity>> GetUnprocessedMatchesAsync()
     {
-        var finishedStatus = new List<MatchStatus>
+        var finishedStatus = new List<int>
         {
-            MatchStatus.FT,
-            MatchStatus.AET,
-            MatchStatus.PEN
+            (int)MatchStatus.FT,
+            (int)MatchStatus.AET,
+            (int)MatchStatus.PEN
         };
+        var test = await _context.MatchEntities.FirstOrDefaultAsync();
+        var testFinished = finishedStatus.Any(f => f == (int)test.MatchStatus);
         var finished = await _context.MatchEntities
             .Where(m =>
-                finishedStatus.Any(f => f == m.MatchStatus)
+                finishedStatus.Any(f => f == (int)m.MatchStatus)
                 && m.Date < DateTime.Now 
                 && m.BetsPayed == false)
             .ToListAsync();
