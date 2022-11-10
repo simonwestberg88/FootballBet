@@ -1,6 +1,7 @@
 ﻿@page "/BettingGroup/{groupId}"
 @using FootballBet.Client.Components.Groups
 @using FootballBet.Client.Components.Matches
+@using FootballBet.Client.Components.Stats
 @using FootballBet.Client.Services
 @using FootballBet.Shared.Models.Groups
 @using FootballBet.Shared.Models.Match
@@ -12,13 +13,12 @@
 <MudTabs Elevation="1" Rounded="true" Centered="true" PanelClass="pa-0">
     <MudTabPanel Icon="@Icons.Filled.Scoreboard" class="px-0">
         <ChildContent>
-            <MudText>Custom tab content only</MudText>
             <MatchesListComponent _matches="_matches"></MatchesListComponent>
         </ChildContent>
     </MudTabPanel>
     <MudTabPanel Icon="@Icons.Filled.FormatListNumbered" class="px-0">
         <ChildContent>
-            <MudText>Will be filled with ranking of $</MudText>
+            <StatsComponent></StatsComponent>
         </ChildContent>
     </MudTabPanel>
     <MudTabPanel Icon="@Icons.Filled.Settings" class="px-0">
