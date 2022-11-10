@@ -40,11 +40,11 @@ public class OddsRepository : IOddsRepository
         return await _context.ExactScoreOddsEntities.Where(x => x.MatchOddsGroupId == groupId).ToListAsync();
     }
 
-    public async Task<BaseOddsEntity> GetLatestBaseOddsAsync(int matchId)
+    public async Task<IEnumerable<BaseOddsEntity>> GetLatestBaseOddsAsync(int matchId)
     {
         var groupId = _context.MatchOddsGroupEntities.OrderByDescending(x => x.Id)
             .Single(m => m.MatchId == matchId).Id;
-        return await _context.BaseOddsEntities.SingleAsync(x => x.MatchOddsGroupId == groupId);
+        return await _context.BaseOddsEntities.Where(x => x.MatchOddsGroupId == groupId).ToListAsync();
     }
 
     public async Task<ExactScoreOddsEntity?> GetOddsAsync(int oddsId)

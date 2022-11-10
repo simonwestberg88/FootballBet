@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Json;
-using System.Text.Json;
+﻿using System.Text.Json;
 using FootballBet.Infrastructure.ApiResponses.Fixtures;
 using FootballBet.Infrastructure.ApiResponses.Odds;
 using FootballBet.Infrastructure.Interfaces;
@@ -7,6 +6,7 @@ using FootballBet.Infrastructure.Mappers;
 using FootballBet.Infrastructure.Settings;
 using FootballBet.Infrastructure.TestData;
 using FootballBet.Repository.Entities;
+using FootballBet.Repository.Enums;
 using FootballBet.Repository.Repositories.Interfaces;
 using FootballBet.Server.Data.Repositories.Interfaces;
 using FootballBet.Server.Models.Football.ApiResponses.Leagues;
@@ -98,10 +98,15 @@ public class FootballApiClient : IFootballApiClient
         return odds.Select(o => o.ToOddsDto());
     }
 
-    public async Task<BaseOddsDto> GetLatestBaseOdds(int matchId)
+    public async Task<BaseOddsResponse> GetLatestBaseOdds(int matchId)
     {
-        var baseOdds = await _oddsRepository.GetLatestBaseOddsAsync(matchId);
-        return baseOdds.ToBaseOddsDto();
+        var baseOdds = (await _oddsRepository.GetLatestBaseOddsAsync(matchId)).ToList();
+        return new BaseOddsResponse
+        {
+            Away = baseOdds.Single(b => b.MatchWinnerEntityEnum == MatchWinnerEntityEnum.Away).ToBaseOddsDto(),
+            Draw = baseOdds.Single(b => b.MatchWinnerEntityEnum == MatchWinnerEntityEnum.Draw).ToBaseOddsDto(),
+            Home = baseOdds.Single(b => b.MatchWinnerEntityEnum == MatchWinnerEntityEnum.Home).ToBaseOddsDto()
+        };
     }
 
     private static (IEnumerable<ExactScoreOddsEntity>, IEnumerable<BaseOddsEntity>) CreateOddsEntities(BookmakerOdds bookmakerOdds, int matchId,

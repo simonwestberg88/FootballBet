@@ -10,5 +10,5 @@ public interface IFootballApiClient
     public Task<List<Match>> GetFixtures(int leagueId, string season);
     public Task SaveOddsForLeague(int leagueId, string season);
     public Task<IEnumerable<ExactScoreOddsDto>> GetLatestExactScoreOdds(int matchId);
-    public Task<BaseOddsDto> GetLatestBaseOdds(int matchId);
+    public Task<BaseOddsResponse> GetLatestBaseOdds(int matchId);
 }

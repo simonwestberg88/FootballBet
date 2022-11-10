@@ -9,7 +9,7 @@ public interface IOddsRepository
     public Task AddBaseOddsAsync(IEnumerable<BaseOddsEntity> baseOddsEntities);
     public Task<int> AddOddsGroupAsync(MatchOddsGroupEntity matchOddsGroup);
     public Task<IEnumerable<ExactScoreOddsEntity>> GetLatestExactScoreOddsAsync(int matchId);
-    public Task<BaseOddsEntity> GetLatestBaseOddsAsync(int matchId);
+    public Task<IEnumerable<BaseOddsEntity>> GetLatestBaseOddsAsync(int matchId);
     public Task<ExactScoreOddsEntity?> GetOddsAsync(int oddsId);
     public Task<ExactScoreOddsEntity?> GetBaseOddsAsync(int oddsId, MatchWinnerEntityEnum winner);
 }
