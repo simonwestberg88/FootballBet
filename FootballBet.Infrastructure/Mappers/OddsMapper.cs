@@ -8,7 +8,7 @@ namespace FootballBet.Infrastructure.Mappers;
 
 public static class OddsMapper
 {
-    public static OddsDto ToOddsDto(this OddsEntity entity)
+    public static ExactScoreOddsDto ToOddsDto(this ExactScoreOddsEntity entity)
         => new ()
         {
             Id = entity.Id,
@@ -26,10 +26,10 @@ public static class OddsMapper
             _ => MatchWinnerEnumDto.Home
         };
 
-    public static OddsEntity ToOddsEntity(this BetValue betValue, int matchOddsGroupId)
+    public static ExactScoreOddsEntity ToOddsEntity(this BetValue betValue, int matchOddsGroupId)
     {
         var (homeGoals, awayGoals) = ParseExactResult(betValue.Prediction.ToString());
-        return new OddsEntity
+        return new ExactScoreOddsEntity
         {
             Odds = decimal.Parse(betValue.Odd, CultureInfo.InvariantCulture),
             MatchWinnerEntityEnum = ParseMatchWinnerFromExactScore(homeGoals, awayGoals),

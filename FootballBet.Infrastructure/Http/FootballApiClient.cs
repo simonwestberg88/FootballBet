@@ -92,13 +92,19 @@ public class FootballApiClient : IFootballApiClient
         }
     }
 
-    public async Task<IEnumerable<OddsDto>> GetLatestOddsForMatch(int matchId)
+    public async Task<IEnumerable<ExactScoreOddsDto>> GetLatestExactScoreOdds(int matchId)
     {
-        var odds = await _oddsRepository.GetLatestOddsAsync(matchId);
+        var odds = await _oddsRepository.GetLatestExactScoreOddsAsync(matchId);
         return odds.Select(o => o.ToOddsDto());
     }
 
-    private static (IEnumerable<OddsEntity>, IEnumerable<BaseOddsEntity>) CreateOddsEntities(BookmakerOdds bookmakerOdds, int matchId,
+    public async Task<BaseOddsDto> GetLatestBaseOdds(int matchId)
+    {
+        var baseOdds = await _oddsRepository.GetLatestBaseOddsAsync(matchId);
+        return baseOdds.ToBaseOddsDto();
+    }
+
+    private static (IEnumerable<ExactScoreOddsEntity>, IEnumerable<BaseOddsEntity>) CreateOddsEntities(BookmakerOdds bookmakerOdds, int matchId,
         int matchOddsGroupId)
     {
         var exactScore = bookmakerOdds.Bets

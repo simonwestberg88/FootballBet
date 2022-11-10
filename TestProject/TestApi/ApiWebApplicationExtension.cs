@@ -38,7 +38,7 @@ public static class ApiWebApplicationExtension
             });
 
         app.MapGet("test/odds", async (int matchId, IFootballApiClient client)
-            => await client.GetLatestOddsForMatch(matchId));
+            => await client.GetLatestExactScoreOdds(matchId));
 
         app.MapPost("test/bets/place",
             async (string userId, int matchId, string groupId, BetRequest bet, IBetService service) =>

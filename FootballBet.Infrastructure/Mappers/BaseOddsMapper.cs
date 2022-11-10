@@ -2,6 +2,7 @@ using System.Globalization;
 using FootballBet.Infrastructure.ApiResponses.Odds;
 using FootballBet.Repository.Entities;
 using FootballBet.Repository.Enums;
+using FootballBet.Shared.Models.Odds;
 
 namespace FootballBet.Infrastructure.Mappers;
 
@@ -13,6 +14,13 @@ public static class BaseOddsMapper
             Odds = decimal.Parse(betValue.Odd, CultureInfo.InvariantCulture),
             MatchWinnerEntityEnum = ParseMatchWinner(betValue.Prediction.ToString()),
             MatchOddsGroupId = matchOddsGroupId
+        };
+    
+    public static BaseOddsDto ToBaseOddsDto(this BaseOddsEntity baseOddsEntity)
+        => new()
+        {
+            Odds = baseOddsEntity.Odds,
+            MatchWinner = (MatchWinnerEnumDto)baseOddsEntity.MatchWinnerEntityEnum
         };
 
     private static MatchWinnerEntityEnum ParseMatchWinner(string? prediction)
