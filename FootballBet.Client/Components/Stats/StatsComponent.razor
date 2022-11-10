@@ -1,42 +1,57 @@
-﻿<div>
-    <MudChart ChartType="ChartType.Line" ChartSeries="@Series" @bind-SelectedIndex="Index" XAxisLabels="@XAxisLabels" Width="100%" Height="350px" ChartOptions="chartOptions"></MudChart>
-    <MudButton @onclick="RandomizeData">Randomize Data</MudButton>
-    <MudButton @onclick="RandomizeLineWidths">Randomize Line Widths</MudButton>
-    <MudText Typo="Typo.h6">Selected portion of the chart: @Index</MudText>
-</div>
+﻿@using FootballBet.Shared.Models.Stats
+@using FootballBet.Shared.Models.Users
+@inject HttpClient Http
+
+    @if(GameDayStat != null)
+    {
+        <MudChart ChartType="ChartType.Line" ChartSeries="@Series"  XAxisLabels="@XAxisLabels" Width="100%" Height="700px" ChartOptions="chartOptions"></MudChart>
+    }
 
 @code {
-    private int Index = -1; //default value cannot be 0 -> first selectedindex is 0.
-
+    [Parameter]
+    public string? ThisGroupId { get; set; }
+    private GameDayStatsContainerShared GameDayStat { get; set; }
     public ChartOptions chartOptions = new ChartOptions();
 
-    public List<ChartSeries> Series = new List<ChartSeries>()
-    {
-        new ChartSeries() { Name = "Series 1", Data = new double[] { 90, 79, 72, 69, 62, 62, 55, 65, 70 } },
-        new ChartSeries() { Name = "Series 2", Data = new double[] { 10, 41, 35, 51, 49, 62, 69, 91, 148 } },
-    };
-    public string[] XAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
+    public List<ChartSeries> Series = new List<ChartSeries>();
+
+    public string[] XAxisLabels = new string[] { };
 
     Random random = new Random();
-    public void RandomizeData()
+    protected override async Task OnInitializedAsync()
     {
-        var new_series = new List<ChartSeries>()
-        {
-            new ChartSeries() { Name = "Series 1", Data = new double[9] },
-            new ChartSeries() { Name = "Series 2", Data = new double[9] },
-        };
-        for (int i = 0; i < 9; i++)
-        {
-            new_series[0].Data[i] = random.NextDouble() * 100;
-            new_series[1].Data[i] = random.NextDouble() * 100;
-        }
-        Series = new_series;
+        GameDayStat = await Http.GetFromJsonAsync<GameDayStatsContainerShared>($"/groupStats/{ThisGroupId}") ?? new();
+        CreateSeries(GameDayStat.GameDayStats, GameDayStat.Members);
+        CreateXAxis(GameDayStat.GameDates);
         StateHasChanged();
     }
 
-    public void RandomizeLineWidths()
+    private void CreateSeries(List<GameDayStatsShared> gameDayStats, List<UserDto> members)
     {
-        chartOptions.LineStrokeWidth = random.NextInt64(1, 10);
-        StateHasChanged();
+        var series = new List<ChartSeries>();
+        foreach (var member in members)
+        {
+            var memberGameDays = gameDayStats.OrderBy(d => d.Date).SelectMany(c => c.MemberGameDayStats.Select(x => x).Where(m => m.User.Id == member.Id));
+            var listOfWinningsPerDay = new List<double>();
+            var totalWinningsSoFar = 0d;
+            foreach (var matchDay in memberGameDays)
+            {
+                listOfWinningsPerDay.Add((double)matchDay.TotalWinningsForDay + totalWinningsSoFar);
+                totalWinningsSoFar += (double)matchDay.TotalWinningsForDay;
+            }
+            var chartSeriesForMember = new ChartSeries()
+                {
+                    Name = member.UserName,
+                    Data = listOfWinningsPerDay.ToArray()
+                };
+            series.Add(chartSeriesForMember);
+        }
+        Series = series;
     }
+
+    private void CreateXAxis(List<DateTime> gameDates)
+    {
+        XAxisLabels = gameDates.Select(d => d.ToString("dd/MM")).ToArray();
+    }
+    
 }

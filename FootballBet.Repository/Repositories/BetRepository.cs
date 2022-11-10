@@ -23,6 +23,9 @@ public class BetRepository : IBetRepository
     public async Task<IEnumerable<BetEntity>> GetBetsAsync(int matchId, string bettingGroupId)
         => throw new NotImplementedException();
 
+    public async Task<IEnumerable<BetEntity>> GetBetsForGroupAsync(string bettingGroupId)
+        => await _context.BetEntities.Where(b => b.BettingGroupId == bettingGroupId).ToListAsync();
+
     public async Task<BetEntity?> GetBetAsync(string userId, int matchId, string groupId)
     {
         var bet = await _context.BetEntities.SingleOrDefaultAsync(

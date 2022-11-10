@@ -15,7 +15,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddFootballBetServices(this IServiceCollection services)
         => services.AddTransient<IEmailSender, EmailSender>()
-            
+
             .AddTransient<IFootballApiClient, FootballApiClient>()
             .AddTransient<IFootballAPIService, FootballApiService>()
             .AddTransient<IFootballRepository, FootballRepository>()
@@ -23,6 +23,7 @@ public static class ServiceCollectionExtensions
             .AddTransient<IUserRepository, UserRepository>()
             .AddTransient<IBetService, BetService>()
             .AddTransient<IBetPayoutService, BetPayoutService>()
+            .AddTransient<IStatsService, StatsService>()
             .AddHostedService<BetPayoutBackgroundService>()
             .AddMemoryCache()
             .AddRepositories();
