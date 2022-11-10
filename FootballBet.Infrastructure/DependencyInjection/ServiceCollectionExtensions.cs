@@ -21,7 +21,6 @@ public static class ServiceCollectionExtensions
             .AddTransient<IFootballRepository, FootballRepository>()
             .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
             .AddTransient<IUserRepository, UserRepository>()
-            .AddTransient<ITransactionService, TransactionService>()
             .AddTransient<IBetService, BetService>()
             .AddTransient<IBetPayoutService, BetPayoutService>()
             .AddMemoryCache()
