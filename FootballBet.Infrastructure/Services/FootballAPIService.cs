@@ -1,7 +1,7 @@
 ﻿using FootballBet.Infrastructure.ApiResponses.Fixtures;
 using FootballBet.Infrastructure.Interfaces;
 using FootballBet.Infrastructure.Mappers;
-using FootballBet.Server.Data.Repositories.Interfaces;
+using FootballBet.Repository.Repositories.Interfaces;
 using FootballBet.Shared.Models.Match;
 
 namespace FootballBet.Infrastructure;
@@ -21,7 +21,7 @@ public class FootballApiService : IFootballAPIService
     {
         var result = await _footballApiClient.GetSpecificLeague("1");
         var resultTwo = await _footballApiClient.GetFixtures(1, "2018");
-        var test = _footballRepository.GetAllMatchesForLeagueId(1);
+        var test = _footballRepository.GetAllMatches(1);
         return "ok";
     }
 
@@ -41,5 +41,5 @@ public class FootballApiService : IFootballAPIService
             $"Amount of fixtures added: {fixtures.Created}. Amount of fixtures updated: {fixtures.Created}";
     }
     public IEnumerable<MatchDto> GetMatches(int leagueId)
-        => _footballRepository.GetAllMatchesForLeagueId(leagueId).Select(e => e.ToMatchDto());
+        => _footballRepository.GetAllMatches(leagueId).Select(e => e.ToMatchDto());
 }

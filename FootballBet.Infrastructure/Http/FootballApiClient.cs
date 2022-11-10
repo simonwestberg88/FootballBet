@@ -65,8 +65,9 @@ public class FootballApiClient : IFootballApiClient
     {
         try
         {
+            //todo only get odds for matches that have not started yet and more tha
             var matchIds = _footballRepository
-                .GetAllMatchesForLeagueId(leagueId)
+                .GetAllMatches(leagueId)
                 .Select(m => m.Id).ToList();
             // var response = await _client.GetFromJsonAsync<OddsRoot>($"/v3/odds?league={leagueId}&season={season}&bookmaker={Bet365}&date={DateTime.Now:yyyy-MM-dd}");
             var matches = OddsTestData.GenerateData(matchIds).Response.ToList();
@@ -89,6 +90,7 @@ public class FootballApiClient : IFootballApiClient
         catch (Exception e)
         {
             _logger.LogError(e, "Error while saving odds for league");
+            throw;
         }
     }
 

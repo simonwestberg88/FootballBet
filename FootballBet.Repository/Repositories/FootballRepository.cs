@@ -1,5 +1,5 @@
 ﻿using FootballBet.Repository.Entities;
-using FootballBet.Server.Data.Repositories.Interfaces;
+using FootballBet.Repository.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace FootballBet.Repository.Repositories;
@@ -72,9 +72,9 @@ public class FootballRepository : IFootballRepository
                 entity.HomePenaltyGoals != match.HomePenaltyGoals ||
                 entity.MatchStatus != match.MatchStatus ||
                 entity.Season != match.Season ||
-                entity.LeagueId != entity.LeagueId ||
-                entity.Round != entity.Round ||
-                entity.Date != entity.Date)
+                entity.LeagueId != match.LeagueId ||
+                entity.Round != match.Round ||
+                entity.Date != match.Date)
             {
                 entity.HomeTeamId = match.HomeTeamId;
                 entity.AwayTeamId = match.AwayTeamId;
@@ -86,9 +86,9 @@ public class FootballRepository : IFootballRepository
                 entity.HomePenaltyGoals = match.HomePenaltyGoals;
                 entity.MatchStatus = match.MatchStatus;
                 entity.Season = match.Season;
-                entity.LeagueId = entity.LeagueId;
-                entity.Round = entity.Round;
-                entity.Date = entity.Date;
+                entity.LeagueId = match.LeagueId;
+                entity.Round = match.Round;
+                entity.Date = match.Date;
                 _context.MatchEntities.Update(entity);
                 updated++;
             }
@@ -97,11 +97,32 @@ public class FootballRepository : IFootballRepository
         return (Updated: updated, Created: created);
     }
 
-    public IEnumerable<MatchEntity> GetAllMatchesForLeagueId(int leagueId)
+    public IEnumerable<MatchEntity> GetAllMatches(int leagueId)
     {
         var matches =  _context.MatchEntities.Where(m => m.LeagueId == leagueId).Include("HomeTeam").Include("AwayTeam").ToList();
-        
-        var matchesByLeague = _context.LeagueEntities.FirstOrDefault(l => l.Id == leagueId)?.Matches;
+        return matches;
+    }
+
+    public async Task<IEnumerable<MatchEntity>> GetAllNotStartedMatches(int leagueId)
+    {
+        var matches = await _context.MatchEntities.Where(m => m.LeagueId == leagueId && m.MatchStatus == MatchStatus.NS)
+            .ToListAsync();
+        return matches;
+    }
+
+    public async Task<IEnumerable<MatchEntity>> GetMatchesStartingNextWeek(int leagueId)
+    {
+        var matches = await _context.MatchEntities
+            .Where(m => m.LeagueId == leagueId && m.Date < DateTime.Now.AddDays(7) && m.MatchStatus == MatchStatus.NS)
+            .ToListAsync();
+        return matches;
+    }
+
+    public async Task<IEnumerable<MatchEntity>> GetMatchesStartingNextHour(int leagueId)
+    {
+        var matches = await _context.MatchEntities
+            .Where(m => m.LeagueId == leagueId && m.Date < DateTime.Now.AddHours(1) && m.MatchStatus == MatchStatus.NS)
+            .ToListAsync();
         return matches;
     }
 

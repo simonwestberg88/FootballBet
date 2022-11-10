@@ -17,7 +17,7 @@ public static class ApiWebApplicationExtension
         });
 
         app.MapGet("/test/matches/all", (int leagueId, IFootballRepository repository) =>
-            repository.GetAllMatchesForLeagueId(leagueId));
+            repository.GetAllMatches(leagueId));
         
         app.MapGet("/test/matches", (int matchId, IMatchRepository repository) =>
             repository.GetMatchAsync(matchId));
