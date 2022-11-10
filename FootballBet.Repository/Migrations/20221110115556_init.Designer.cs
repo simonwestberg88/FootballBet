@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FootballBet.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221110111226_update")]
-    partial class update
+    [Migration("20221110115556_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
