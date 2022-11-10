@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Json;
-using System.Text.Json;
+﻿using System.Text.Json;
 using FootballBet.Infrastructure.ApiResponses.Fixtures;
 using FootballBet.Infrastructure.ApiResponses.Odds;
 using FootballBet.Infrastructure.Interfaces;
@@ -7,6 +6,7 @@ using FootballBet.Infrastructure.Mappers;
 using FootballBet.Infrastructure.Settings;
 using FootballBet.Infrastructure.TestData;
 using FootballBet.Repository.Entities;
+using FootballBet.Repository.Enums;
 using FootballBet.Repository.Repositories.Interfaces;
 using FootballBet.Server.Data.Repositories.Interfaces;
 using FootballBet.Server.Models.Football.ApiResponses.Leagues;
@@ -80,8 +80,9 @@ public class FootballApiClient : IFootballApiClient
                 var oddsGroupId = await _oddsRepository.AddOddsGroupAsync(new MatchOddsGroupEntity
                     { MatchId = matchId, Created = DateTime.Now });
 
-                var oddsEntities = CreateOddsEntities(bookmakerOddsForMatch, matchId, oddsGroupId);
-                await _oddsRepository.AddOddsAsync(oddsEntities);
+                var (exactScoreOdds, baseOdds) = CreateOddsEntities(bookmakerOddsForMatch, matchId, oddsGroupId);
+                await _oddsRepository.AddOddsAsync(exactScoreOdds);
+                await _oddsRepository.AddBaseOddsAsync(baseOdds);
                 _logger.LogInformation("Saved odds for match {MatchId}", matchId);
             }
         }
@@ -91,18 +92,33 @@ public class FootballApiClient : IFootballApiClient
         }
     }
 
-    public async Task<IEnumerable<OddsDto>> GetLatestOddsForMatch(int matchId)
+    public async Task<IEnumerable<ExactScoreOddsDto>> GetLatestExactScoreOdds(int matchId)
     {
-        var odds = await _oddsRepository.GetLatestOddsAsync(matchId);
+        var odds = await _oddsRepository.GetLatestExactScoreOddsAsync(matchId);
         return odds.Select(o => o.ToOddsDto());
     }
 
-    private static IEnumerable<OddsEntity> CreateOddsEntities(BookmakerOdds bookmakerOdds, int matchId,
+    public async Task<BaseOddsResponse> GetLatestBaseOdds(int matchId)
+    {
+        var baseOdds = (await _oddsRepository.GetLatestBaseOddsAsync(matchId)).ToList();
+        return new BaseOddsResponse
+        {
+            Away = baseOdds.Single(b => b.MatchWinnerEntityEnum == MatchWinnerEntityEnum.Away).ToBaseOddsDto(),
+            Draw = baseOdds.Single(b => b.MatchWinnerEntityEnum == MatchWinnerEntityEnum.Draw).ToBaseOddsDto(),
+            Home = baseOdds.Single(b => b.MatchWinnerEntityEnum == MatchWinnerEntityEnum.Home).ToBaseOddsDto()
+        };
+    }
+
+    private static (IEnumerable<ExactScoreOddsEntity>, IEnumerable<BaseOddsEntity>) CreateOddsEntities(BookmakerOdds bookmakerOdds, int matchId,
         int matchOddsGroupId)
     {
-        var betValues = bookmakerOdds.Bets
-            .Where(b => b.Name is "Match Winner" or "Exact Score").SelectMany(b => b.Values).ToList();
-        return betValues.Select(w => w.ToOddsEntity(matchId, matchOddsGroupId)).ToList();
+        var exactScore = bookmakerOdds.Bets
+            .Where(b => b.Name == "Exact Score").SelectMany(b => b.Values).ToList();
+        var baseOdds = bookmakerOdds.Bets
+            .Where(b => b.Name == "Match Winner").SelectMany(b => b.Values).ToList();
+        var exactScoreEntity = exactScore.Select(w => w.ToOddsEntity(matchOddsGroupId)).ToList();
+        var baseOddsEntity = baseOdds.Select(w => w.ToBaseOddsEntity(matchOddsGroupId)).ToList();
+        return (exactScoreEntity, baseOddsEntity);
     }
 
     private static async Task<T?> HandleResponse<T>(HttpResponseMessage response)

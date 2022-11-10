@@ -10,12 +10,24 @@ public static class OddsApi
     {
         app.MapGet("api/matches/odds", async (int matchId, IFootballApiClient client, IMemoryCache cache) =>
         {
-            if (cache.TryGetValue(matchId, out IEnumerable<OddsDto> cachedOdds))
+            if (cache.TryGetValue(matchId, out IEnumerable<ExactScoreOddsDto> cachedOdds))
             {
                 return cachedOdds;
             }
 
-            var odds = (await client.GetLatestOddsForMatch(matchId)).ToList();
+            var odds = (await client.GetLatestExactScoreOdds(matchId)).ToList();
+            cache.Set(matchId, odds, TimeSpan.FromHours(1));
+            return odds;
+        }).AllowAnonymous();
+        
+        app.MapGet("api/matches/baseOdds", async (int matchId, IFootballApiClient client, IMemoryCache cache) =>
+        {
+            if (cache.TryGetValue(matchId, out BaseOddsResponse cachedOdds))
+            {
+                return cachedOdds;
+            }
+
+            var odds = await client.GetLatestBaseOdds(matchId);
             cache.Set(matchId, odds, TimeSpan.FromHours(1));
             return odds;
         }).AllowAnonymous();

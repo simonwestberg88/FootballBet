@@ -15,31 +15,14 @@ public class UserRepository : IUserRepository
     public async Task<ApplicationUser?> GetUserAsync(string userId, CancellationToken ct)
         => await _context.Users.FirstOrDefaultAsync(x => x.Id == userId, ct);
 
-    public async Task<decimal> GetBalanceAsync(string userId, CancellationToken ct)
+    public async Task<decimal> GetBalanceAsync(string userId, string groupId, CancellationToken ct)
     {
-        var user = await GetApplicationUser(userId, ct);
+        var user = await _context.UserBalanceEntities.FirstOrDefaultAsync(
+            x => x.UserId == userId && x.GroupId == groupId, ct);
+        if (user is null)
+        {
+            throw new InvalidOperationException("User not found");
+        }
         return user.Balance;
     }
-
-    public async Task<decimal> DepositAsync(string userId, decimal balance, CancellationToken ct)
-    {
-        var user = await GetApplicationUser(userId, ct);
-        user.Balance += balance;
-        await _context.SaveChangesAsync(ct);
-        return user.Balance;
-    }
-
-    public async Task<decimal> WithdrawAsync(string userId, decimal amount, CancellationToken ct)
-    {
-        var user = await GetApplicationUser(userId, ct);
-        if (amount > user.Balance)
-            throw new InvalidOperationException("Insufficient funds");
-        user.Balance -= amount;
-        await _context.SaveChangesAsync(ct);
-        return user.Balance;
-    }
-
-    private async Task<ApplicationUser> GetApplicationUser(string userId, CancellationToken ct)
-        => await _context.Users.FirstOrDefaultAsync(x => x.Id == userId, ct) ??
-           throw new InvalidOperationException("User does not exist");
 }

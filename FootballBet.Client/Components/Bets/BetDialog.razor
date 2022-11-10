@@ -12,8 +12,8 @@
         }
         else
         {
-            <MudText> Score @Odds.HomeTeamGoals - @Odds.AwayTeamGoals</MudText>
-            <MudText style="@($"background:{_theme.PaletteDark.Secondary};")">@Odds.Odds</MudText>
+            <MudText> Score @ExactScoreOdds.HomeTeamGoals - @ExactScoreOdds.AwayTeamGoals</MudText>
+            <MudText style="@($"background:{_theme.PaletteDark.Secondary};")">@ExactScoreOdds.Odds</MudText>
         }
     </DialogContent>
     <DialogActions>
@@ -39,7 +39,7 @@
     MudDialogInstance MudDialog { get; set; }
 
     [Parameter]
-    public OddsDto Odds { get; set; }
+    public ExactScoreOddsDto ExactScoreOdds { get; set; }
 
     [Parameter]
     public int MatchId { get; set; }
@@ -47,7 +47,7 @@
 
     private async Task Submit()
     {
-        var response = await BetService.PlaceBetAsync(Odds.Id, MatchId, amount: 100, _groupId);
+        var response = await BetService.PlaceBetAsync(ExactScoreOdds.Id, MatchId, amount: 100, _groupId);
         await UserHasMadeBet.InvokeAsync(response);
         MudDialog.Close(DialogResult.Ok(true));
     }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FootballBet.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221109185440_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20221110115556_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -173,9 +173,6 @@ namespace FootballBet.Repository.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -233,6 +230,28 @@ namespace FootballBet.Repository.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("FootballBet.Repository.Entities.BaseOddsEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("MatchOddsGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MatchWinnerEntityEnum")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Odds")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BaseOddsEntities");
+                });
+
             modelBuilder.Entity("FootballBet.Repository.Entities.BetEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -241,15 +260,9 @@ namespace FootballBet.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("BettingGroupId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("HasBeenPayed")
-                        .HasColumnType("bit");
 
                     b.Property<bool?>("IsWinningBet")
                         .HasColumnType("bit");
@@ -260,6 +273,9 @@ namespace FootballBet.Repository.Migrations
                     b.Property<int>("OddsId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Processed")
+                        .HasColumnType("bit");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -268,8 +284,6 @@ namespace FootballBet.Repository.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("BetEntities");
                 });
@@ -357,6 +371,34 @@ namespace FootballBet.Repository.Migrations
                     b.ToTable("BettingGroupMembers");
                 });
 
+            modelBuilder.Entity("FootballBet.Repository.Entities.ExactScoreOddsEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AwayTeamGoals")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HomeTeamGoals")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MatchOddsGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MatchWinnerEntityEnum")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Odds")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExactScoreOddsEntities");
+                });
+
             modelBuilder.Entity("FootballBet.Repository.Entities.LeagueEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -392,6 +434,9 @@ namespace FootballBet.Repository.Migrations
 
                     b.Property<int?>("AwayTeamId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("BetsPayed")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -454,39 +499,6 @@ namespace FootballBet.Repository.Migrations
                     b.ToTable("MatchOddsGroupEntities");
                 });
 
-            modelBuilder.Entity("FootballBet.Repository.Entities.OddsEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AwayTeamGoals")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HomeTeamGoals")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MatchOddsGroupEntityId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MatchOddsGroupId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MatchWinnerEntityEnum")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Odds")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MatchOddsGroupEntityId");
-
-                    b.ToTable("OddsEntities");
-                });
-
             modelBuilder.Entity("FootballBet.Repository.Entities.TeamEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -501,6 +513,30 @@ namespace FootballBet.Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TeamEntities");
+                });
+
+            modelBuilder.Entity("FootballBet.Repository.Entities.UserBalanceEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("GroupId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserBalanceEntities");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -640,13 +676,6 @@ namespace FootballBet.Repository.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("FootballBet.Repository.Entities.BetEntity", b =>
-                {
-                    b.HasOne("FootballBet.Repository.Entities.ApplicationUser", null)
-                        .WithMany("Bets")
-                        .HasForeignKey("ApplicationUserId");
-                });
-
             modelBuilder.Entity("FootballBet.Repository.Entities.BettingGroupEntity", b =>
                 {
                     b.HasOne("FootballBet.Repository.Entities.ApplicationUser", "Creator")
@@ -719,13 +748,6 @@ namespace FootballBet.Repository.Migrations
                     b.Navigation("HomeTeam");
                 });
 
-            modelBuilder.Entity("FootballBet.Repository.Entities.OddsEntity", b =>
-                {
-                    b.HasOne("FootballBet.Repository.Entities.MatchOddsGroupEntity", null)
-                        .WithMany("OddsEntities")
-                        .HasForeignKey("MatchOddsGroupEntityId");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -777,11 +799,6 @@ namespace FootballBet.Repository.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FootballBet.Repository.Entities.ApplicationUser", b =>
-                {
-                    b.Navigation("Bets");
-                });
-
             modelBuilder.Entity("FootballBet.Repository.Entities.BettingGroupEntity", b =>
                 {
                     b.Navigation("Memberships");
@@ -792,11 +809,6 @@ namespace FootballBet.Repository.Migrations
                     b.Navigation("BettingGroups");
 
                     b.Navigation("Matches");
-                });
-
-            modelBuilder.Entity("FootballBet.Repository.Entities.MatchOddsGroupEntity", b =>
-                {
-                    b.Navigation("OddsEntities");
                 });
 #pragma warning restore 612, 618
         }

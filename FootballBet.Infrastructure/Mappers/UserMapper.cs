@@ -11,6 +11,5 @@ public static class UserMapper
             Id = databaseUser.Id,
             Email = databaseUser.Email,
             UserName = databaseUser.UserName,
-            Balance = databaseUser.Balance
         };
 }
