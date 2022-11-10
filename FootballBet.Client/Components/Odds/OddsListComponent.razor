@@ -37,6 +37,7 @@ th, td {
     [Parameter]
     public List<ExactScoreOddsDto> Odds { get; set; }
     [Parameter] public int MatchId { get; set; }
+    [Parameter] public string? MatchStatus { get; set; }
     [Parameter] public EventCallback<BetResponse> UserHasMadeBet { get; set; }
     private BetResponse UserBet { get; set; }
 
@@ -44,6 +45,7 @@ th, td {
 
     private void OpenDialog(ExactScoreOddsDto exactScoreOdds)
     {
+        if (MatchStatus != "Not started") return;
         var parameters = new DialogParameters { { "ExactScoreOdds", exactScoreOdds }, { "MatchId", MatchId }, {"UserHasMadeBet", UserHasMadeBet} };
         var options = new DialogOptions { CloseOnEscapeKey = true };
         DialogService.Show<BetDialog>("Place bet", parameters, options);

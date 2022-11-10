@@ -19,7 +19,7 @@
     <DialogActions>
         @if (_betPlaced)
         {
-        <MudButton OnClick="Cancel">Close</MudButton>
+            <MudButton OnClick="Cancel">Close</MudButton>
         }
         else
         {
@@ -43,7 +43,9 @@
 
     [Parameter]
     public int MatchId { get; set; }
-    [Parameter] public EventCallback<BetResponse> UserHasMadeBet { get; set; }
+
+    [Parameter]
+    public EventCallback<BetResponse> UserHasMadeBet { get; set; }
 
     private async Task Submit()
     {

@@ -45,13 +45,13 @@
                 <MudText Typo="Typo.h6">Exact odds</MudText>
                 <MudExpansionPanels>
                     <MudExpansionPanel Text="Home">
-                        <OddsListComponent Odds="_homeOdds" MatchId="MatchData.MatchId" UserHasMadeBet="UserHasMadeBet"/>
+                        <OddsListComponent Odds="_homeOdds" MatchId="MatchData.MatchId" MatchStatus=@MatchData.MatchStatus UserHasMadeBet="UserHasMadeBet"/>
                     </MudExpansionPanel>
                     <MudExpansionPanel Text="Draw">
-                        <OddsListComponent Odds="_drawOdds" MatchId="MatchData.MatchId" UserHasMadeBet="UserHasMadeBet"/>
+                        <OddsListComponent Odds="_drawOdds" MatchId="MatchData.MatchId" MatchStatus=@MatchData.MatchStatus UserHasMadeBet="UserHasMadeBet"/>
                     </MudExpansionPanel>
                     <MudExpansionPanel Text="Away">
-                        <OddsListComponent Odds="_awayOdds" MatchId="MatchData.MatchId" UserHasMadeBet="UserHasMadeBet"/>a
+                        <OddsListComponent Odds="_awayOdds" MatchId="MatchData.MatchId" MatchStatus=@MatchData.MatchStatus UserHasMadeBet="UserHasMadeBet"/>a
                     </MudExpansionPanel>
                 </MudExpansionPanels>
             }
