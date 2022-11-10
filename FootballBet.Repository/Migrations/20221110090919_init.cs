@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FootballBet.Repository.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,6 +47,21 @@ namespace FootballBet.Repository.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BaseOddsEntities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Odds = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    MatchWinnerEntityEnum = table.Column<int>(type: "int", nullable: false),
+                    MatchOddsGroupId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BaseOddsEntities", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -346,6 +361,7 @@ namespace FootballBet.Repository.Migrations
                     Round = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Season = table.Column<int>(type: "int", nullable: true),
                     LeagueId = table.Column<int>(type: "int", nullable: true),
+                    BetsPayed = table.Column<bool>(type: "bit", nullable: false),
                     LeagueEntityId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -567,6 +583,9 @@ namespace FootballBet.Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "BaseOddsEntities");
 
             migrationBuilder.DropTable(
                 name: "BetEntities");

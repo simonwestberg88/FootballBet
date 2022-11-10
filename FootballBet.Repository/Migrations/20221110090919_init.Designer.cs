@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FootballBet.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221109185440_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20221110090919_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -233,6 +233,28 @@ namespace FootballBet.Repository.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("FootballBet.Repository.Entities.BaseOddsEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("MatchOddsGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MatchWinnerEntityEnum")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Odds")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BaseOddsEntities");
+                });
+
             modelBuilder.Entity("FootballBet.Repository.Entities.BetEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -392,6 +414,9 @@ namespace FootballBet.Repository.Migrations
 
                     b.Property<int?>("AwayTeamId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("BetsPayed")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");

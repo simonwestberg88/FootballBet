@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using FootballBet.Repository.Enums;
 
 namespace FootballBet.Repository.Entities;
