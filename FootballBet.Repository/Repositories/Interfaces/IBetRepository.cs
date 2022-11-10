@@ -10,6 +10,8 @@ public interface IBetRepository
     public Task<BetEntity?> GetBetAsync(string userId, int matchId, string groupId);
     public Task<BetEntity> PlaceBetAsync(BetEntity bet);
     public Task<IEnumerable<BetEntity>> GetUnprocessedBetsAsync(int matchIds);
-    public Task PayoutExactWinAsync(int betId);
+    public Task ProcessExactWinAsync(int betId);
+    public Task ProcessBaseWinAsync(int betId);
+    public Task ProcessLossAsync(int betId);
 
 }

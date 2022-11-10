@@ -45,7 +45,7 @@ public class BetRepository : IBetRepository
     public async Task<IEnumerable<BetEntity>> GetUnprocessedBetsAsync(int matchId)
         => await _context.BetEntities.Where(b => b.MatchId == matchId).ToListAsync();
 
-    public async Task PayoutExactWinAsync(int betId)
+    public async Task ProcessExactWinAsync(int betId)
     {
         var bet = await _context.BetEntities.FindAsync(betId);
         if (bet is null)
@@ -61,5 +61,39 @@ public class BetRepository : IBetRepository
         bet.Processed = true;
         bet.IsWinningBet = true;
         await _context.SaveChangesAsync();  
+    }
+
+    public async Task ProcessBaseWinAsync(int betId)
+    {
+        var bet = await _context.BetEntities.FindAsync(betId);
+        if (bet is null)    
+            throw new InvalidOperationException("Bet not found");
+        var oddsForBet = await _context.BaseOddsEntities.FindAsync(bet.OddsId);
+        if (oddsForBet is null)
+            throw new InvalidOperationException("Odds not found");
+        var baseOdds = await _context.BaseOddsEntities.SingleOrDefaultAsync(b =>
+            b.MatchOddsGroupId == oddsForBet.MatchOddsGroupId &&
+            b.MatchWinnerEntityEnum == oddsForBet.MatchWinnerEntityEnum);
+        if (baseOdds is null){
+            throw new InvalidOperationException("Base odds not found");
+        }
+        var payoutAmount = bet.WagerAmount * baseOdds.Odds;
+        var userBalance = await _context.UserBalanceEntities.FindAsync(bet.UserId);
+        if (userBalance is null)
+            throw new InvalidOperationException("User balance not found");
+        userBalance.Balance += payoutAmount;
+        bet.Processed = true;
+        bet.IsWinningBet = true;
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task ProcessLossAsync(int betId)
+    {
+        var bet = await _context.BetEntities.FindAsync(betId);
+        if (bet is null)
+            throw new InvalidOperationException("Bet not found");
+        bet.Processed = true;
+        bet.IsWinningBet = false;
+        await _context.SaveChangesAsync();
     }
 }
