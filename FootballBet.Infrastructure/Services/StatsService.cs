@@ -11,12 +11,6 @@ namespace FootballBet.Infrastructure.Services
 
     public class StatsService : IStatsService
     {
-        //    public List<ChartSeries> Series = new List<ChartSeries>()
-        //{
-        //    new ChartSeries() { Name = "Series 1", Data = new double[] { 90, 79, 72, 69, 62, 62, 55, 65, 70 } },
-        //    new ChartSeries() { Name = "Series 2", Data = new double[] { 10, 41, 35, 51, 49, 62, 69, 91, 148 } },
-        //};
-        //    public string[] XAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
 
         private readonly IGroupRepository _groupRepository;
         private readonly IBetRepository _betRepository;

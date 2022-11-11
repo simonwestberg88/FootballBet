@@ -8,7 +8,6 @@
         <HeaderContent>
             <MudTh><MudTableSortLabel SortBy="new Func<UserDto, object>(x=>x.UserName)">User</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel Enabled="@enabled" SortBy="new Func<UserDto, object>(x=>x.Balance)">Balance</MudTableSortLabel></MudTh>
-
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="User">@context.UserName</MudTd>
@@ -19,18 +18,18 @@
         </PagerContent>
     </MudTable>
 
-    <MudChart ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="700px" ChartOptions="chartOptions"></MudChart>
+    <MudChart ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" ChartOptions="@chartOptions" Width="100%" Height="600px"></MudChart>
 }
 
 @code {
     [Parameter]
     public string? ThisGroupId { get; set; }
     private GameDayStatsContainerShared? GameDayStat { get; set; }
-    public ChartOptions chartOptions = new ChartOptions();
-    public List<ChartSeries> Series = new List<ChartSeries>();
-    public string[] XAxisLabels = new string[] { };
-    public bool enabled = true;
-    public IEnumerable<UserDto> TableElements = new List<UserDto>();
+    private ChartOptions chartOptions = new ChartOptions();
+    private List<ChartSeries> Series = new List<ChartSeries>();
+    private string[] XAxisLabels = new string[] { };
+    private bool enabled = true;
+    private IEnumerable<UserDto> TableElements = new List<UserDto>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -46,9 +45,9 @@
         var series = new List<ChartSeries>();
         foreach (var member in members)
         {
-            var memberGameDays = gameDayStats.OrderBy(d => d.Date).SelectMany(c => c.MemberGameDayStats.Select(x => x).Where(m => m.User.Id == member.Id));
             var listOfWinningsPerDay = new List<double>();
             var totalWinningsSoFar = 0d;
+            var memberGameDays = gameDayStats.OrderBy(d => d.Date).SelectMany(c => c.MemberGameDayStats.Select(x => x).Where(m => m.User.Id == member.Id));
             foreach (var matchDay in memberGameDays)
             {
                 listOfWinningsPerDay.Add((double)matchDay.TotalWinningsForDay + totalWinningsSoFar);
