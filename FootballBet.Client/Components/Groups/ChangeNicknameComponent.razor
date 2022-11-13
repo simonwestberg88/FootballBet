@@ -1,0 +1,78 @@
+﻿@inject NavigationManager navigationManager
+@inject HttpClient Http
+@using FluentValidation
+
+<MudCard Elevation="25" Class="rounded-lg pb-4">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h5" Align="Align.Center">Change your nickname in group</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudTextField T="string" Label="New nickname" Required="true" RequiredError="Field is required!" Validation="@nickNameValidator.Validation" Immediate="true"
+                      @bind-Value="NewNickname" />
+    </MudCardContent>
+    <MudCardActions>
+        @if (!SuccesfullyChangedNickname && ChangedNicknameResponse is not null)
+        {
+            <MudAlert Severity="MudBlazor.Severity.Error">Something went wrong</MudAlert>
+        }
+        else if (SuccesfullyChangedNickname && ChangedNicknameResponse is not null)
+        {
+            <MudAlert Severity="MudBlazor.Severity.Success">Nickname changed!</MudAlert>
+
+        }
+        @if (!RequestIsPending)
+        {
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" @onclick="ChangeNickname" Class="ml-auto">Submit change</MudButton>
+        }
+        else
+        {
+            <MudProgressCircular Color="Color.Primary" Class="ml-auto" Indeterminate="true" />
+        }
+    </MudCardActions>
+</MudCard>
+
+@code {
+    private bool RequestIsPending;
+    private bool SuccesfullyChangedNickname;
+    private string NewNickname = "";
+    private HttpResponseMessage? ChangedNicknameResponse = null;
+    [Parameter]
+    public string ThisGroupId { get; set; }
+
+    private async void ChangeNickname()
+    {
+        if (!string.IsNullOrEmpty(NewNickname) && NewNickname.Length <= 15)
+        {
+            RequestIsPending = true;
+            ChangedNicknameResponse = await Http.GetAsync($"/group/changeNickname/{NewNickname}/{ThisGroupId}");
+            SuccesfullyChangedNickname = ChangedNicknameResponse.IsSuccessStatusCode;
+        }
+        RequestIsPending = false;
+        StateHasChanged();
+    }
+
+    FluentValueValidator<string> nickNameValidator = new FluentValueValidator<string>(x => x
+       .NotEmpty()
+       .Length(1, 15));
+
+    public class FluentValueValidator<T> : AbstractValidator<T>
+    {
+        public FluentValueValidator(Action<IRuleBuilderInitial<T, T>> rule)
+        {
+            rule(RuleFor(x => x));
+        }
+
+        private IEnumerable<string> ValidateValue(T arg)
+        {
+            var result = Validate(arg);
+            if (result.IsValid)
+                return new string[0];
+            return result.Errors.Select(e => e.ErrorMessage);
+        }
+
+        public Func<T, IEnumerable<string>> Validation => ValidateValue;
+    }
+}
+

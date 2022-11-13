@@ -10,4 +10,5 @@ public interface IGroupService
     public Task<List<BettingGroupShared>> ListGroupsForUser(string userId, CancellationToken ct);
     public Task<BettingGroupInvitationEntity> CreateInvitation(string groupId, string userEmail, string userId, CancellationToken ct);
     public Task ConsumeInvitation(string invitationId, string groupId, string userId, CancellationToken ct);
+    public Task ChangeNicknameForGroupMemberAsync(string userId, string newNickname, string groupId);
 }
