@@ -18,7 +18,7 @@
         </PagerContent>
     </MudTable>
 
-    <MudChart ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" ChartOptions="@chartOptions" Width="100%" Height="600px"></MudChart>
+    @*<MudChart ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" ChartOptions="@chartOptions" Width="100%" Height="600px"></MudChart>*@
 }
 
 @code {
@@ -34,8 +34,8 @@
     protected override async Task OnInitializedAsync()
     {
         GameDayStat = await Http.GetFromJsonAsync<GameDayStatsContainerShared>($"/groupStats/{ThisGroupId}") ?? new();
-        CreateSeries(GameDayStat.GameDayStats, GameDayStat.Members);
-        CreateXAxis(GameDayStat.GameDates);
+        //CreateSeries(GameDayStat.GameDayStats, GameDayStat.Members);
+        //CreateXAxis(GameDayStat.GameDates);
         TableElements = GameDayStat.Members.OrderByDescending(x => x.Balance);
         StateHasChanged();
     }

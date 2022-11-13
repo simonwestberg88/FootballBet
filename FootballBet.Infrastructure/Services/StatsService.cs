@@ -29,7 +29,8 @@ namespace FootballBet.Infrastructure.Services
             _oddsRepository = oddsRepository;
         }
 
-        public async Task<GameDayStatsContainerShared> GetStatsForGroupAsync(string groupId)
+        [Obsolete("a bit too heavy, would need a different implementation that reduces SQL requests")]
+        public async Task<GameDayStatsContainerShared> GetAdvancedStatsForGroupAsync(string groupId)
         {
             var members = await _groupRepository.GetBettingGroupMembersAsync(groupId);
             var matches = await _matchRepository.GetMatches(1);
@@ -59,7 +60,7 @@ namespace FootballBet.Infrastructure.Services
 
                     memberGameDayStats.Add(new MemberGameDayStatsShared()
                     {
-                        User = new() { Id = member.UserId, UserName = member.Nickname},
+                        User = new() { Id = member.UserId, UserName = member.Nickname },
                         TotalWinningsForDay = totalMatchDayWinnings
                     });
                 }
@@ -79,6 +80,21 @@ namespace FootballBet.Infrastructure.Services
                     Id = x.UserId,
                     UserName = x.Nickname,
                     Balance = (_betRepository.GetUserBalanceForGroupAsync(x.UserId, groupId)).Result.Balance
+                }).ToList()
+            };
+        }
+
+        public async Task<GameDayStatsContainerShared> GetStatsForGroupAsync(string groupId)
+        {
+            var users = await _betRepository.GetUserBalancesForGroupAsync(groupId);
+            var members = await _groupRepository.GetBettingGroupMembersAsync(groupId);
+            return new GameDayStatsContainerShared()
+            {
+                Members = members.Select(x => new UserDto()
+                {
+                    Id = x.UserId,
+                    UserName = x.Nickname,
+                    Balance = users.FirstOrDefault(u => u.UserId == x.UserId).Balance
                 }).ToList()
             };
         }
