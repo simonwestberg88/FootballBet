@@ -1,8 +1,8 @@
+using FootballBet.Infrastructure.Interfaces;
 using FootballBet.Shared.Models.Groups;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using FootballBet.Infrastructure.Interfaces;
 
 namespace FootballBet.Server.Controllers
 {
@@ -41,10 +41,20 @@ namespace FootballBet.Server.Controllers
         }
 
         [HttpPost("invitation/accept/")]
-        public async Task<IActionResult> ConsumeInvitation([FromBody]BettingGroupInvitationAcceptShared acceptedInvitation, CancellationToken ct)
+        public async Task<IActionResult> ConsumeInvitation([FromBody] BettingGroupInvitationAcceptShared acceptedInvitation, CancellationToken ct)
         {
             await _groupService.ConsumeInvitation(acceptedInvitation.InvitationId, acceptedInvitation.GroupId, User.Identity.GetUserId(), ct);
             return NoContent();
+        }
+
+        [HttpGet("changeNickname/{newNickname}/{groupId}")]
+        public async Task<IActionResult> ChangeNickname([FromRoute] string newNickname, string groupId)
+        {
+            if (string.IsNullOrEmpty(newNickname) || newNickname.Length > 15)
+                throw new InvalidDataException("Nickname is null or too long");
+
+            await _groupService.ChangeNicknameForGroupMemberAsync(User.Identity.GetUserId(), newNickname, groupId);
+            return Ok();
         }
 
     }

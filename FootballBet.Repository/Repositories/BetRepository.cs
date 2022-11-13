@@ -101,10 +101,10 @@ public class BetRepository : IBetRepository
     }
 
     public async Task<UserBalanceEntity> GetUserBalanceForGroupAsync(string userId, string groupId)
-        => _context.UserBalanceEntities?.FirstOrDefault(x => x.UserId == userId && x.GroupId == groupId);
+        => await _context.UserBalanceEntities?.FirstOrDefaultAsync(x => x.UserId == userId && x.GroupId == groupId);
 
     public async Task<IEnumerable<UserBalanceEntity>> GetUserBalancesForGroupAsync(string groupId)
-        => _context.UserBalanceEntities?.Where(x => x.GroupId == groupId);
+        => await _context.UserBalanceEntities?.Where(x => x.GroupId == groupId).ToListAsync();
 
     public async Task ProcessLossAsync(int betId)
     {

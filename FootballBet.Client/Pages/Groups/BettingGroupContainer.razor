@@ -27,9 +27,11 @@
             {
                 <InviteMemberToGroupComponent ThisGroupId="@GroupId"></InviteMemberToGroupComponent>
             }
+            <ChangeNicknameComponent ThisGroupId="@GroupId"></ChangeNicknameComponent>
         </ChildContent>
     </MudTabPanel>
 </MudTabs>
+
 @code {
     [Parameter]
     public string? GroupId { get; set; }
