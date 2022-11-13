@@ -57,11 +57,6 @@
        .NotEmpty()
        .Length(1, 15));
 
-    /// <summary>
-    /// A glue class to make it easy to define validation rules for single values using FluentValidation
-    /// You can reuse this class for all your fields, like for the credit card rules above.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
     public class FluentValueValidator<T> : AbstractValidator<T>
     {
         public FluentValueValidator(Action<IRuleBuilderInitial<T, T>> rule)
