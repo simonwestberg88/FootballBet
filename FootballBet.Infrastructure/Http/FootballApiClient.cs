@@ -50,6 +50,13 @@ public class FootballApiClient : IFootballApiClient
         }
     }
 
+    public async Task<Match?> GetMatch(int matchId)
+    {
+        var fixture = await _client.GetFromJsonAsync<FixturesRoot>($"/v3/fixtures?id={matchId}");
+        var match = fixture?.Matches.FirstOrDefault();
+        return match ?? new Match();
+    }
+
     public async Task<IEnumerable<OddsResponse>> GetOddsAsync(int leagueId, string season)
     {
         var response = await _client.GetFromJsonAsync<OddsRoot>($"/v3/odds?league={leagueId}&season={season}&bookmaker={ApiConstants.Bet365Id}");

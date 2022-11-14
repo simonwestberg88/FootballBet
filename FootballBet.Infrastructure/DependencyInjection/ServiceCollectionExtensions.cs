@@ -18,7 +18,7 @@ public static class ServiceCollectionExtensions
         => services.AddTransient<IEmailSender, EmailSender>()
             
             .AddTransient<IFootballApiClient, FootballApiClient>()
-            .AddTransient<IFootballApiService, FootballApiService>()
+            .AddTransient<IMatchService, MatchService>()
             .AddTransient<IFootballRepository, FootballRepository>()
             .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
             .AddTransient<IUserRepository, UserRepository>()

@@ -27,15 +27,15 @@ public class SeedMatchesBackgroundService : BackgroundService
                 {
                     _logger.LogInformation("seeding matches");
                     using var scope = _serviceProvider.CreateScope();
-                    var payoutService = scope.ServiceProvider.GetRequiredService<IFootballAPIService>();
-                    await payoutService.SeedDatabase("2022", 1);
+                    var payoutService = scope.ServiceProvider.GetRequiredService<IMatchService>();
+                    await payoutService.SeedMatchesAsync(1, "2022");
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Error processing bets");
+                    _logger.LogError(e, "Error seeding matches");
                 }
 
-                await Task.Delay(TimeSpan.FromHours(4), stoppingToken);
+                await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
             }
         }, stoppingToken);
     }

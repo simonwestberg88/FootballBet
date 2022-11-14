@@ -8,6 +8,7 @@ public interface IFootballApiClient
 {
     public Task<LeaguesRoot> GetSpecificLeague(string id);
     public Task<List<Match>> GetFixtures(int leagueId, string season);
+    public Task<Match?> GetMatch(int matchId);
     public Task<IEnumerable<OddsResponse>> GetOddsAsync(int leagueId, string season);
     public Task<OddsResponse?> GetOddsAsync(int matchId);
 }
