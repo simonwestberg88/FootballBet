@@ -10,7 +10,7 @@ public interface IMatchService
 {
     public Task<string> SeedMatchesAsync(int leagueId, string season);
     public IEnumerable<MatchDto> GetMatches(int leagueId);
-    public Task UpdateLiveMatchAsync(int matchId);
+    public Task UpdateLiveMatchesAsync();
 
 }
 public class MatchService: IMatchService
@@ -42,7 +42,7 @@ public class MatchService: IMatchService
     public IEnumerable<MatchDto> GetMatches(int leagueId)
         => _footballRepository.GetAllMatches(leagueId).Select(e => e.ToMatchDto());
 
-    public async Task UpdateLiveMatchAsync(int matchId)
+    public async Task UpdateLiveMatchesAsync()
     {
         var liveMatches = await _footballRepository.GetMatchesAsync(1, TimeSpan.FromHours(3));
         

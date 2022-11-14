@@ -28,6 +28,7 @@ public static class ServiceCollectionExtensions
             .AddHostedService<BetPayoutBackgroundService>()
             .AddHostedService<SeedMatchesBackgroundService>()
             .AddHostedService<SeedOddsBackgroundService>()
+            .AddHostedService<LiveMatchesBackgroundService>()
             .AddMemoryCache()
             .AddRepositories();
 
