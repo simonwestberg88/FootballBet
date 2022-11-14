@@ -11,9 +11,10 @@
 
 
 <MudTabs Elevation="1" Rounded="true" Centered="true" PanelClass="pa-0">
+    <MudCheckBox @bind-Checked="@CheckboxHideFinishedGames" Label="Hide finished games" Color="Color.Primary"></MudCheckBox>
     <MudTabPanel Icon="@Icons.Filled.Scoreboard" class="px-0">
         <ChildContent>
-            <MatchesListComponent _matches="_matches"></MatchesListComponent>
+            <MatchesListComponent _matches="_matches" HideFinishedGames="CheckboxHideFinishedGames"></MatchesListComponent>
         </ChildContent>
     </MudTabPanel>
     <MudTabPanel Icon="@Icons.Filled.FormatListNumbered" class="px-0">
@@ -38,6 +39,7 @@
     private BettingGroupShared BettingGroup { get; set; }
     private bool HasGottenGroup;
     private List<MatchDto> _matches = new List<MatchDto>();
+    private bool CheckboxHideFinishedGames { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
     {

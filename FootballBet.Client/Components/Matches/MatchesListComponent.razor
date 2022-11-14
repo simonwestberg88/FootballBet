@@ -6,17 +6,34 @@
     <MudList>
         @foreach (var round in _matches.Select(m => m.Round).Distinct())
         {
-            <div align="center">
-            <MudText Typo="Typo.h4">@round</MudText>
-            @foreach (var date in GetUniqueDatesForRound(round))
+            @if(_matches.Where(g => g.Round == round).All(m => IsMatchFinished(m.MatchStatus)) && HideFinishedGames)
             {
-                <MudText Typo="Typo.h5">@date.Date.ToString("dd/MM/yyyy")</MudText>
-                <Virtualize Items="@GetGamesForDate(date)" Context="game">
-                    <MudListItem class="px-0">
-                        <MatchComponent MatchData="@game"></MatchComponent>
-                    </MudListItem>
-                </Virtualize>
+                continue;
             }
+            <div align="center">
+                <MudText Typo="Typo.h4">@round</MudText>
+                @foreach (var date in GetUniqueDatesForRound(round))
+                {
+                    @if (_matches.Where(g => g.Date.Date == date).All(m => IsMatchFinished(m.MatchStatus)) && HideFinishedGames)
+                    {
+                        continue;
+                    }
+                    <MudText Typo="Typo.h5">@date.Date.ToString("dd/MM/yyyy")</MudText>
+                    <Virtualize Items="@GetGamesForDate(date)" Context="game">
+                        @if (IsMatchFinished(game.MatchStatus) && HideFinishedGames)
+                        {
+                        <MudListItem class="px-0" Style="display:none">
+                            <MatchComponent MatchData="@game"></MatchComponent>
+                        </MudListItem>
+                        }
+                        else
+                        {
+                        <MudListItem class="px-0">
+                            <MatchComponent MatchData="@game"></MatchComponent>
+                        </MudListItem>
+                        }
+                    </Virtualize>
+                }
             </div>
         }
     </MudList>
@@ -25,6 +42,8 @@
 @code {
     [Parameter]
     public List<MatchDto> _matches { get; set; } = new List<MatchDto>();
+    [Parameter]
+    public bool HideFinishedGames { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -36,6 +55,19 @@
 
 
     private List<MatchDto> GetGamesForDate(DateTime date)
-        => _matches.Where(m => m.Date.Date == date.Date).OrderBy(m => m.Date).ToList();  
+        => _matches.Where(m => m.Date.Date == date.Date).OrderBy(m => m.Date).ToList();
+
+    private bool IsMatchFinished(string status)
+        => status.ToLower() switch
+        {
+            "live" => false,
+            "not started" => false,
+            "first half" => false,
+            "second half" => false,
+            "extra time" => false,
+            "penalty" => false,
+            "Break Time (in Extra Time)" => false,
+            _ => true
+        };
 
 }
