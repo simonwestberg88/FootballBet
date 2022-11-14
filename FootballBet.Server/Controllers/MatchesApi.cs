@@ -9,7 +9,7 @@ public static class MatchesApi
     public static void AddMatchesApi(this WebApplication app)
     {
         app.MapGet("api/matches/{leagueId:int}",
-            (int leagueId, IMemoryCache cache, IFootballAPIService footballApiService) =>
+            (int leagueId, IMemoryCache cache, IFootballApiService footballApiService) =>
             {
                 if(cache.TryGetValue(leagueId, out List<MatchDto> cachedMatches))
                 {

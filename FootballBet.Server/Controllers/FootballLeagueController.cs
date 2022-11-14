@@ -11,9 +11,9 @@ namespace FootballBet.Server.Controllers
     [Route("[controller]")]
     public class FootballLeagueController : ControllerBase
     {
-        private readonly IFootballAPIService _footballAPIService;
+        private readonly IFootballApiService _footballAPIService;
 
-        public FootballLeagueController(IFootballAPIService footballAPIService)
+        public FootballLeagueController(IFootballApiService footballAPIService)
         {
             _footballAPIService = footballAPIService;
         }

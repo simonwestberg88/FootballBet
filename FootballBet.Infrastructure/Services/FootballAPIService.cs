@@ -4,9 +4,9 @@ using FootballBet.Infrastructure.Mappers;
 using FootballBet.Repository.Repositories.Interfaces;
 using FootballBet.Shared.Models.Match;
 
-namespace FootballBet.Infrastructure;
+namespace FootballBet.Infrastructure.Services;
 
-public class FootballApiService : IFootballAPIService
+public class FootballApiService : IFootballApiService
 {
     private readonly IFootballApiClient _footballApiClient;
     private readonly IFootballRepository _footballRepository;
@@ -16,7 +16,6 @@ public class FootballApiService : IFootballAPIService
         _footballApiClient = footballApiClient;
         _footballRepository = footballRepository;
     }
-
     public async Task<string> GetWorldCup()
     {
         var result = await _footballApiClient.GetSpecificLeague("1");

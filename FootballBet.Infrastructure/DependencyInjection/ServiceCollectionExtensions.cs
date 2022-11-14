@@ -18,14 +18,16 @@ public static class ServiceCollectionExtensions
         => services.AddTransient<IEmailSender, EmailSender>()
             
             .AddTransient<IFootballApiClient, FootballApiClient>()
-            .AddTransient<IFootballAPIService, FootballApiService>()
+            .AddTransient<IFootballApiService, FootballApiService>()
             .AddTransient<IFootballRepository, FootballRepository>()
             .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
             .AddTransient<IUserRepository, UserRepository>()
             .AddTransient<IBetService, BetService>()
             .AddTransient<IBetPayoutService, BetPayoutService>()
+            .AddTransient<IOddsService, OddsService>()
             .AddHostedService<BetPayoutBackgroundService>()
             .AddHostedService<SeedMatchesBackgroundService>()
+            .AddHostedService<SeedOddsBackgroundService>()
             .AddMemoryCache()
             .AddRepositories();
 

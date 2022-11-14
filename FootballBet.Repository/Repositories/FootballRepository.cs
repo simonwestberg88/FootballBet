@@ -110,18 +110,11 @@ public class FootballRepository : IFootballRepository
         return matches;
     }
 
-    public async Task<IEnumerable<MatchEntity>> GetMatchesStartingNextWeek(int leagueId)
+    public async Task<IEnumerable<MatchEntity>> GetNotStartedMatches(int leagueId, TimeSpan timeSpan)
     {
+        var latestMatchDate = DateTime.Now.Add(timeSpan);
         var matches = await _context.MatchEntities
-            .Where(m => m.LeagueId == leagueId && m.Date < DateTime.Now.AddDays(7) && m.MatchStatus == MatchStatus.NS)
-            .ToListAsync();
-        return matches;
-    }
-
-    public async Task<IEnumerable<MatchEntity>> GetMatchesStartingNextHour(int leagueId)
-    {
-        var matches = await _context.MatchEntities
-            .Where(m => m.LeagueId == leagueId && m.Date < DateTime.Now.AddHours(1) && m.MatchStatus == MatchStatus.NS)
+            .Where(m => m.LeagueId == leagueId && m.Date < latestMatchDate && m.MatchStatus == MatchStatus.NS)
             .ToListAsync();
         return matches;
     }

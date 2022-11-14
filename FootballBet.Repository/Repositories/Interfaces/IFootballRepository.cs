@@ -9,8 +9,7 @@ namespace FootballBet.Repository.Repositories.Interfaces
         Task<(int Updated, int Created)> CreateOrUpdateMatches(IEnumerable<MatchEntity> matches);
         IEnumerable<MatchEntity> GetAllMatches(int leagueId);
         Task<IEnumerable<MatchEntity>> GetAllNotStartedMatches(int leagueId);
-        Task<IEnumerable<MatchEntity>> GetMatchesStartingNextWeek(int leagueId);
-        Task<IEnumerable<MatchEntity>> GetMatchesStartingNextHour(int leagueId);
+        Task<IEnumerable<MatchEntity>> GetNotStartedMatches(int leagueId, TimeSpan timeSpan);
         Task<LeagueEntity> GetLeague(int leagueId);
     }
 }
