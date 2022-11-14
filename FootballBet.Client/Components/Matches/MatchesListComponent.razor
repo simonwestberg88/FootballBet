@@ -6,7 +6,7 @@
     <MudList>
         @foreach (var round in _matches.Select(m => m.Round).Distinct())
         {
-            @if(_matches.Where(g => g.Round == round).All(m => IsMatchFinished(m.MatchStatus)) && HideFinishedGames)
+            @if (_matches.Where(g => g.Round == round).All(m => IsMatchFinished(m.MatchStatus)) && HideFinishedGames)
             {
                 continue;
             }
@@ -20,18 +20,9 @@
                     }
                     <MudText Typo="Typo.h5">@date.Date.ToString("dd/MM/yyyy")</MudText>
                     <Virtualize Items="@GetGamesForDate(date)" Context="game">
-                        @if (IsMatchFinished(game.MatchStatus) && HideFinishedGames)
-                        {
-                        <MudListItem class="px-0" Style="display:none">
+                        <MudListItem class="px-0" Style="@(IsMatchFinished(game.MatchStatus) && HideFinishedGames ? "display:none" : "")">
                             <MatchComponent MatchData="@game"></MatchComponent>
-                        </MudListItem>
-                        }
-                        else
-                        {
-                        <MudListItem class="px-0">
-                            <MatchComponent MatchData="@game"></MatchComponent>
-                        </MudListItem>
-                        }
+                        </MudListItem>                        
                     </Virtualize>
                 }
             </div>
