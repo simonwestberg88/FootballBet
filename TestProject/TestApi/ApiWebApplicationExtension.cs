@@ -25,12 +25,6 @@ public static class ApiWebApplicationExtension
         app.MapGet("/test/leagues", (IFootballApiClient client) =>
             client.GetSpecificLeague("1"));
 
-        app.MapPost("test/seed/matches",
-            async (string season, int leagueId, IFootballApiService footballService) =>
-            {
-                await footballService.SeedDatabase(season, leagueId);
-            });
-
         app.MapPost("test/seed/odds",
             async (string season, int leagueId, IOddsService service) =>
             {

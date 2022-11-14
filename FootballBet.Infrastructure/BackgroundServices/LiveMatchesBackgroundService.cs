@@ -13,6 +13,7 @@ public class LiveMatchesBackgroundService: BackgroundService
     }
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
         while (!stoppingToken.IsCancellationRequested)
         {
             await Task.Run(async () =>

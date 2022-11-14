@@ -17,6 +17,7 @@ public class BetPayoutBackgroundService : BackgroundService
     }
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
         await Task.Run(async () =>
         {
             while (!stoppingToken.IsCancellationRequested)

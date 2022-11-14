@@ -5,12 +5,12 @@ using Microsoft.Extensions.Logging;
 
 namespace FootballBet.Infrastructure.BackgroundServices;
 
-public class SeedOddsBackgroundService: BackgroundService
+public class SeedOddsFiveMinBackgroundService: BackgroundService
 {
-    private readonly ILogger<SeedOddsBackgroundService> _logger;
+    private readonly ILogger<SeedOddsFiveMinBackgroundService> _logger;
     private readonly IServiceProvider _serviceProvider;
 
-    public SeedOddsBackgroundService(ILogger<SeedOddsBackgroundService> logger, IServiceProvider serviceProvider)
+    public SeedOddsFiveMinBackgroundService(ILogger<SeedOddsFiveMinBackgroundService> logger, IServiceProvider serviceProvider)
     {
         _logger = logger;
         _serviceProvider = serviceProvider;
@@ -24,17 +24,17 @@ public class SeedOddsBackgroundService: BackgroundService
         {
             try
             {
-                _logger.LogInformation("seeding odds for matches starting within the next 7 days");
+                _logger.LogInformation("seeding odds for matches starting within 5 hours");
                 using var scope = _serviceProvider.CreateScope();
                 var service = scope.ServiceProvider.GetRequiredService<IOddsService>();
-                await service.SaveOddsAsync(1, "2022", TimeSpan.FromDays(7));
+                await service.SaveOddsAsync(1, "2022", TimeSpan.FromHours(5));
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Error seeding odds");
             }
 
-            await Task.Delay(TimeSpan.FromHours(12), stoppingToken);
+            await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
         }
     }
 }
