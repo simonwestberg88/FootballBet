@@ -37,19 +37,24 @@ public class OddsService : IOddsService
     public async Task<BaseOddsResponse> GetLatestBaseOddsAsync(int matchId)
     {
         var baseOdds = (await _oddsRepository.GetLatestBaseOddsAsync(matchId)).ToList();
-        return new BaseOddsResponse
-        {
-            Away = baseOdds.Single(b => b.MatchWinnerEntityEnum == MatchWinnerEntityEnum.Away).ToBaseOddsDto(),
-            Draw = baseOdds.Single(b => b.MatchWinnerEntityEnum == MatchWinnerEntityEnum.Draw).ToBaseOddsDto(),
-            Home = baseOdds.Single(b => b.MatchWinnerEntityEnum == MatchWinnerEntityEnum.Home).ToBaseOddsDto()
-        };
+        if (baseOdds.Count != 0)
+            return new BaseOddsResponse
+            {
+                Away = baseOdds.Single(b => b.MatchWinnerEntityEnum == MatchWinnerEntityEnum.Away).ToBaseOddsDto(),
+                Draw = baseOdds.Single(b => b.MatchWinnerEntityEnum == MatchWinnerEntityEnum.Draw).ToBaseOddsDto(),
+                Home = baseOdds.Single(b => b.MatchWinnerEntityEnum == MatchWinnerEntityEnum.Home).ToBaseOddsDto()
+            };
+        _logger.LogWarning("No base odds found for match with id {MatchId}", matchId);
+        return new BaseOddsResponse();
     }
 
 
     public async Task<IEnumerable<ExactScoreOddsDto>> GetLatestExactOddsAsync(int matchId)
     {
-        var odds = await _oddsRepository.GetLatestExactScoreOddsAsync(matchId);
-        return odds.Select(o => o.ToOddsDto());
+        var odds = (await _oddsRepository.GetLatestExactScoreOddsAsync(matchId)).ToList();
+        if (odds.Any()) return odds.Select(o => o.ToOddsDto());
+        _logger.LogInformation("no exact odds available");
+        return new List<ExactScoreOddsDto>();
     }
 
     public async Task SaveOddsAsync(int leagueId, string season, TimeSpan timeSpan)
