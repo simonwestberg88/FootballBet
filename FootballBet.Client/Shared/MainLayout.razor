@@ -7,15 +7,17 @@
 
 <MudLayout>
     <MudMainContent Class="pt-0">
-        <article class="content px-4">
-            @Body
-        </article>
+        <CascadingValue Value="@_theme" Name="_theme">
+            <article class="content px-4">
+                @Body
+            </article>
+        </CascadingValue>
     </MudMainContent>
     <MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1">
         <MudSpacer />
         <MudSpacer />
         <MudSpacer />
-        <MudIconButton @onclick="NavigateToMyGroups" Icon="@Icons.Sharp.SportsSoccer" Size="Size.Large" Color="Color.Secondary" />
+        <MudIconButton @onclick="NavigateToMyGroups" Icon="@Icons.Sharp.SportsSoccer" Size="Size.Large" Color="Color.Tertiary" />
         <MudSpacer />
         <MudSpacer />
         <LoginDisplay />
@@ -23,8 +25,16 @@
 </MudLayout>
 
 @code {
-    private bool _isDarkMode = true;
-    private MudTheme _theme = new();
+    private bool _isDarkMode = false;
+    private MudTheme _theme = new()
+    {
+        Palette = new(){
+                Primary = "8CB369",
+                Secondary = "92D5E6",
+                Tertiary = "F0A868",
+                AppbarBackground = "F0A868"
+        }
+    };
 
     private void NavigateToMyGroups()
     {

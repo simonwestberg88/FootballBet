@@ -25,7 +25,7 @@ th, td {
     {
         <tr @onclick="() => OpenDialog(row)">
             <td>@row.HomeTeamGoals - @row.AwayTeamGoals</td>
-            <td style="@($"background:{_theme.PaletteDark.Secondary};")">@row.Odds</td>
+            <td style="@($"background:{_theme.Palette.Secondary};")">@row.Odds</td>
         </tr>
     }
     </tbody>
@@ -40,8 +40,8 @@ th, td {
     [Parameter] public string? MatchStatus { get; set; }
     [Parameter] public EventCallback<BetResponse> UserHasMadeBet { get; set; }
     private BetResponse UserBet { get; set; }
-
-    private readonly MudTheme _theme = new();
+    [CascadingParameter(Name = "_theme")]
+    protected MudTheme _theme { get; set; }
 
     private void OpenDialog(ExactScoreOddsDto exactScoreOdds)
     {

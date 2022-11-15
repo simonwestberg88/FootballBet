@@ -13,7 +13,7 @@
             <MudGrid>
                 <MudItem xs="3" Style="display: flex; flex-direction: column; justify-content: center; align-items: center">
                     <MudText>@MatchData.HomeTeamName</MudText>
-                    <MudImage Src="@MatchData.HomeTeamLogo" Width="Width" Height="Height"></MudImage>
+                    <MudImage Src="@MatchData.HomeTeamLogo" Height="Height"></MudImage>
                 </MudItem>
                 <MudItem xs="6" Style="display: flex; justify-content: center; align-items: center">
                     <MudItem style="display: block">
@@ -23,7 +23,7 @@
                 </MudItem>
                 <MudItem xs="3" Style="display: flex; flex-direction: column; justify-content: center; align-items: center">
                     <MudText>@MatchData.AwayTeamName</MudText>
-                    <MudImage Src="@MatchData.AwayTeamLogo" Width="Width" Height="Height"></MudImage>
+                    <MudImage Src="@MatchData.AwayTeamLogo"  Height="Height"></MudImage>
                 </MudItem>
             </MudGrid>
             @if (UserBet is not null)
@@ -50,7 +50,7 @@
                         <OddsListComponent Odds="_drawOdds" MatchId="MatchData.MatchId" MatchStatus=@MatchData.MatchStatus UserHasMadeBet="UserHasMadeBet" />
                     </MudExpansionPanel>
                     <MudExpansionPanel Text="Away">
-                        <OddsListComponent Odds="_awayOdds" MatchId="MatchData.MatchId" MatchStatus=@MatchData.MatchStatus UserHasMadeBet="UserHasMadeBet" />a
+                        <OddsListComponent Odds="_awayOdds" MatchId="MatchData.MatchId" MatchStatus=@MatchData.MatchStatus UserHasMadeBet="UserHasMadeBet" />
                     </MudExpansionPanel>
                 </MudExpansionPanels>
             }
@@ -69,11 +69,8 @@
     private BaseOddsResponse? _baseOdds;
     private string _baseWinString = "";
     private BetResponse? UserBet { get; set; }
-
     bool _isOpen;
     bool _hasLoadedOddsForGame;
-
-    private static int Width => 50;
     private int Height => 50;
 
     private async void GetOddsForGame()
