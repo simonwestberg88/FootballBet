@@ -2,7 +2,7 @@ name: Build and deploy .NET Core application to Web App footballbet
 on:
   push:
     branches:
-    - feature/ShowOtherPlayersBetsAfterMatchStart
+    - master
 env:
   AZURE_WEBAPP_NAME: footballbet
   AZURE_WEBAPP_PACKAGE_PATH: FootballBet.Server/published
