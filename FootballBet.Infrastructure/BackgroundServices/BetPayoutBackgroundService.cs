@@ -1,8 +1,9 @@
+using FootballBet.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace FootballBet.Infrastructure.Services;
+namespace FootballBet.Infrastructure.BackgroundServices;
 
 public class BetPayoutBackgroundService : BackgroundService
 {
@@ -16,6 +17,7 @@ public class BetPayoutBackgroundService : BackgroundService
     }
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
         await Task.Run(async () =>
         {
             while (!stoppingToken.IsCancellationRequested)

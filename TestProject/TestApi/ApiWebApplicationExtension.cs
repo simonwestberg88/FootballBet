@@ -1,6 +1,6 @@
 using FootballBet.Infrastructure.Interfaces;
+using FootballBet.Infrastructure.Services;
 using FootballBet.Repository.Repositories.Interfaces;
-using FootballBet.Server.Data.Repositories.Interfaces;
 using FootballBet.Shared.Models.Bets;
 using FootballBet.Shared.Models.Groups;
 
@@ -17,7 +17,7 @@ public static class ApiWebApplicationExtension
         });
 
         app.MapGet("/test/matches/all", (int leagueId, IFootballRepository repository) =>
-            repository.GetAllMatchesForLeagueId(leagueId));
+            repository.GetAllMatches(leagueId));
         
         app.MapGet("/test/matches", (int matchId, IMatchRepository repository) =>
             repository.GetMatchAsync(matchId));
@@ -25,20 +25,14 @@ public static class ApiWebApplicationExtension
         app.MapGet("/test/leagues", (IFootballApiClient client) =>
             client.GetSpecificLeague("1"));
 
-        app.MapPost("test/seed/matches",
-            async (string season, int leagueId, IFootballAPIService footballService) =>
-            {
-                await footballService.SeedDatabase(season, leagueId);
-            });
-
         app.MapPost("test/seed/odds",
-            async (string season, int leagueId, IFootballApiClient client) =>
+            async (string season, int leagueId, IOddsService service) =>
             {
-                await client.SaveOddsForLeague(leagueId, season);
+                await service.SaveOddsAsync(leagueId, season, TimeSpan.FromDays(7));
             });
 
-        app.MapGet("test/odds", async (int matchId, IFootballApiClient client)
-            => await client.GetLatestExactScoreOdds(matchId));
+        app.MapGet("test/odds", async (int matchId, IOddsService service)
+            => await service.GetLatestExactOddsAsync(matchId));
 
         app.MapPost("test/bets/place",
             async (string userId, int matchId, string groupId, BetRequest bet, IBetService service) =>
