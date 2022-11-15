@@ -55,7 +55,7 @@ namespace FootballBet.Server.Areas.Identity.Pages.Account
             }
 
             Email = email;
-            DisplayConfirmAccountLink = true; //for ease of use. should be false or removed when we go live
+            DisplayConfirmAccountLink = false;
             if (DisplayConfirmAccountLink)
             {
                 var userId = await _userManager.GetUserIdAsync(user);

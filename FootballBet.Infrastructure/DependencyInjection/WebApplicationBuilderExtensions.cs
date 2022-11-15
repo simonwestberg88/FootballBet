@@ -29,7 +29,10 @@ public static class WebApplicationBuilderExtensions
             })
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
-        builder.Services.AddIdentityServer()
+        builder.Services.AddIdentityServer(options =>
+        {
+            options.IssuerUri = "https://footballbet.azurewebsites.net/";
+        })
             .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
     }
 
