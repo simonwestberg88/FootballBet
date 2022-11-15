@@ -1,4 +1,6 @@
 @using FootballBet.Shared.Models.Bets
+
+
 <MudSimpleTable Style="display: flex; flex-direction: row">
     <thead>
     <tr>
@@ -9,7 +11,7 @@
     </thead>
     <tbody>
     <tr>
-        <td>@($"{UserBet?.HomeGoals}  - {UserBet?.AwayGoals}")</td>
+        <td>@($"{UserBet?.HomeGoals} - {UserBet?.AwayGoals}")</td>
         <td>@UserBet?.PotentialBaseWin</td>
         <td>@UserBet?.PotentialWin</td>
     </tr>
@@ -21,7 +23,6 @@
 
     [Parameter]
     public BetResponse? UserBet { get; set; }
-
     [Parameter]
     public string? BaseWinString { get; set; }
 

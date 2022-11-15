@@ -11,9 +11,9 @@
 
 
 <MudTabs Elevation="1" Rounded="true" Centered="true" PanelClass="pa-0">
-    <MudCheckBox @bind-Checked="@CheckboxHideFinishedGames" Label="Hide finished games" Color="Color.Primary"></MudCheckBox>
     <MudTabPanel Icon="@Icons.Filled.Scoreboard" class="px-0">
         <ChildContent>
+        <MudCheckBox @bind-Checked="@CheckboxHideFinishedGames" Label="Hide finished games" Color="Color.Primary"></MudCheckBox>
             <MatchesListComponent _matches="_matches" HideFinishedGames="CheckboxHideFinishedGames"></MatchesListComponent>
         </ChildContent>
     </MudTabPanel>
