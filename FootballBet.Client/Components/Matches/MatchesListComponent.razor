@@ -20,7 +20,7 @@
                     }
                     <MudText Typo="Typo.h5">@date.Date.ToString("dd/MM/yyyy")</MudText>
                     <Virtualize Items="@GetGamesForDate(date)" Context="game">
-                        <MudListItem class="px-0" Style="@(IsMatchFinished(game.MatchStatus) && HideFinishedGames ? "display:none" : "")">
+                        <MudListItem class="px-0" @key=game Style="@(IsMatchFinished(game.MatchStatus) && HideFinishedGames ? "display:none" : "")">
                             <MatchComponent MatchData="@game"></MatchComponent>
                         </MudListItem>                        
                     </Virtualize>
