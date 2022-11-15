@@ -14,6 +14,8 @@ public static class WebApplicationBuilderExtensions
     public static void AddFootballBetDatabase(this WebApplicationBuilder builder)
     {
         builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
+        builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Infrastructure", LogLevel.Warning);
+        builder.Logging.AddFilter("Duende.IdentityServer", LogLevel.Warning);
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FootballBet.Repository")));
