@@ -1,3 +1,4 @@
+using FootballBet.Infrastructure.BackgroundServices;
 using FootballBet.Infrastructure.Http;
 using FootballBet.Infrastructure.Interfaces;
 using FootballBet.Infrastructure.Services;
