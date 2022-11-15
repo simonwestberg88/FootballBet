@@ -25,4 +25,15 @@ public class UserRepository : IUserRepository
         }
         return user.Balance;
     }
+
+    public async Task ChangeNicknameForGroupMemberAsync(string userId, string newNickname, string groupId)
+    {
+        var user = await _context.BettingGroupMembers.FirstOrDefaultAsync(x => x.UserId == userId && x.BettingGroupEntityId == Guid.Parse(groupId));
+        if (user is null)
+        {
+            throw new InvalidOperationException("User not found");
+        }
+        user.Nickname = newNickname;
+        await _context.SaveChangesAsync();
+    }
 }

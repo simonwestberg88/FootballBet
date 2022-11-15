@@ -71,4 +71,8 @@ public class GroupRepository : IGroupRepository
             await _context.SaveChangesAsync(ct);
         }
     }
+
+    public async Task<List<BettingGroupMemberEntity>> GetBettingGroupMembersAsync(string groupId)
+        => (await _context.BettingGroups.Include(b => b.Memberships).FirstOrDefaultAsync(bg => bg.Id == Guid.Parse(groupId)))?.Memberships;
+
 }

@@ -12,5 +12,6 @@ namespace FootballBet.Server.Data.Repositories.Interfaces
         Task DeleteBettingGroupInvitationsByEmailAndGroupId(string email, string groupId);
         Task<BettingGroupInvitationEntity> GetBettingGroupInvitationByIdAsync(Guid invitationId, CancellationToken ct);
         Task DeleteBettingGroupInvitation(Guid invitationId, CancellationToken ct);
+        Task<List<BettingGroupMemberEntity>> GetBettingGroupMembersAsync(string groupId);
     }
 }

@@ -16,10 +16,7 @@ public class MatchRepository : IMatchRepository
     public async Task<IEnumerable<MatchEntity>> GetMatches(int leagueId)
         => await _context.MatchEntities.Where(m => m.LeagueId == leagueId).ToListAsync();
 
-    public async Task<MatchEntity?> GetMatchAsync(int matchId)
-        => await _context.MatchEntities.SingleOrDefaultAsync(m => m.Id == matchId);
-
-    public async Task<IEnumerable<MatchEntity>> GetUnprocessedMatchesAsync()
+    public async Task<IEnumerable<MatchEntity>> GetFinishedMatches(int leagueId = 1, int? season = 2022) //default World Cup loaded
     {
         var finishedStatus = new List<int>
         {
@@ -30,11 +27,18 @@ public class MatchRepository : IMatchRepository
         var finished = await _context.MatchEntities
             .Where(m =>
                 finishedStatus.Any(f => f == (int)m.MatchStatus)
-                && m.Date < DateTime.Now 
-                && m.BetsPayed == false)
+                && m.Date < DateTime.Now
+                && m.LeagueId == leagueId
+                && m.Season == season)
             .ToListAsync();
         return finished;
     }
+
+    public async Task<MatchEntity?> GetMatchAsync(int matchId)
+        => await _context.MatchEntities.SingleOrDefaultAsync(m => m.Id == matchId);
+
+    public async Task<IEnumerable<MatchEntity>> GetUnprocessedMatchesAsync()
+        => (await GetFinishedMatches()).Where(m => m.BetsPayed == false);
 
     public async Task SetProcessedAsync(int matchId)
     {

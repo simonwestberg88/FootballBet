@@ -23,6 +23,9 @@ public class BetRepository : IBetRepository
     public async Task<IEnumerable<BetEntity>> GetBetsAsync(int matchId, string bettingGroupId)
         => throw new NotImplementedException();
 
+    public async Task<IEnumerable<BetEntity>> GetBetsForGroupAsync(string bettingGroupId)
+        => await _context.BetEntities.Where(b => b.BettingGroupId == bettingGroupId).ToListAsync();
+
     public async Task<BetEntity?> GetBetAsync(string userId, int matchId, string groupId)
     {
         var bet = await _context.BetEntities.SingleOrDefaultAsync(
@@ -36,12 +39,16 @@ public class BetRepository : IBetRepository
         var existingBet = await _context.BetEntities.SingleOrDefaultAsync(b =>
             b.UserId == bet.UserId && b.MatchId == bet.MatchId && b.BettingGroupId == bet.BettingGroupId);
         if (existingBet is not null)
-            throw new InvalidOperationException("Already placed bet on match");
+        {
+            _context.BetEntities.Attach(existingBet);
+            _context.BetEntities.Remove(existingBet);
+        }
         var match = await _context.MatchEntities.FindAsync(bet.MatchId);
         if (match is null)
             throw new InvalidOperationException("Match not found");
         if (match.MatchStatus != MatchStatus.NS)
             throw new InvalidOperationException("Can only place bets on matches that are not started yet");
+
         await _context.BetEntities.AddAsync(bet);
         await _context.SaveChangesAsync();
         return bet;
@@ -62,16 +69,16 @@ public class BetRepository : IBetRepository
         var userBalance = await _context.UserBalanceEntities.SingleOrDefaultAsync(ub => ub.UserId == bet.UserId);
         if (userBalance is null)
             throw new InvalidOperationException("User balance not found");
-        userBalance.Balance+= payoutAmount;
+        userBalance.Balance += payoutAmount;
         bet.Processed = true;
         bet.IsWinningBet = true;
-        await _context.SaveChangesAsync();  
+        await _context.SaveChangesAsync();
     }
 
     public async Task ProcessBaseWinAsync(int betId)
     {
         var bet = await _context.BetEntities.FindAsync(betId);
-        if (bet is null)    
+        if (bet is null)
             throw new InvalidOperationException("Bet not found");
         var exactScoreOdds = await _context.ExactScoreOddsEntities.FindAsync(bet.OddsId);
         if (exactScoreOdds is null)
@@ -79,7 +86,8 @@ public class BetRepository : IBetRepository
         var baseOdds = await _context.BaseOddsEntities.SingleOrDefaultAsync(b =>
             b.MatchOddsGroupId == exactScoreOdds.MatchOddsGroupId &&
             b.MatchWinnerEntityEnum == exactScoreOdds.MatchWinnerEntityEnum);
-        if (baseOdds is null){
+        if (baseOdds is null)
+        {
             throw new InvalidOperationException("Base odds not found");
         }
         var payoutAmount = bet.WagerAmount * baseOdds.Odds;
@@ -91,6 +99,12 @@ public class BetRepository : IBetRepository
         bet.IsWinningBet = true;
         await _context.SaveChangesAsync();
     }
+
+    public async Task<UserBalanceEntity> GetUserBalanceForGroupAsync(string userId, string groupId)
+        => await _context.UserBalanceEntities?.FirstOrDefaultAsync(x => x.UserId == userId && x.GroupId == groupId);
+
+    public async Task<IEnumerable<UserBalanceEntity>> GetUserBalancesForGroupAsync(string groupId)
+        => await _context.UserBalanceEntities?.Where(x => x.GroupId == groupId).ToListAsync();
 
     public async Task ProcessLossAsync(int betId)
     {

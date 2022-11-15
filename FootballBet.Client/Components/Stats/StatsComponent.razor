@@ -1,0 +1,71 @@
+﻿@using FootballBet.Shared.Models.Stats
+@using FootballBet.Shared.Models.Users
+@inject HttpClient Http
+
+@if (GameDayStat != null)
+{
+    <MudTable Items="@TableElements" Hover="true" SortLabel="Sort By">
+        <HeaderContent>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserDto, object>(x=>x.UserName)">User</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel Enabled="@enabled" SortBy="new Func<UserDto, object>(x=>x.Balance)">Balance</MudTableSortLabel></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="User">@context.UserName</MudTd>
+            <MudTd DataLabel="Balance">@context.Balance</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+        </PagerContent>
+    </MudTable>
+
+    @*<MudChart ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" ChartOptions="@chartOptions" Width="100%" Height="600px"></MudChart>*@
+}
+
+@code {
+    [Parameter]
+    public string? ThisGroupId { get; set; }
+    private GameDayStatsContainerShared? GameDayStat { get; set; }
+    private ChartOptions chartOptions = new ChartOptions();
+    private List<ChartSeries> Series = new List<ChartSeries>();
+    private string[] XAxisLabels = new string[] { };
+    private bool enabled = true;
+    private IEnumerable<UserDto> TableElements = new List<UserDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        GameDayStat = await Http.GetFromJsonAsync<GameDayStatsContainerShared>($"/groupStats/{ThisGroupId}") ?? new();
+        //CreateSeries(GameDayStat.GameDayStats, GameDayStat.Members);
+        //CreateXAxis(GameDayStat.GameDates);
+        TableElements = GameDayStat.Members.OrderByDescending(x => x.Balance);
+        StateHasChanged();
+    }
+
+    private void CreateSeries(List<GameDayStatsShared> gameDayStats, List<UserDto> members)
+    {
+        var series = new List<ChartSeries>();
+        foreach (var member in members)
+        {
+            var listOfWinningsPerDay = new List<double>();
+            var totalWinningsSoFar = 0d;
+            var memberGameDays = gameDayStats.OrderBy(d => d.Date).SelectMany(c => c.MemberGameDayStats.Select(x => x).Where(m => m.User.Id == member.Id));
+            foreach (var matchDay in memberGameDays)
+            {
+                listOfWinningsPerDay.Add((double)matchDay.TotalWinningsForDay + totalWinningsSoFar);
+                totalWinningsSoFar += (double)matchDay.TotalWinningsForDay;
+            }
+            var chartSeriesForMember = new ChartSeries()
+                {
+                    Name = member.UserName,
+                    Data = listOfWinningsPerDay.ToArray()
+                };
+            series.Add(chartSeriesForMember);
+        }
+        Series = series;
+    }
+
+    private void CreateXAxis(List<DateTime> gameDates)
+    {
+        XAxisLabels = gameDates.Select(d => d.ToString("dd/MM")).ToArray();
+    }
+
+}

@@ -128,6 +128,8 @@ namespace FootballBet.Server.Data.Services
                 UserId = user.Id
             };
 
+        public async Task ChangeNicknameForGroupMemberAsync(string userId, string newNickname, string groupId)
+            => await _userRepository.ChangeNicknameForGroupMemberAsync(userId, newNickname, groupId);
 
     }
 }

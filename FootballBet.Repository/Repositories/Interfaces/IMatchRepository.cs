@@ -8,4 +8,5 @@ public interface IMatchRepository
     public Task<MatchEntity?> GetMatchAsync(int matchId);
     public Task<IEnumerable<MatchEntity>> GetUnprocessedMatchesAsync();
     public Task SetProcessedAsync(int matchId);
+    public Task<IEnumerable<MatchEntity>> GetFinishedMatches(int leagueId = 1, int? season = 2022);
 }
