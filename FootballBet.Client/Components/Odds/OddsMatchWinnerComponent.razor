@@ -6,7 +6,7 @@
     align-items: center
     }
     .oddsText{
-    background:@_theme.PaletteDark.Secondary; 
+    background:@_theme.Palette.Secondary; 
     padding: 3px
     }
 </style>
@@ -35,7 +35,8 @@
 
     [Parameter]
     public decimal? AwayOdds { get; set; }
-
-    MudTheme _theme = new();
+    [CascadingParameter(Name = "_theme")]
+    protected MudTheme _theme { get; set; }
+    //MudTheme _theme = new();
 
 }

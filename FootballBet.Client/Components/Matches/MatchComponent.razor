@@ -13,45 +13,44 @@
             <MudGrid>
                 <MudItem xs="3" Style="display: flex; flex-direction: column; justify-content: center; align-items: center">
                     <MudText>@MatchData.HomeTeamName</MudText>
-                    <MudImage Src="@MatchData.HomeTeamLogo" Width="Width" Height="Height"></MudImage>
+                    <MudImage Src="@MatchData.HomeTeamLogo" Height="Height"></MudImage>
                 </MudItem>
                 <MudItem xs="6" Style="display: flex; justify-content: center; align-items: center">
                     <MudItem style="display: block">
                         <MudText Style="text-align: center">@MatchData.Date.ToString("H:mm")</MudText>
-                        <MudText Style="text-align: center">@MatchData.HomeCurrentGoals - @MatchData.AwayCurrentGoals</MudText>
+                        <MudText Typo="Typo.h5" Style="text-align: center">@MatchData.HomeCurrentGoals - @MatchData.AwayCurrentGoals</MudText>
                     </MudItem>
                 </MudItem>
                 <MudItem xs="3" Style="display: flex; flex-direction: column; justify-content: center; align-items: center">
                     <MudText>@MatchData.AwayTeamName</MudText>
-                    <MudImage Src="@MatchData.AwayTeamLogo" Width="Width" Height="Height"></MudImage>
+                    <MudImage Src="@MatchData.AwayTeamLogo"  Height="Height"></MudImage>
                 </MudItem>
             </MudGrid>
             @if (UserBet is not null)
             {
-                <UserBetComponent UserBet="@UserBet" BaseWinString="@_baseWinString"/>
+                <UserBetComponent UserBet="@UserBet" BaseWinString="@_baseWinString" /> 
             }
         </TitleContent>
         <ChildContent>
             <MudText Style="padding-top: 10px">@(MatchData.MatchStatus)</MudText>
-            @if (Odds != null)
+            @if (Odds != null && MatchData.MatchStatus == "Not started")
             {
-                <MudDivider Style="margin-top: 10px; margin-bottom: 10px"/>
+                <MudDivider Style="margin-top: 10px; margin-bottom: 10px" />
                 <MudText Typo="Typo.h6" Style="padding-top: 10px">Base Odds</MudText>
-                <OddsMatchWinnerComponent
-                    HomeOdds="@_baseOdds?.Home.Odds"
-                    AwayOdds="@_baseOdds?.Away.Odds"
-                    DrawOdds="@_baseOdds?.Draw.Odds"/>
-                <MudDivider Style="margin-top: 10px; margin-bottom: 10px"/>
+                <OddsMatchWinnerComponent HomeOdds="@_baseOdds?.Home.Odds"
+                                      AwayOdds="@_baseOdds?.Away.Odds"
+                                      DrawOdds="@_baseOdds?.Draw.Odds" />
+                <MudDivider Style="margin-top: 10px; margin-bottom: 10px" />
                 <MudText Typo="Typo.h6">Exact odds</MudText>
                 <MudExpansionPanels>
                     <MudExpansionPanel Text="Home">
-                        <OddsListComponent Odds="_homeOdds" MatchId="MatchData.MatchId" MatchStatus=@MatchData.MatchStatus UserHasMadeBet="UserHasMadeBet"/>
+                        <OddsListComponent Odds="_homeOdds" MatchId="MatchData.MatchId" MatchStatus=@MatchData.MatchStatus UserHasMadeBet="UserHasMadeBet" />
                     </MudExpansionPanel>
                     <MudExpansionPanel Text="Draw">
-                        <OddsListComponent Odds="_drawOdds" MatchId="MatchData.MatchId" MatchStatus=@MatchData.MatchStatus UserHasMadeBet="UserHasMadeBet"/>
+                        <OddsListComponent Odds="_drawOdds" MatchId="MatchData.MatchId" MatchStatus=@MatchData.MatchStatus UserHasMadeBet="UserHasMadeBet" />
                     </MudExpansionPanel>
                     <MudExpansionPanel Text="Away">
-                        <OddsListComponent Odds="_awayOdds" MatchId="MatchData.MatchId" MatchStatus=@MatchData.MatchStatus UserHasMadeBet="UserHasMadeBet"/>a
+                        <OddsListComponent Odds="_awayOdds" MatchId="MatchData.MatchId" MatchStatus=@MatchData.MatchStatus UserHasMadeBet="UserHasMadeBet" />
                     </MudExpansionPanel>
                 </MudExpansionPanels>
             }
@@ -63,20 +62,15 @@
 
     [Parameter]
     public MatchDto MatchData { get; set; }
-
     private List<ExactScoreOddsDto>? Odds { get; set; }
     private List<ExactScoreOddsDto>? _homeOdds;
     private List<ExactScoreOddsDto>? _awayOdds;
     private List<ExactScoreOddsDto>? _drawOdds;
     private BaseOddsResponse? _baseOdds;
     private string _baseWinString = "";
-
     private BetResponse? UserBet { get; set; }
-
     bool _isOpen;
     bool _hasLoadedOddsForGame;
-
-    private static int Width => 50;
     private int Height => 50;
 
     private async void GetOddsForGame()
