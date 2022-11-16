@@ -3,6 +3,7 @@
 @using FootballBet.Client.Services
 @using FootballBet.Shared.Models.Bets
 @using NuGet.Common
+@using FootballBet.Client.Components.Bets
 @inject IOddsService OddsService;
 @inject IBetService BetService;
 @inject NavigationManager MyNavigationManager;
@@ -54,6 +55,10 @@
                     </MudExpansionPanel>
                 </MudExpansionPanels>
             }
+            else if(_groupVisibleBetDtos != null)
+            {
+                <GroupBetsForMatchComponent UserBets="_groupVisibleBetDtos"></GroupBetsForMatchComponent>
+            }
         </ChildContent>
     </MudExpansionPanel>
 </MudPaper>
@@ -66,6 +71,7 @@
     private List<ExactScoreOddsDto>? _homeOdds;
     private List<ExactScoreOddsDto>? _awayOdds;
     private List<ExactScoreOddsDto>? _drawOdds;
+    private List<GroupVisibleBetDto>? _groupVisibleBetDtos;
     private BaseOddsResponse? _baseOdds;
     private string _baseWinString = "";
     private BetResponse? UserBet { get; set; }
@@ -89,10 +95,41 @@
 
     protected override async Task OnInitializedAsync()
     {
+        var bettingGroupId = MyNavigationManager.Uri.Split("/").Last().Trim('\'');
         UserBet = await BetService.GetBetAsync(MatchData.MatchId, MyNavigationManager.Uri.Split("/").Last());
+        if (MatchData.Date < DateTime.Now && MatchHasStartedOrIsFinished(MatchData.MatchStatus) && !string.IsNullOrEmpty(bettingGroupId))
+        {
+            _groupVisibleBetDtos = (await BetService.GetAllBetsForGameAndGroup(MatchData.MatchId, bettingGroupId));
+            StateHasChanged();
+        }
         SetBaseWinString();
         await base.OnInitializedAsync();
     }
+
+    private bool MatchHasStartedOrIsFinished(string matchStatus)
+        => matchStatus switch
+        {
+            "TBD" => false,
+            "Not started" => false,
+            "First half" => true,
+            "Half time" => true,
+            "Second Half" => true,
+            "Extra Time" => true,
+            "Penalty" => true,
+            "Match Finished" => true,
+            "Extra time finish" => true,
+            "Penalty finish" => true,
+            "Break Time (in Extra Time)" => true,
+            "Match Suspended" => true,
+            "Match Interrupted" => true,
+            "Match Postponed" => true,
+            "Match Cancelled" => true,
+            "Match Abandoned" => true,
+            "Technical Loss" => true,
+            "WalkOver" => true,
+            "Live" => true,
+            _ => false
+        };
 
     protected void UserHasMadeBet(BetResponse bet)
     {

@@ -7,6 +7,7 @@ public interface IBetService
 {
     Task<BetResponse?> GetBetAsync(int matchId, string groupId);
     public Task<BetResponse> PlaceBetAsync(int oddsId, int matchId, decimal amount, string groupId);
+    Task<List<GroupVisibleBetDto>> GetAllBetsForGameAndGroup(int matchId, string groupId);
 }
 
 public class BetService : IBetService
@@ -24,6 +25,16 @@ public class BetService : IBetService
         if (response.IsSuccessStatusCode)
         {
             return await response.Content.ReadFromJsonAsync<BetResponse>();
+        }
+        return null;
+    }
+
+    public async Task<List<GroupVisibleBetDto>> GetAllBetsForGameAndGroup(int matchId, string groupId)
+    {
+        var response = await _httpClient.GetAsync($"/api/bets/match/group?matchId={matchId}&groupId={groupId}");
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadFromJsonAsync<List<GroupVisibleBetDto>>();
         }
         return null;
     }
