@@ -5,8 +5,8 @@
     <thead>
         <tr>
             <th>Nickname</th>
-            <th>Potential win</th>
             <th>Potential base win</th>
+            <th>Potential win</th>
             <th>Bet</th>
         </tr>
     </thead>
@@ -15,8 +15,8 @@
         {
             <tr>
                 <td>@($"{bet?.Nickname}")</td>
-                <td>@bet.BetDto.PotentialWin</td>
                 <td>@bet.BetDto.PotentialBaseWin</td>
+                <td>@bet.BetDto.PotentialWin</td>
                 <td>@bet.BetDto.HomeGoals - @bet.BetDto.AwayGoals</td>
             </tr>
         }
