@@ -15,4 +15,11 @@ public static class BetsMapper
             HomeGoals = exactScoreOdds.HomeTeamGoals,
             AwayGoals = exactScoreOdds.AwayTeamGoals
         };
+
+    public static GroupVisibleBetDto ToGroupVisibleBetDto(this BetEntity bet, ExactScoreOddsEntity exactScoreOdds, BaseOddsEntity baseOdds, string nickname)
+        => new()
+        {
+            BetDto = bet.ToBetDto(exactScoreOdds, baseOdds),
+            Nickname = nickname
+        };
 }

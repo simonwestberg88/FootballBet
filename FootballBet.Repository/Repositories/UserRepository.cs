@@ -36,4 +36,7 @@ public class UserRepository : IUserRepository
         user.Nickname = newNickname;
         await _context.SaveChangesAsync();
     }
+
+    public async Task<string> GetBettingGroupUserNicknameByUserIdAsync(string userId)
+        => (await _context.BettingGroupMembers.FirstOrDefaultAsync(x => x.UserId == userId)).Nickname;
 }

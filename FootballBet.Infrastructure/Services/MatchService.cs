@@ -44,7 +44,7 @@ public class MatchService: IMatchService
 
     public async Task UpdateLiveMatchesAsync()
     {
-        var liveMatches = await _footballRepository.GetMatchesAsync(1, TimeSpan.FromHours(3));
+        var liveMatches = await _footballRepository.GetMatchesAsync(1, TimeSpan.FromHours(4));
         
         foreach (var match in liveMatches)
         {

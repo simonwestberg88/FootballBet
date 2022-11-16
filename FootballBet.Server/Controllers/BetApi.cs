@@ -1,9 +1,9 @@
-using System.Security.Claims;
 using FootballBet.Infrastructure.Interfaces;
 using FootballBet.Infrastructure.Mappers;
 using FootballBet.Repository.Repositories.Interfaces;
 using FootballBet.Shared.Models.Bets;
 using Microsoft.AspNet.Identity;
+using System.Security.Claims;
 
 namespace FootballBet.Server.Controllers;
 
@@ -22,13 +22,13 @@ public static class BetApi
                     return Results.NotFound("Odds not found");
                 }
                 var baseOdds = await oddsRepository.GetBaseOddsAsync(bet.OddsId, odds.MatchWinnerEntityEnum);
-                if(baseOdds is null)
+                if (baseOdds is null)
                 {
                     return Results.NotFound("Base odds not found");
                 }
                 return Results.Ok(placedBet.ToBetDto(odds, baseOdds));
             });
-                
+
 
         app.MapGet("api/bets/match",
             async (int matchId, string groupId, IBetService service, ClaimsPrincipal user) =>
@@ -37,6 +37,20 @@ public static class BetApi
                 {
                     var bet = await service.GetBet(user.Identity.GetUserId(), matchId, groupId);
                     return Results.Ok(bet);
+                }
+                catch (InvalidOperationException e)
+                {
+                    return Results.NotFound("Bet not found");
+                }
+            });
+
+        app.MapGet("api/bets/match/group",
+            async (int matchId, string groupId, IBetService service) =>
+            {
+                try
+                {
+                    var bets = await service.GetBetsForGameAsync(matchId, groupId);
+                    return Results.Ok(bets);
                 }
                 catch (InvalidOperationException e)
                 {

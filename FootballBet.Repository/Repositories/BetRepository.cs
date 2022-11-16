@@ -115,4 +115,8 @@ public class BetRepository : IBetRepository
         bet.IsWinningBet = false;
         await _context.SaveChangesAsync();
     }
+
+    public async Task<List<BetEntity>> GetBetsForGroupAndGameAsync(int matchId, string groupId)
+        => await _context.BetEntities.Where(b => b.BettingGroupId == groupId && b.MatchId == matchId).ToListAsync();
+
 }
