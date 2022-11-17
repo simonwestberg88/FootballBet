@@ -34,7 +34,7 @@ public class SeedOddsBackgroundService: BackgroundService
                 _logger.LogError(e, "Error seeding odds");
             }
 
-            await Task.Delay(TimeSpan.FromHours(12), stoppingToken);
+            await Task.Delay(TimeSpan.FromHours(3), stoppingToken);
         }
     }
 }
