@@ -31,7 +31,7 @@ public static class WebApplicationBuilderExtensions
 
         builder.Services.AddIdentityServer(options =>
         {
-            options.IssuerUri = "https://footballbet-app.azurewebsites.net/";
+            options.IssuerUri = "https://footballbet.online/";
         })
             .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
     }
