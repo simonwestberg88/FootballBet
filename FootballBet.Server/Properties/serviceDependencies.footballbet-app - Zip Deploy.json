@@ -1,9 +1,8 @@
 {
   "dependencies": {
-    "mssql1": {
+    "mssql2": {
       "secretStore": "AzureAppSettings",
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/fb-app-server/databases/fb-app-database",
-      "type": "mssql.azure",
+      "type": "mssql.onprem",
       "connectionId": "ConnectionStrings:DefaultConnection",
       "dynamicId": null
     }
