@@ -90,7 +90,7 @@ namespace FootballBet.Server.Data.Services
             var invitation = await _groupRepository.GetBettingGroupInvitationByIdAsync(Guid.Parse(invitationId), ct);
             var group = await _groupRepository.GetGroupById(Guid.Parse(groupId), ct);
 
-            if (invitation == null || group == null || invitation.InvitedUserEmail != userEmail || invitation.BettingGroupEntityId != Guid.Parse(groupId))
+            if (invitation == null || group == null || invitation.InvitedUserEmail.Trim().ToLower() != userEmail.Trim().ToLower() || invitation.BettingGroupEntityId != Guid.Parse(groupId))
                 return false;
             return true;
         }
