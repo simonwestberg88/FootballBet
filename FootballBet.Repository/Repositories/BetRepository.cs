@@ -70,7 +70,8 @@ public class BetRepository : IBetRepository
         if (oddsForBet is null)
             throw new InvalidOperationException("Odds not found");
         var payoutAmount = bet.WagerAmount * oddsForBet.Odds;
-        var userBalance = await _context.UserBalanceEntities.SingleOrDefaultAsync(ub => ub.UserId == bet.UserId);
+        var userBalance = await _context.UserBalanceEntities.SingleOrDefaultAsync(ub => ub.UserId == bet.UserId
+                            && bet.BettingGroupId == ub.GroupId);
         if (userBalance is null)
             throw new InvalidOperationException("User balance not found");
         userBalance.Balance += payoutAmount;
