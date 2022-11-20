@@ -128,7 +128,7 @@ public class FootballRepository : IFootballRepository
 
     public async Task<IEnumerable<MatchEntity>> GetNotStartedMatches(int leagueId, TimeSpan timeSpan)
     {
-        var latestMatchDate = DateTime.Now.Add(timeSpan);
+        var latestMatchDate = DateTimeHelper.GetNow().Add(timeSpan);
         var matches = await _context.MatchEntities
             .Where(m => m.LeagueId == leagueId && m.Date < latestMatchDate && m.MatchStatus == MatchStatus.NS)
             .ToListAsync();
@@ -140,10 +140,11 @@ public class FootballRepository : IFootballRepository
 
     public async Task<IEnumerable<MatchEntity>> GetMatchesAsync(int leagueId, TimeSpan timeSpan)
     {
-        var date = DateTime.Now.Add(-timeSpan);
+        var dateTimeNow = DateTimeHelper.GetNow();
+        var date = DateTimeHelper.GetNow().Add(-timeSpan);
         var matches = await _context.MatchEntities
             .Where(m => m.LeagueId == leagueId
-                        && m.Date < DateTime.Now && m.Date > date
+                        && m.Date < dateTimeNow && m.Date > date
                         && ((int)m.MatchStatus < (int)MatchStatus.P || m.MatchStatus == MatchStatus.LIVE))
             .ToListAsync();
         return matches;

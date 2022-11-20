@@ -18,6 +18,7 @@ public class MatchRepository : IMatchRepository
 
     public async Task<IEnumerable<MatchEntity>> GetFinishedMatches(int leagueId = 1, int? season = 2022) //default World Cup loaded
     {
+        var dateTimeNow = DateTimeHelper.GetNow();
         var finishedStatus = new List<int>
         {
             (int)MatchStatus.FT,
@@ -27,7 +28,7 @@ public class MatchRepository : IMatchRepository
         var finished = await _context.MatchEntities
             .Where(m =>
                 finishedStatus.Any(f => f == (int)m.MatchStatus)
-                && m.Date < DateTime.Now
+                && m.Date < dateTimeNow
                 && m.LeagueId == leagueId
                 && m.Season == season)
             .ToListAsync();
