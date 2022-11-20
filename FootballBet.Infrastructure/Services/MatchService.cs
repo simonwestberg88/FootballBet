@@ -3,6 +3,7 @@ using FootballBet.Infrastructure.Interfaces;
 using FootballBet.Infrastructure.Mappers;
 using FootballBet.Repository.Repositories.Interfaces;
 using FootballBet.Shared.Models.Match;
+using Microsoft.Extensions.Logging;
 
 namespace FootballBet.Infrastructure.Services;
 
@@ -17,10 +18,13 @@ public class MatchService: IMatchService
 {
     private readonly IFootballApiClient _footballApiClient;
     private readonly IFootballRepository _footballRepository;
-    public MatchService(IFootballApiClient footballApiClient, IFootballRepository footballRepository)
+    private readonly ILogger<MatchService> _logger;
+
+    public MatchService(IFootballApiClient footballApiClient, IFootballRepository footballRepository, ILogger<MatchService> logger)
     {
         _footballApiClient = footballApiClient;
         _footballRepository = footballRepository;
+        _logger = logger;
     }
 
     public async Task<string> SeedMatchesAsync(int leagueId, string season)
@@ -44,8 +48,8 @@ public class MatchService: IMatchService
 
     public async Task UpdateLiveMatchesAsync()
     {
-        var liveMatches = await _footballRepository.GetMatchesAsync(1, TimeSpan.FromHours(4));
-        
+        var liveMatches = (await _footballRepository.GetMatchesAsync(1, TimeSpan.FromHours(4))).ToList();
+        _logger.LogInformation("Live matches: {Matches}",  string.Join(", ", liveMatches.Select(m => m.Id).ToList()));
         foreach (var match in liveMatches)
         {
             var liveMatch = await _footballApiClient.GetMatch(match.Id);

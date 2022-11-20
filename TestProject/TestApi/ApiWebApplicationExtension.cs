@@ -50,5 +50,10 @@ public static class ApiWebApplicationExtension
         app.MapGet("/test/bettingGroup/all",
             async (string userId, IGroupService service) =>
                 await service.ListGroupsForUser(userId, CancellationToken.None));
+
+        app.MapPost("test/backgroundService/livematches", async (IMatchService matchservice) =>
+        {
+            await matchservice.UpdateLiveMatchesAsync();
+        });
     }
 }
