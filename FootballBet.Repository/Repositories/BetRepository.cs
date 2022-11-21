@@ -48,7 +48,7 @@ public class BetRepository : IBetRepository
             throw new InvalidOperationException("Match not found");
         if (match.MatchStatus != MatchStatus.NS)
             throw new InvalidOperationException("Can only place bets on matches that are not started yet");
-        if (match.Date > DateTimeHelper.GetNow())
+        if (match.Date < DateTimeHelper.GetNow())
         {
             throw new InvalidOperationException("Cannot place bets on matches that have already started");
         }
