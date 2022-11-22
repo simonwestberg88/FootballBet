@@ -80,6 +80,7 @@ public class BetService : IBetService
         {
             MatchStatus.TBD => false,
             MatchStatus.NS => false,
+            MatchStatus.PST => false,
             _ => true
         };
 }
