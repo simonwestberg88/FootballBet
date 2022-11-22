@@ -36,12 +36,15 @@ public class BetRepository : IBetRepository
     public async Task<BetEntity> PlaceBetAsync(BetEntity bet)
     {
         //check if bet for user and match already exists
-        var existingBet = await _context.BetEntities.SingleOrDefaultAsync(b =>
-            b.UserId == bet.UserId && b.MatchId == bet.MatchId && b.BettingGroupId == bet.BettingGroupId);
-        if (existingBet is not null)
+        var existingBets = await _context.BetEntities.Where(b =>
+            b.UserId == bet.UserId && b.MatchId == bet.MatchId && b.BettingGroupId == bet.BettingGroupId).ToListAsync();
+        if (existingBets is not null)
         {
-            _context.BetEntities.Attach(existingBet);
-            _context.BetEntities.Remove(existingBet);
+            foreach (var existingBet in existingBets)
+            {
+                _context.BetEntities.Attach(existingBet);
+                _context.BetEntities.Remove(existingBet);
+            }
         }
         var match = await _context.MatchEntities.FindAsync(bet.MatchId);
         if (match is null)
