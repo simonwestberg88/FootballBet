@@ -29,7 +29,7 @@
             </MudGrid>
             @if (UserBet is not null)
             {
-                <UserBetComponent UserBet="@UserBet" BaseWinString="@_baseWinString" />
+                <UserBetComponent Match="@MatchData" UserBet="@UserBet" BaseWinString="@_baseWinString" />
             }
         </TitleContent>
         <ChildContent>
@@ -58,7 +58,7 @@
             else if (_groupVisibleBetDtos != null)
             {
                 <CascadingValue Value="@MatchData" Name="Match">
-                    <CascadingValue Value="@_groupVisibleBetDtos" Name="UserBets">                        
+                    <CascadingValue Value="@_groupVisibleBetDtos" Name="UserBets">
                         <GroupBetsForMatchComponent></GroupBetsForMatchComponent>
                     </CascadingValue>
                 </CascadingValue>

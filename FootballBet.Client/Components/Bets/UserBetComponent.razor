@@ -1,20 +1,43 @@
+@using FootballBet.Client.Helpers
 @using FootballBet.Shared.Models.Bets
+@using FootballBet.Shared.Models.Match
 
 
 <MudSimpleTable Style="display: flex; flex-direction: row">
     <thead>
-    <tr>
-        <th>Your bet</th>
-        <th>Base win</th>
-        <th>Max win</th>
-    </tr>
+        <tr>
+            <th>Your bet</th>
+            <th>Base win</th>
+            <th>Max win</th>
+        </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>@($"{UserBet?.HomeGoals} - {UserBet?.AwayGoals}")</td>
-        <td>@UserBet?.PotentialBaseWin</td>
-        <td>@UserBet?.PotentialWin</td>
-    </tr>
+        @if (UserBet is not null)
+        {
+            <tr bgcolor="@BetHelper.GetBackGroundColorDependingOnStatus(Match, (BetResponse)UserBet)">
+                <td>@($"{UserBet?.HomeGoals} - {UserBet?.AwayGoals}")</td>
+                @if (@MatchHelper.GetTypeOfWin(Match, (BetResponse)UserBet) == "exact" && Match.MatchStatus == "Match Finished")
+                {
+                    <td><del>@UserBet?.PotentialBaseWin</del></td>
+                    <td><ins>@UserBet?.PotentialWin</ins></td>
+                }
+                else if (@MatchHelper.GetTypeOfWin(Match, (BetResponse)UserBet) == "base" && Match.MatchStatus == "Match Finished")
+                {
+                    <td><ins>@UserBet?.PotentialBaseWin</ins></td>
+                    <td><del>@UserBet?.PotentialWin</del></td>
+                }
+                else if (@MatchHelper.GetTypeOfWin(Match, (BetResponse)UserBet) == "lost" && Match.MatchStatus == "Match Finished")
+                {
+                    <td><del>@UserBet?.PotentialBaseWin</del></td>
+                    <td><del>@UserBet?.PotentialWin</del></td>
+                }
+                else
+                {
+                    <td>@UserBet?.PotentialBaseWin</td>
+                    <td>@UserBet?.PotentialWin</td>
+                }
+            </tr>
+        }
     </tbody>
 </MudSimpleTable>
 
@@ -25,5 +48,6 @@
     public BetResponse? UserBet { get; set; }
     [Parameter]
     public string? BaseWinString { get; set; }
-
+    [Parameter]
+    public MatchDto Match { get; set; }
 }
