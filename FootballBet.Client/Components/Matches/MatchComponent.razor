@@ -24,12 +24,12 @@
                 </MudItem>
                 <MudItem xs="3" Style="display: flex; flex-direction: column; justify-content: center; align-items: center">
                     <MudText>@MatchData.AwayTeamName</MudText>
-                    <MudImage Src="@MatchData.AwayTeamLogo"  Height="Height"></MudImage>
+                    <MudImage Src="@MatchData.AwayTeamLogo" Height="Height"></MudImage>
                 </MudItem>
             </MudGrid>
             @if (UserBet is not null)
             {
-                <UserBetComponent UserBet="@UserBet" BaseWinString="@_baseWinString" /> 
+                <UserBetComponent UserBet="@UserBet" BaseWinString="@_baseWinString" />
             }
         </TitleContent>
         <ChildContent>
@@ -55,9 +55,13 @@
                     </MudExpansionPanel>
                 </MudExpansionPanels>
             }
-            else if(_groupVisibleBetDtos != null)
+            else if (_groupVisibleBetDtos != null)
             {
-                <GroupBetsForMatchComponent UserBets="_groupVisibleBetDtos"></GroupBetsForMatchComponent>
+                <CascadingValue Value="@MatchData" Name="Match">
+                    <CascadingValue Value="@_groupVisibleBetDtos" Name="UserBets">                        
+                        <GroupBetsForMatchComponent></GroupBetsForMatchComponent>
+                    </CascadingValue>
+                </CascadingValue>
             }
         </ChildContent>
     </MudExpansionPanel>

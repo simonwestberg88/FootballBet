@@ -1,23 +1,25 @@
 ﻿@using FootballBet.Shared.Models.Bets
+@using FootballBet.Shared.Models.Match
 
 
 <MudSimpleTable Style="display: flex; flex-direction: row">
     <thead>
         <tr>
             <th>Nickname</th>
+            <th>Bet</th>
             <th>Base win</th>
             <th>Max win</th>
-            <th>Bet</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var bet in UserBets)
         {
-            <tr>
+
+            <tr bgcolor="@GetBackGroundColorDependingOnStatus(bet)">
                 <td>@($"{bet?.Nickname}")</td>
+                <td>@(bet.BetDto.HomeGoals)&nbsp-&nbsp@(bet.BetDto.AwayGoals)</td>
                 <td>@bet.BetDto.PotentialBaseWin</td>
                 <td>@bet.BetDto.PotentialWin</td>
-                <td>@bet.BetDto.HomeGoals - @bet.BetDto.AwayGoals</td>
             </tr>
         }
     </tbody>
@@ -25,8 +27,32 @@
 
 
 @code {
-
-    [Parameter]
+    [CascadingParameter(Name = "Match")]
+    public MatchDto Match { get; set; }
+    [CascadingParameter(Name = "UserBets")]
     public List<GroupVisibleBetDto>? UserBets { get; set; }
 
+    private string GetBackGroundColorDependingOnStatus(GroupVisibleBetDto userBet)
+        => Match.MatchStatus == "Match Finished"
+        ? GetTypeOfWin(userBet) switch
+        {
+            "exact" => "#90F166",
+            "base" => "#EBF166",
+            _ => "#F58702"
+        }
+        : "#FFFFFF";
+
+
+    private string GetTypeOfWin(GroupVisibleBetDto userBet)
+    {
+        if (Match.AwayFulltimeGoals == userBet.BetDto.AwayGoals && Match.HomeFulltimeGoals == userBet.BetDto.HomeGoals)
+            return "exact";
+        //base win
+        if ((Match.AwayFulltimeGoals < Match.HomeFulltimeGoals && userBet.BetDto.AwayGoals < userBet.BetDto.HomeGoals)
+            || (Match.AwayFulltimeGoals > Match.HomeFulltimeGoals && userBet.BetDto.AwayGoals > userBet.BetDto.HomeGoals)
+            || (Match.AwayFulltimeGoals == Match.HomeFulltimeGoals && userBet.BetDto.AwayGoals == userBet.BetDto.HomeGoals))
+            return "base";
+        //lost
+        return "lost";
+    }
 }
