@@ -9,7 +9,7 @@
 @inject NavigationManager MyNavigationManager;
 
 <MudPaper Elevation="2" Style="margin-top: 10px">
-    <MudExpansionPanel @bind-IsExpanded="_isOpen" @onclick="GetOddsForGame" HideIcon="true">
+    <MudExpansionPanel @bind-IsExpanded="_isOpen" @onclick="GetOddsForGame" HideIcon="true" DisableGutters="true">
         <TitleContent>
             <MudGrid>
                 <MudItem xs="3" Style="display: flex; flex-direction: column; justify-content: center; align-items: center">
@@ -33,17 +33,17 @@
             }
         </TitleContent>
         <ChildContent>
-            <MudText Style="padding-top: 10px">@(MatchData.MatchStatus)</MudText>
+            <MudText Style="padding-top: 10px; padding-left: 16px">@(MatchData.MatchStatus)</MudText>
             @if (Odds != null && MatchData.MatchStatus == "Not started")
             {
                 <MudDivider Style="margin-top: 10px; margin-bottom: 10px" />
-                <MudText Typo="Typo.h6" Style="padding-top: 10px">Base Odds</MudText>
+                <MudText Typo="Typo.h6" Style="padding-top: 10px; padding-left: 16px">Base Odds</MudText>
                 <OddsMatchWinnerComponent HomeOdds="@_baseOdds?.Home.Odds"
                                       AwayOdds="@_baseOdds?.Away.Odds"
                                       DrawOdds="@_baseOdds?.Draw.Odds" />
                 <MudDivider Style="margin-top: 10px; margin-bottom: 10px" />
-                <MudText Typo="Typo.h6">Exact odds</MudText>
-                <MudExpansionPanels>
+                <MudText Typo="Typo.h6" Style="padding-left: 16px">Exact odds</MudText>
+                <MudExpansionPanels DisableGutters="true">
                     <MudExpansionPanel Text="Home">
                         <OddsListComponent Odds="_homeOdds" MatchId="MatchData.MatchId" MatchStatus=@MatchData.MatchStatus UserHasMadeBet="UserHasMadeBet" />
                     </MudExpansionPanel>
