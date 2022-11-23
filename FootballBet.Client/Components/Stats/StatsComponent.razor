@@ -11,7 +11,7 @@
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="User">@context.UserName</MudTd>
-            <MudTd DataLabel="Balance">@context.Balance</MudTd>
+            <MudTd DataLabel="Balance">@string.Format("{0:0}", context.Balance)</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{50, 100}" />

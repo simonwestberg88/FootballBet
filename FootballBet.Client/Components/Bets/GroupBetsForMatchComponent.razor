@@ -21,23 +21,23 @@
                 <td>@(bet.BetDto.HomeGoals)&nbsp-&nbsp@(bet.BetDto.AwayGoals)</td>
                 @if (@MatchHelper.GetTypeOfWin(Match, bet.BetDto) == "exact" && Match.MatchStatus == "Match Finished")
                 {
-                    <td><del>@bet.BetDto.PotentialBaseWin</del></td>
-                    <td><ins>@bet.BetDto.PotentialWin</ins></td>
+                    <td><del>@string.Format("{0:0}", bet.BetDto.PotentialBaseWin)</del></td>
+                    <td><ins>@string.Format("{0:0}", bet.BetDto.PotentialWin)</ins></td>
                 }
                 else if (@MatchHelper.GetTypeOfWin(Match, bet.BetDto) == "base" && Match.MatchStatus == "Match Finished")
                 {
-                    <td><ins>@bet.BetDto.PotentialBaseWin</ins></td>
-                    <td><del>@bet.BetDto.PotentialWin</del></td>
+                    <td><ins>@string.Format("{0:0}", bet.BetDto.PotentialBaseWin)</ins></td>
+                    <td><del>@string.Format("{0:0}", bet.BetDto.PotentialWin)</del></td>
                 }
                 else if (@MatchHelper.GetTypeOfWin(Match, bet.BetDto) == "lost" && Match.MatchStatus == "Match Finished")
                 {
-                    <td><del>@bet.BetDto.PotentialBaseWin</del></td>
-                    <td><del>@bet.BetDto.PotentialWin</del></td>
+                    <td><del>@string.Format("{0:0}", bet.BetDto.PotentialBaseWin)</del></td>
+                    <td><del>@string.Format("{0:0}", bet.BetDto.PotentialWin)</del></td>
                 }
                 else
                 {
-                    <td>@bet.BetDto.PotentialBaseWin</td>
-                    <td>@bet.BetDto.PotentialWin</td>
+                    <td>@string.Format("{0:0}", bet.BetDto.PotentialBaseWin)</td>
+                    <td>@string.Format("{0:0}", bet.BetDto.PotentialWin)</td>
                 }
             </tr>
         }
