@@ -1,0 +1,17 @@
+@inject NavigationManager NavigationManager
+<MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1">
+    <MudContainer Style="display: flex; flex-direction: row; justify-content: space-between; align-items: center">
+        <MudText>Balance: 0</MudText>
+        <MudIconButton @onclick="NavigateToMyGroups" Icon="@Icons.Sharp.SportsSoccer" Size="Size.Large" Color="Color.Tertiary"/>
+        <LoginDisplay/>
+    </MudContainer>
+</MudAppBar>
+
+@code {
+
+    private void NavigateToMyGroups()
+    {
+        NavigationManager.NavigateTo($"/");
+    }
+
+}

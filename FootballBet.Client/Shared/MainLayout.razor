@@ -6,6 +6,7 @@
 <MudSnackbarProvider />
 
 <MudLayout>
+    <AppBarComponent></AppBarComponent>
     <MudMainContent Class="pt-0">
         <CascadingValue Value="@_theme" Name="_theme">
             <article>
@@ -13,16 +14,6 @@
             </article>
         </CascadingValue>
     </MudMainContent>
-    <div style="height: 100px"></div>
-    <MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1">
-        <MudSpacer />
-        <MudSpacer />
-        <MudSpacer />
-        <MudIconButton @onclick="NavigateToMyGroups" Icon="@Icons.Sharp.SportsSoccer" Size="Size.Large" Color="Color.Tertiary" />
-        <MudSpacer />
-        <MudSpacer />
-        <LoginDisplay />
-    </MudAppBar>
 </MudLayout>
 
 @code {

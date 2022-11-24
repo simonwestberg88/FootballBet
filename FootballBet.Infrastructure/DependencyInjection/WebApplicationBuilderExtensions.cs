@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace FootballBet.Infrastructure.DependencyInjection;
@@ -30,9 +31,12 @@ public static class WebApplicationBuilderExtensions
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
         builder.Services.AddIdentityServer(options =>
-        {
-            options.IssuerUri = "https://footballbet.online/";
-        })
+            {
+                if (!builder.Environment.IsDevelopment())
+                {
+                    options.IssuerUri = "https://footballbet.online/";
+                }
+            })
             .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
     }
 
