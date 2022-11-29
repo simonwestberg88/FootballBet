@@ -99,6 +99,19 @@ namespace FootballBet.Infrastructure.Services
             };
         }
 
+        public async Task<AppBarStatsDto> GetAppBarStatsAsync(string groupId, string userId)
+        {
+            var (exactWins, baseWins, losses) = await _betRepository.GetBetStatsAsync(groupId, userId);
+            var balance = (await _betRepository.GetUserBalanceForGroupAsync(userId, groupId)).Balance;
+            return new AppBarStatsDto
+            {
+                ExactWins = exactWins,
+                BaseWins = baseWins,
+                Losses = losses,
+                Balance = balance
+            };
+        }
+
         private static MatchWinnerEntityEnum GetMatchWinner(MatchEntity match)
         {
             if (match.HomeFulltimeGoals > match.AwayFulltimeGoals)

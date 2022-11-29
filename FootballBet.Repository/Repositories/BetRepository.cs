@@ -46,6 +46,7 @@ public class BetRepository : IBetRepository
                 _context.BetEntities.Remove(existingBet);
             }
         }
+
         var match = await _context.MatchEntities.FindAsync(bet.MatchId);
         if (match is null)
             throw new InvalidOperationException("Match not found");
@@ -74,7 +75,7 @@ public class BetRepository : IBetRepository
             throw new InvalidOperationException("Odds not found");
         var payoutAmount = bet.WagerAmount * oddsForBet.Odds;
         var userBalance = await _context.UserBalanceEntities.SingleOrDefaultAsync(ub => ub.UserId == bet.UserId
-                            && bet.BettingGroupId == ub.GroupId);
+            && bet.BettingGroupId == ub.GroupId);
         if (userBalance is null)
             throw new InvalidOperationException("User balance not found");
         userBalance.Balance += payoutAmount;
@@ -98,9 +99,10 @@ public class BetRepository : IBetRepository
         {
             throw new InvalidOperationException("Base odds not found");
         }
+
         var payoutAmount = bet.WagerAmount * baseOdds.Odds;
         var userBalance = await _context.UserBalanceEntities.SingleOrDefaultAsync(ub => ub.UserId == bet.UserId
-                                                                          && bet.BettingGroupId == ub.GroupId);
+            && bet.BettingGroupId == ub.GroupId);
         if (userBalance is null)
             throw new InvalidOperationException("User balance not found");
         userBalance.Balance += payoutAmount;
@@ -115,6 +117,18 @@ public class BetRepository : IBetRepository
     public async Task<IEnumerable<UserBalanceEntity>> GetUserBalancesForGroupAsync(string groupId)
         => await _context.UserBalanceEntities?.Where(x => x.GroupId == groupId).ToListAsync();
 
+    public async Task<(int exactWins, int baseWins, int losses)> GetBetStatsAsync(string groupId, string userId)
+    {
+        var userBets =  await _context.BetEntities
+            .Where(b => b.Processed && b.UserId == userId && b.BettingGroupId == groupId).ToListAsync();
+        var winningOddsIds = userBets.Where(b => b.IsWinningBet == true).Select(b => b.OddsId).ToList();
+        var losingOddsIds = userBets.Where(b => b.IsWinningBet == false).Select(b => b.OddsId).ToList();
+        var exactWins = await _context.ExactScoreOddsEntities.CountAsync(e => winningOddsIds.Contains(e.Id));
+        var baseWins = await _context.BaseOddsEntities.CountAsync(b => winningOddsIds.Contains(b.Id));
+        var losses = losingOddsIds.Count;
+        return (exactWins, baseWins, losses);
+    }
+
     public async Task ProcessLossAsync(int betId)
     {
         var bet = await _context.BetEntities.FindAsync(betId);
@@ -127,5 +141,4 @@ public class BetRepository : IBetRepository
 
     public async Task<List<BetEntity>> GetBetsForGroupAndGameAsync(int matchId, string groupId)
         => await _context.BetEntities.Where(b => b.BettingGroupId == groupId && b.MatchId == matchId).ToListAsync();
-
 }
