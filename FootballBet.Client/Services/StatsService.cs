@@ -5,7 +5,7 @@ namespace FootballBet.Client.Services;
 
 public interface IStatsService
 {
-    public Task<AppBarStatsDto> GetAppBarStats();
+    public Task<AppBarStatsDto> GetAppBarStats(string groupId);
 }
 public class StatsService: IStatsService
 {
@@ -14,9 +14,9 @@ public class StatsService: IStatsService
     {
         _httpClient = httpClient;
     }
-    public async Task<AppBarStatsDto> GetAppBarStats()
+    public async Task<AppBarStatsDto> GetAppBarStats(string groupId)
     {
-        var response = await _httpClient.GetFromJsonAsync<AppBarStatsDto>("api/stats/appbar");
+        var response = await _httpClient.GetFromJsonAsync<AppBarStatsDto>($"api/stats/appbar?groupId={groupId}");
         return response;
     }
 }

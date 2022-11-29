@@ -1,18 +1,24 @@
+@using FootballBet.Shared.Models.Stats
 @inject NavigationManager NavigationManager
 <MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1">
     <MudContainer Style="display: flex; flex-direction: row; justify-content: space-around; align-items: center">
-        <MudText>@Stats</MudText>
+        @if (Stats.HasValue)
+        {
+            <MudText>@($"{Stats.Value.Balance}  {Stats.Value.ExactWins}/{Stats.Value.BaseWins}/{Stats.Value.Losses}")</MudText>
+        }
         <MudIconButton @onclick="NavigateToMyGroups" Icon="@Icons.Sharp.SportsSoccer" Size="Size.Large" Color="Color.Tertiary"/>
         <LoginDisplay/>
     </MudContainer>
 </MudAppBar>
 
 @code {
+
     [Parameter]
-    public string? Stats { get; set; }
+    public AppBarStatsDto? Stats { get; set; }
 
     private void NavigateToMyGroups()
     {
         NavigationManager.NavigateTo($"/");
     }
+
 }
