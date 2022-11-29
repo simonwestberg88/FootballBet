@@ -1,7 +1,10 @@
 @using FootballBet.Shared.Models.Match
 @using FootballBet.Client.Services
+@using FootballBet.Shared.Models.Stats
+@inject IStatsService StatsService
+@inject NavigationManager MyNavigationManager;
 
-<AppBarComponent Stats="2504 3/5/20"></AppBarComponent>
+<AppBarComponent Stats="@_appBarStats"></AppBarComponent>
 <MudPaper>
     <MudList>
         @foreach (var round in _matches.Select(m => m.Round).Distinct())
@@ -36,8 +39,12 @@
     [Parameter]
     public bool HideFinishedGames { get; set; }
 
+    private AppBarStatsDto _appBarStats;  
+
     protected override async Task OnInitializedAsync()
     {
+        var groupId = MyNavigationManager.Uri.Split("/").Last();
+        _appBarStats = await StatsService.GetAppBarStats(groupId);
         await base.OnInitializedAsync();
     }
 
