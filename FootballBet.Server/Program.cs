@@ -22,6 +22,7 @@ app.AddMatchesApi();
 app.AddUserApi();
 app.AddBetApi();
 app.AddOddsApi();
+app.AddstatsApi();
 
 if (app.Environment.IsDevelopment())
 {

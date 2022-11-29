@@ -26,6 +26,7 @@ public static class ServiceCollectionExtensions
             .AddTransient<IBetPayoutService, BetPayoutService>()
             .AddTransient<IStatsService, StatsService>()
             .AddTransient<IOddsService, OddsService>()
+            .AddTransient<IStatsService, StatsService>()
             .AddHostedService<BetPayoutBackgroundService>()
             .AddHostedService<SeedMatchesBackgroundService>()
             .AddHostedService<SeedOddsBackgroundService>()
