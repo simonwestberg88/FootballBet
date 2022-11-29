@@ -1,12 +1,11 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager navigationManager
 
-<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme" />
-<MudDialogProvider />
-<MudSnackbarProvider />
+<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme"/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
 
 <MudLayout>
-    <AppBarComponent></AppBarComponent>
     <MudMainContent Class="pt-0">
         <CascadingValue Value="@_theme" Name="_theme">
             <article>
@@ -19,15 +18,15 @@
 @code {
     private bool _isDarkMode = false;
     private MudTheme _theme = new()
+    {
+        Palette = new()
         {
-            Palette = new()
-            {
-                Primary = "8CB369",
-                Secondary = "92D5E6",
-                Tertiary = "F0A868",
-                AppbarBackground = "F0A868"
-            }
-        };
+            Primary = "8CB369",
+            Secondary = "92D5E6",
+            Tertiary = "F0A868",
+            AppbarBackground = "F0A868"
+        }
+    };
 
     private void NavigateToMyGroups()
     {

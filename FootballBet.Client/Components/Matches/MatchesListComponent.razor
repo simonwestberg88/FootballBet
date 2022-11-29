@@ -1,7 +1,7 @@
 @using FootballBet.Shared.Models.Match
 @using FootballBet.Client.Services
 
-
+<AppBarComponent Stats="2504 3/5/20"></AppBarComponent>
 <MudPaper>
     <MudList>
         @foreach (var round in _matches.Select(m => m.Round).Distinct())
