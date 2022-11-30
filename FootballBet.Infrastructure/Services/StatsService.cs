@@ -95,13 +95,13 @@ namespace FootballBet.Infrastructure.Services
                 {
                     Id = x.UserId,
                     UserName = x.Nickname,
-                    Balance = users.FirstOrDefault(u => u.UserId == x.UserId).Balance,
+                    Balance = users.FirstOrDefault(u => u.UserId == x.UserId)?.Balance ?? 0,
                     Stats = new BetStatsDto
                     {
-                        Balance = users.FirstOrDefault(u => u.UserId == x.UserId).Balance,
-                        Losses = betStats.FirstOrDefault(s => s.UserId == x.UserId).Losses,
-                        BaseWins = betStats.FirstOrDefault(s => s.UserId == x.UserId).BaseWins,
-                        ExactWins = betStats.FirstOrDefault(s => s.UserId == x.UserId).ExactWins
+                        Balance = users.FirstOrDefault(u => u.UserId == x.UserId)?.Balance ?? 0,
+                        Losses = betStats.FirstOrDefault(s => s.UserId == x.UserId)?.Losses ?? 0,
+                        BaseWins = betStats.FirstOrDefault(s => s.UserId == x.UserId)?.BaseWins ?? 0,
+                        ExactWins = betStats.FirstOrDefault(s => s.UserId == x.UserId)?.ExactWins ?? 0
                     } 
                 }).ToList()
             };
