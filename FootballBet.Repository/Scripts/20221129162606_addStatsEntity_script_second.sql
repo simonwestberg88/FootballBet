@@ -1,5 +1,4 @@
-USE FootballBet
-
+--USE FootballBet
 declare @oddsId           int
 declare @userId           varchar(64)
 declare @groupId          varchar(64)
@@ -53,7 +52,7 @@ WHILE @@FETCH_STATUS = 0
         CLOSE bet_cursor
         DEALLOCATE bet_cursor
 
-        select @statsLosses =  count(*) from BetEntities b where b.Processed = 1 and b.IsWinningBet = 0
+        select @statsLosses =  count(*) from BetEntities b where b.UserId = @userId AND b.BettingGroupId = @groupId AND b.Processed = 1 and b.IsWinningBet = 0
 
         update StatEntities
         set ExactWins = @statsExactWins,
@@ -61,7 +60,9 @@ WHILE @@FETCH_STATUS = 0
             Losses    = @statsLosses
         where UserId = @userId
           and GroupId = @groupId
-        
+        SET @statsExactWins = 0
+		SET @statsBaseWins = 0
+		SET @statsLosses = 0
         Fetch Next From BettingGroupMembersCursor INTO @userId, @groupId
     END
 CLOSE BettingGroupMembersCursor
