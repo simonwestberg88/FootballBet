@@ -146,6 +146,9 @@ public class BetRepository : IBetRepository
         return stats;
     }
 
+    public async Task<IEnumerable<StatEntity>> GetBetStatsAsync(string groupId)
+        => await _context.StatEntities.Where(s => s.GroupId == groupId).ToListAsync();
+
     public async Task ProcessLossAsync(int betId)
     {
         var bet = await _context.BetEntities.FindAsync(betId);
