@@ -8,15 +8,10 @@
         <HeaderContent>
             <MudTh><MudTableSortLabel SortBy="new Func<UserDto, object>(x=>x.UserName)">User</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel Enabled="@enabled" SortBy="new Func<UserDto, object>(x=>x.Balance)">Balance</MudTableSortLabel></MudTh>
-            <MudTh>Bet stats (Exact/Base/Losses)</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="User">@context.UserName</MudTd>
             <MudTd DataLabel="Balance">@string.Format("{0:0}", context.Balance)</MudTd>
-            
-            <MudTd DataLabel="Bet stats (Exact/Base/Losses)">
-                @(context.Stats.HasValue ? $"{context.Stats.Value.ExactWins}/{context.Stats.Value.BaseWins}/{context.Stats.Value.Losses}" : "0/0/0")
-            </MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{50, 100}" />

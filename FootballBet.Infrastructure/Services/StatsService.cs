@@ -88,30 +88,22 @@ namespace FootballBet.Infrastructure.Services
         {
             var users = await _betRepository.GetUserBalancesForGroupAsync(groupId);
             var members = await _groupRepository.GetBettingGroupMembersAsync(groupId);
-            var betStats = await _betRepository.GetBetStatsAsync(groupId);
             return new GameDayStatsContainerShared()
             {
                 Members = members.Select(x => new UserDto()
                 {
                     Id = x.UserId,
                     UserName = x.Nickname,
-                    Balance = users.FirstOrDefault(u => u.UserId == x.UserId).Balance,
-                    Stats = new BetStatsDto
-                    {
-                        Balance = users.FirstOrDefault(u => u.UserId == x.UserId).Balance,
-                        Losses = betStats.FirstOrDefault(s => s.UserId == x.UserId).Losses,
-                        BaseWins = betStats.FirstOrDefault(s => s.UserId == x.UserId).BaseWins,
-                        ExactWins = betStats.FirstOrDefault(s => s.UserId == x.UserId).ExactWins
-                    } 
+                    Balance = users.FirstOrDefault(u => u.UserId == x.UserId).Balance
                 }).ToList()
             };
         }
 
-        public async Task<BetStatsDto> GetAppBarStatsAsync(string groupId, string userId)
+        public async Task<AppBarStatsDto> GetAppBarStatsAsync(string groupId, string userId)
         {
             var stats = await _betRepository.GetBetStatsAsync(groupId, userId);
             var balance = (await _betRepository.GetUserBalanceForGroupAsync(userId, groupId)).Balance;
-            return new BetStatsDto
+            return new AppBarStatsDto
             {
                 ExactWins = stats.ExactWins,
                 BaseWins = stats.BaseWins,

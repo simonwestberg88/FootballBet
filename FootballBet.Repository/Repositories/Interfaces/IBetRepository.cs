@@ -18,6 +18,4 @@ public interface IBetRepository
     public Task<UserBalanceEntity> GetUserBalanceForGroupAsync(string userId, string groupId);
     public Task<IEnumerable<UserBalanceEntity>> GetUserBalancesForGroupAsync(string groupId);
     public Task<StatEntity> GetBetStatsAsync(string groupId, string userId);
-    public Task<IEnumerable<StatEntity>> GetBetStatsAsync(string groupId);
-
 }
