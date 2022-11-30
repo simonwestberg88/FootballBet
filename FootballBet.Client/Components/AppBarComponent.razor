@@ -4,7 +4,9 @@
     <MudContainer Style="display: flex; flex-direction: row; justify-content: space-around; align-items: center">
         @if (Stats.HasValue)
         {
-            <MudText>@($"{Stats.Value.Balance}  {Stats.Value.ExactWins}/{Stats.Value.BaseWins}/{Stats.Value.Losses}")</MudText>
+            <MudTooltip Text="Bet stats Exact/Base/Losses">
+                <MudText>@($"{Stats.Value.Balance:0}  {Stats.Value.ExactWins}/{Stats.Value.BaseWins}/{Stats.Value.Losses}")</MudText>
+            </MudTooltip>
         }
         <MudIconButton @onclick="NavigateToMyGroups" Icon="@Icons.Sharp.SportsSoccer" Size="Size.Large" Color="Color.Tertiary"/>
         <LoginDisplay/>
@@ -14,7 +16,7 @@
 @code {
 
     [Parameter]
-    public AppBarStatsDto? Stats { get; set; }
+    public BetStatsDto? Stats { get; set; }
 
     private void NavigateToMyGroups()
     {
