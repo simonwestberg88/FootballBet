@@ -145,9 +145,9 @@ namespace FootballBet.Infrastructure.Services
             };
         }
 
-        public async Task<WinStatsResponse> GetTop3WinStatsAsync(string groupId)
+        public async Task<WinStatsResponse> GetTop10WinStatsAsync(string groupId)
         {
-            var wins = (await _statRepository.GetTop3WinsAsync(groupId)).ToList();
+            var wins = (await _statRepository.GetTop10WinsAsync(groupId)).ToList();
             // map wins to WinStats object
             var winStats = wins.Select(w => new WinStats
             {

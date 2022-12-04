@@ -6,7 +6,7 @@ namespace FootballBet.Repository.Repositories;
 public interface IStatRepository
 {
     public Task<IEnumerable<WinEntity>> GetWinsAsync(string groupId);
-    public Task<IEnumerable<WinEntity>> GetTop3WinsAsync(string groupId);
+    public Task<IEnumerable<WinEntity>> GetTop10WinsAsync(string groupId);
     public Task<IEnumerable<WinEntity>> GetWinsAsync(string groupId, string userId);
 }
 
@@ -22,9 +22,9 @@ public class StatRepository : IStatRepository
     public async Task<IEnumerable<WinEntity>> GetWinsAsync(string groupId)
         => await _context.WinEntities.Where(w => w.GroupId == groupId).ToListAsync();
 
-    public async Task<IEnumerable<WinEntity>> GetTop3WinsAsync(string groupId)
+    public async Task<IEnumerable<WinEntity>> GetTop10WinsAsync(string groupId)
         => await _context.WinEntities.Where(w => w.GroupId == groupId)
-            .OrderByDescending(x => x.Amount).Take(3)
+            .OrderByDescending(x => x.Amount).Take(10)
             .ToListAsync();
 
     public async Task<IEnumerable<WinEntity>> GetWinsAsync(string groupId, string userId)

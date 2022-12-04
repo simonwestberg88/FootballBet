@@ -16,7 +16,7 @@ public static class StatsApi
         //get top 3 wins for group
         app.MapGet("api/stats/topwins",
             async (string groupId, IStatsService service) =>
-                await service.GetTop3WinStatsAsync(groupId)
+                await service.GetTop10WinStatsAsync(groupId)
         );
     }
 }
