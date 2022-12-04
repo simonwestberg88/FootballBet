@@ -18,5 +18,10 @@ public static class StatsApi
             async (string groupId, IStatsService service) =>
                 await service.GetTop10WinStatsAsync(groupId)
         );
+        
+        app.MapGet("api/stats/chart",
+            async (string groupId, IStatsService service) =>
+                await service.GetChartStatsAsync(groupId)
+        );
     }
 }
