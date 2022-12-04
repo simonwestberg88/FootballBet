@@ -7,4 +7,5 @@ public class WinEntity
     public string UserId { get; set; }
     public decimal Amount { get; set; }
     public DateTime WinDate { get; set; }
+    public bool IsExactScoreWin { get; set; }
 }
