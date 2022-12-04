@@ -6,7 +6,7 @@ namespace FootballBet.Infrastructure.Interfaces
     {
         public Task<GameDayStatsContainerShared> GetStatsForGroupAsync(string groupId);
         public Task<BetStatsDto> GetAppBarStatsAsync(string groupId, string userId);
-        public Task<WinStatsResponse> GetWinStatsAsync(string groupId);
+        public Task<ChartResponse> GetChartStatsAsync(string groupId);
         public Task<WinStatsResponse> GetWinStatsAsync(string groupId, string userId);
         public Task<WinStatsResponse> GetTop10WinStatsAsync(string groupId);
     }
