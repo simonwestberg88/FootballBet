@@ -129,19 +129,34 @@ namespace FootballBet.Infrastructure.Services
             };
         }
 
-        public async Task<WinStatsResponse> GetWinStatsAsync(string groupId)
+        public async Task<ChartResponse> GetChartStatsAsync(string groupId)
         {
             var wins = (await _statRepository.GetWinsAsync(groupId)).ToList();
-            var winStats = wins.Select(w => new WinStats
+            var groupUsers = wins.GroupBy(g => g.UserId).ToList();
+            var userData = groupUsers.Select(g =>
             {
-                NickName = _userRepository.GetUserNickNameAsync(w.UserId ?? "", groupId).Result,
-                Date = w.WinDate,
-                WinAmount = w.Amount,
-                IsExactWin = w.IsExactScoreWin
-            }).ToList();
-            return new WinStatsResponse
+                var userName = _userRepository.GetUserNickNameAsync(g.Key, groupId).Result;
+                decimal total = 0;
+                var userWinsSorted = g.OrderBy(w => w.WinDate).ToList();
+                List<WinData> winData = new ();
+                foreach (var winEntity in userWinsSorted)
+                {
+                    total += winEntity.Amount;
+                    winData.Add(new WinData
+                    {
+                        Amount = total,
+                        Date = winEntity.WinDate
+                    });
+                }
+                return new UserData
+                {
+                    Username = userName,
+                    Wins = winData
+                };
+            });
+            return new ChartResponse
             {
-                WinStats = winStats
+                UserData = userData
             };
         }
 

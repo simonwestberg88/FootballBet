@@ -38,6 +38,7 @@
         <MudTd DataLabel="Amount">@($"{context.WinAmount:0}")</MudTd>
     </RowTemplate>
 </MudTable>
+<StatsChartComponent GroupId="@ThisGroupId"></StatsChartComponent>
 
 @code {
     [Parameter]

@@ -1,0 +1,38 @@
+@using System.Globalization
+@using FootballBet.Client.Services
+@using FootballBet.Shared.Models.Stats
+@inject IStatsService StatsService;
+
+
+<RadzenChart Style="height: 500px">
+    @foreach (var user in _userData)
+    {
+        <RadzenLineSeries Smooth="@smooth" Data="@user.Wins" CategoryProperty="Date" Title="@user.Username" LineType="LineType.Solid" ValueProperty="Amount">
+            <RadzenMarkers MarkerType="MarkerType.Square"/>
+            <RadzenSeriesDataLabels Visible="@showDataLabels"/>
+        </RadzenLineSeries>
+    }
+    <RadzenCategoryAxis Padding="20"/>
+    <RadzenValueAxis>
+        <RadzenGridLines Visible="true"/>
+        <RadzenAxisTitle Text="Points"/>
+    </RadzenValueAxis>
+</RadzenChart>
+
+@code {
+    bool smooth = false;
+    bool showDataLabels = false;
+
+    [Parameter]
+    public string GroupId { get; set; }
+
+    private IEnumerable<UserData> _userData = new List<UserData>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var chartResponse = await StatsService.GetChartStats(GroupId);
+        _userData = chartResponse.UserData;
+        await base.OnInitializedAsync();
+    }
+
+}
