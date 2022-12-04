@@ -3,33 +3,29 @@
 @using FootballBet.Shared.Models.Stats
 @inject IStatsService StatsService;
 
-<div class="container">
-        <div class="row">
-            <div class="col-sm-12 my-5">
-                <RadzenCard Class="w-100 mb-4" Style="display: flex; align-items: center; gap: 0.5rem" >
-                </RadzenCard>
-                <RadzenChart>
-                    @foreach (var user in _userData)
-                    {
-                        <RadzenLineSeries Smooth="@smooth" Data="@user.Wins" CategoryProperty="Date" Title="@user.Username" LineType="LineType.Solid" ValueProperty="Amount">
-                            <RadzenMarkers MarkerType="MarkerType.Square"/>
-                            <RadzenSeriesDataLabels Visible="@showDataLabels"/>
-                        </RadzenLineSeries>    
-                    }
-                    <RadzenCategoryAxis Padding="20"/>
-                    <RadzenValueAxis>
-                        <RadzenGridLines Visible="true"/>
-                        <RadzenAxisTitle Text="Points"/>
-                    </RadzenValueAxis>
-                </RadzenChart>
-            </div>
-        </div>
-    </div>
+
+<RadzenChart Style="height: 500px">
+    @foreach (var user in _userData)
+    {
+        <RadzenLineSeries Smooth="@smooth" Data="@user.Wins" CategoryProperty="Date" Title="@user.Username" LineType="LineType.Solid" ValueProperty="Amount">
+            <RadzenMarkers MarkerType="MarkerType.Square"/>
+            <RadzenSeriesDataLabels Visible="@showDataLabels"/>
+        </RadzenLineSeries>
+    }
+    <RadzenCategoryAxis Padding="20"/>
+    <RadzenValueAxis>
+        <RadzenGridLines Visible="true"/>
+        <RadzenAxisTitle Text="Points"/>
+    </RadzenValueAxis>
+</RadzenChart>
+
 @code {
     bool smooth = false;
     bool showDataLabels = false;
+
     [Parameter]
     public string GroupId { get; set; }
+
     private IEnumerable<UserData> _userData = new List<UserData>();
 
     protected override async Task OnInitializedAsync()
