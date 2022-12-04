@@ -20,6 +20,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<MatchOddsGroupEntity> MatchOddsGroupEntities => Set<MatchOddsGroupEntity>();
     public DbSet<UserBalanceEntity> UserBalanceEntities => Set<UserBalanceEntity>();
     public DbSet<StatEntity> StatEntities => Set<StatEntity>();
+    public DbSet<WinEntity> WinEntities => Set<WinEntity>();
 
 
     public ApplicationDbContext(

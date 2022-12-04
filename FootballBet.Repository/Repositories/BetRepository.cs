@@ -89,6 +89,11 @@ public class BetRepository : IBetRepository
             UserId = bet.UserId
         };
         stats.ExactWins += 1;
+        await _context.WinEntities.AddAsync(new WinEntity
+        {
+            Amount = payoutAmount,
+            UserId = bet.UserId
+        });
         await _context.SaveChangesAsync();
     }
 
@@ -124,6 +129,14 @@ public class BetRepository : IBetRepository
             UserId = bet.UserId
         };
         stats.BaseWins += 1;
+        var match = await _context.MatchEntities.FirstOrDefaultAsync(m => m.Id == bet.MatchId);
+        await _context.WinEntities.AddAsync(new WinEntity
+        {
+            Amount = payoutAmount,
+            UserId = bet.UserId,
+            MatchId = bet.MatchId,
+            WinDate = match?.Date ?? DateTime.Now
+        });
         await _context.SaveChangesAsync();
     }
 
