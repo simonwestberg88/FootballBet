@@ -11,7 +11,6 @@ namespace FootballBet.Infrastructure.Services
 {
     public class StatsService : IStatsService
     {
-
         private readonly IGroupRepository _groupRepository;
         private readonly IBetRepository _betRepository;
         private readonly IMatchRepository _matchRepository;
@@ -23,8 +22,8 @@ namespace FootballBet.Infrastructure.Services
             IGroupRepository groupRepository,
             IBetRepository betRepository,
             IMatchRepository matchRepository,
-            IOddsRepository oddsRepository, 
-            IStatRepository statRepository, 
+            IOddsRepository oddsRepository,
+            IStatRepository statRepository,
             IUserRepository userRepository)
         {
             _groupRepository = groupRepository;
@@ -48,7 +47,8 @@ namespace FootballBet.Infrastructure.Services
             {
                 var memberGameDayStats = new List<MemberGameDayStatsShared>();
                 var gameDayMatches = finishedMatches.Where(x => x.Date.Date == gameday.Date.Date).ToList();
-                var winningGameDayBets = betsForGroup.Where(x => x.IsWinningBet == true && gameDayMatches.Select(gdm => gdm.Id).Contains(x.MatchId));
+                var winningGameDayBets = betsForGroup.Where(x =>
+                    x.IsWinningBet == true && gameDayMatches.Select(gdm => gdm.Id).Contains(x.MatchId));
                 foreach (var member in members)
                 {
                     var totalMatchDayWinnings = 0m;
@@ -57,10 +57,12 @@ namespace FootballBet.Infrastructure.Services
                     {
                         var odds = await _oddsRepository.GetOddsAsync(winningBet.OddsId);
                         var match = gameDayMatches.FirstOrDefault(m => m.Id == winningBet.MatchId);
-                        var exactWin = odds.HomeTeamGoals == match.HomeFulltimeGoals && odds.AwayTeamGoals == match.AwayFulltimeGoals;
+                        var exactWin = odds.HomeTeamGoals == match.HomeFulltimeGoals &&
+                                       odds.AwayTeamGoals == match.AwayFulltimeGoals;
                         var oddsMultiplier = odds.Odds;
                         if (!exactWin)
-                            oddsMultiplier = (await _oddsRepository.GetBaseOddsAsync(odds.Id, GetMatchWinner(match))).Odds;
+                            oddsMultiplier = (await _oddsRepository.GetBaseOddsAsync(odds.Id, GetMatchWinner(match)))
+                                .Odds;
                         totalMatchDayWinnings += winningBet.WagerAmount * oddsMultiplier;
                     }
 
@@ -70,6 +72,7 @@ namespace FootballBet.Infrastructure.Services
                         TotalWinningsForDay = totalMatchDayWinnings
                     });
                 }
+
                 gameDayStats.Add(new GameDayStatsShared()
                 {
                     Date = gameday,
@@ -108,7 +111,7 @@ namespace FootballBet.Infrastructure.Services
                         Losses = betStats.FirstOrDefault(s => s.UserId == x.UserId)?.Losses ?? 0,
                         BaseWins = betStats.FirstOrDefault(s => s.UserId == x.UserId)?.BaseWins ?? 0,
                         ExactWins = betStats.FirstOrDefault(s => s.UserId == x.UserId)?.ExactWins ?? 0
-                    } 
+                    }
                 }).ToList()
             };
         }
@@ -126,9 +129,20 @@ namespace FootballBet.Infrastructure.Services
             };
         }
 
-        public Task<WinStats> GetWinStatsAsync(string groupId)
+        public async Task<WinStatsResponse> GetWinStatsAsync(string groupId)
         {
-            throw new NotImplementedException();
+            var wins = (await _statRepository.GetWinsAsync(groupId)).ToList();
+            var winStats = wins.Select(w => new WinStats
+            {
+                NickName = _userRepository.GetUserNickNameAsync(w.UserId ?? "", groupId).Result,
+                Date = w.WinDate,
+                WinAmount = w.Amount,
+                IsExactWin = w.IsExactScoreWin
+            }).ToList();
+            return new WinStatsResponse
+            {
+                WinStats = winStats
+            };
         }
 
         public async Task<WinStatsResponse> GetTop3WinStatsAsync(string groupId)
@@ -147,9 +161,22 @@ namespace FootballBet.Infrastructure.Services
                 WinStats = winStats
             };
         }
-        public Task<WinStats> GetWinStatsAsync(string groupId, string userId)
+
+        public async Task<WinStatsResponse> GetWinStatsAsync(string groupId, string userId)
         {
-            throw new NotImplementedException();
+            var wins = await _statRepository.GetWinsAsync(groupId, userId);
+            // map wins to WinStats object
+            var winStats = wins.Select(w => new WinStats
+            {
+                NickName = _userRepository.GetUserNickNameAsync(w.UserId ?? "", groupId).Result,
+                Date = w.WinDate,
+                WinAmount = w.Amount,
+                IsExactWin = w.IsExactScoreWin
+            }).ToList();
+            return new WinStatsResponse
+            {
+                WinStats = winStats
+            };
         }
 
         private static MatchWinnerEntityEnum GetMatchWinner(MatchEntity match)
@@ -167,8 +194,4 @@ namespace FootballBet.Infrastructure.Services
             return MatchWinnerEntityEnum.Draw;
         }
     }
-
-
-
-
 }
