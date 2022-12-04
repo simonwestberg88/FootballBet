@@ -94,6 +94,7 @@ public class BetRepository : IBetRepository
         {
             Amount = payoutAmount,
             UserId = bet.UserId,
+            GroupId = bet.BettingGroupId,
             MatchId = bet.MatchId,
             WinDate = match?.Date ?? DateTime.Now,
             IsExactScoreWin = true
@@ -138,6 +139,7 @@ public class BetRepository : IBetRepository
         {
             Amount = payoutAmount,
             UserId = bet.UserId,
+            GroupId = bet.BettingGroupId,
             MatchId = bet.MatchId,
             WinDate = match?.Date ?? DateTime.Now,
             IsExactScoreWin = false
