@@ -8,4 +8,5 @@ public interface IUserRepository
     public Task<decimal> GetBalanceAsync(string userId, string groupId, CancellationToken ct);
     public Task ChangeNicknameForGroupMemberAsync(string userId, string newNickname, string groupId);
     public Task<string> GetBettingGroupUserNicknameByUserIdAsync(string userId);
+    public Task<string> GetUserNickNameAsync(string userId, string groupId);
 }

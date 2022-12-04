@@ -6,6 +6,8 @@ namespace FootballBet.Client.Services;
 public interface IStatsService
 {
     public Task<BetStatsDto> GetAppBarStats(string groupId);
+    public Task<WinStatsResponse> GetTop3WinStats(string groupId);
+
 }
 public class StatsService: IStatsService
 {
@@ -17,6 +19,12 @@ public class StatsService: IStatsService
     public async Task<BetStatsDto> GetAppBarStats(string groupId)
     {
         var response = await _httpClient.GetFromJsonAsync<BetStatsDto>($"api/stats/appbar?groupId={groupId}");
+        return response;
+    }
+    
+    public async Task <WinStatsResponse> GetTop3WinStats(string groupId)
+    {
+        var response = await _httpClient.GetFromJsonAsync<WinStatsResponse>($"api/stats/topwins?groupId={groupId}");
         return response;
     }
 }

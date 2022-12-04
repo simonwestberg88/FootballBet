@@ -12,5 +12,11 @@ public static class StatsApi
             async (string groupId, IStatsService service, ClaimsPrincipal user) =>
                 await service.GetAppBarStatsAsync(groupId, user.Identity.GetUserId())
         );
+        
+        //get top 3 wins for group
+        app.MapGet("api/stats/topwins",
+            async (string groupId, IStatsService service) =>
+                await service.GetTop3WinStatsAsync(groupId)
+        );
     }
 }
