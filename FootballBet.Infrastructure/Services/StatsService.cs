@@ -136,14 +136,22 @@ namespace FootballBet.Infrastructure.Services
             var userData = groupUsers.Select(g =>
             {
                 var userName = _userRepository.GetUserNickNameAsync(g.Key, groupId).Result;
-                var userWins = g.Select(w => new WinData
+                decimal total = 0;
+                var userWinsSorted = g.OrderBy(w => w.WinDate).ToList();
+                List<WinData> winData = new ();
+                foreach (var winEntity in userWinsSorted)
                 {
-                    Amount = w.Amount,Date = w.WinDate
-                });
+                    total += winEntity.Amount;
+                    winData.Add(new WinData
+                    {
+                        Amount = total,
+                        Date = winEntity.WinDate
+                    });
+                }
                 return new UserData
                 {
                     Username = userName,
-                    Wins = userWins
+                    Wins = winData
                 };
             });
             return new ChartResponse
