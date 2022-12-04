@@ -39,4 +39,10 @@ public class UserRepository : IUserRepository
 
     public async Task<string> GetBettingGroupUserNicknameByUserIdAsync(string userId)
         => (await _context.BettingGroupMembers.FirstOrDefaultAsync(x => x.UserId == userId)).Nickname;
+
+    public async Task<string> GetUserNickNameAsync(string userId, string groupId)
+    {
+        var user = await _context.BettingGroupMembers.FirstOrDefaultAsync(m => m.UserId == userId);
+        return user?.Nickname ?? userId;
+    }
 }

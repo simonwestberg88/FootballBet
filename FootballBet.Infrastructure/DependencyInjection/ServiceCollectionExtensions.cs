@@ -41,5 +41,6 @@ public static class ServiceCollectionExtensions
             .AddTransient<IGroupService, GroupService>()
             .AddTransient<IOddsRepository, OddsRepository>()
             .AddTransient<IMatchRepository, MatchRepository>()
+            .AddTransient<IStatRepository, StatRepository>()
             .AddTransient<IBetRepository, BetRepository>();
 }

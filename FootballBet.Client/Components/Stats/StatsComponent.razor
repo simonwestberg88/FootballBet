@@ -1,6 +1,8 @@
 ﻿@using FootballBet.Shared.Models.Stats
 @using FootballBet.Shared.Models.Users
+@using FootballBet.Client.Services
 @inject HttpClient Http
+@inject IStatsService StatsService
 
 @if (GameDayStat != null)
 {
@@ -25,6 +27,16 @@
 
     @*<MudChart ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" ChartOptions="@chartOptions" Width="100%" Height="600px"></MudChart>*@
 }
+<MudTable Items="@Top3Wins.WinStats" Hover="true">
+    <HeaderContent>
+        <MudTh>Nickname</MudTh>
+        <MudTh>Win amount</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Nickname">@context.NickName</MudTd>
+        <MudTd DataLabel="Amount">@context.WinAmount</MudTd>
+    </RowTemplate>
+</MudTable>
 
 @code {
     [Parameter]
@@ -35,10 +47,12 @@
     private string[] XAxisLabels = new string[] { };
     private bool enabled = true;
     private IEnumerable<UserDto> TableElements = new List<UserDto>();
+    private WinStatsResponse Top3Wins { get; set; } = new ();
 
     protected override async Task OnInitializedAsync()
     {
         GameDayStat = await Http.GetFromJsonAsync<GameDayStatsContainerShared>($"/groupStats/{ThisGroupId}") ?? new();
+        Top3Wins = await StatsService.GetTop3WinStats(ThisGroupId);
         //CreateSeries(GameDayStat.GameDayStats, GameDayStat.Members);
         //CreateXAxis(GameDayStat.GameDates);
         TableElements = GameDayStat.Members.OrderByDescending(x => x.Balance);

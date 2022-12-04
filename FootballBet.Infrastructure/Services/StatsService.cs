@@ -1,6 +1,7 @@
 ﻿using FootballBet.Infrastructure.Interfaces;
 using FootballBet.Repository.Entities;
 using FootballBet.Repository.Enums;
+using FootballBet.Repository.Repositories;
 using FootballBet.Repository.Repositories.Interfaces;
 using FootballBet.Server.Data.Repositories.Interfaces;
 using FootballBet.Shared.Models.Stats;
@@ -8,7 +9,6 @@ using FootballBet.Shared.Models.Users;
 
 namespace FootballBet.Infrastructure.Services
 {
-
     public class StatsService : IStatsService
     {
 
@@ -16,17 +16,23 @@ namespace FootballBet.Infrastructure.Services
         private readonly IBetRepository _betRepository;
         private readonly IMatchRepository _matchRepository;
         private readonly IOddsRepository _oddsRepository;
+        private readonly IStatRepository _statRepository;
+        private readonly IUserRepository _userRepository;
 
         public StatsService(
             IGroupRepository groupRepository,
             IBetRepository betRepository,
             IMatchRepository matchRepository,
-            IOddsRepository oddsRepository)
+            IOddsRepository oddsRepository, 
+            IStatRepository statRepository, 
+            IUserRepository userRepository)
         {
             _groupRepository = groupRepository;
             _betRepository = betRepository;
             _matchRepository = matchRepository;
             _oddsRepository = oddsRepository;
+            _statRepository = statRepository;
+            _userRepository = userRepository;
         }
 
         [Obsolete("a bit too heavy, would need a different implementation that reduces SQL requests")]
@@ -118,6 +124,32 @@ namespace FootballBet.Infrastructure.Services
                 Losses = stats.Losses,
                 Balance = balance
             };
+        }
+
+        public Task<WinStats> GetWinStatsAsync(string groupId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<WinStatsResponse> GetTop3WinStatsAsync(string groupId)
+        {
+            var wins = (await _statRepository.GetTop3WinsAsync(groupId)).ToList();
+            // map wins to WinStats object
+            var winStats = wins.Select(w => new WinStats
+            {
+                NickName = _userRepository.GetUserNickNameAsync(w.UserId ?? "", groupId).Result,
+                Date = w.WinDate,
+                WinAmount = w.Amount,
+                IsExactWin = w.IsExactScoreWin
+            }).ToList();
+            return new WinStatsResponse
+            {
+                WinStats = winStats
+            };
+        }
+        public Task<WinStats> GetWinStatsAsync(string groupId, string userId)
+        {
+            throw new NotImplementedException();
         }
 
         private static MatchWinnerEntityEnum GetMatchWinner(MatchEntity match)
