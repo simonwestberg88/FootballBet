@@ -47,8 +47,8 @@ WHILE @@FETCH_STATUS = 0
                 -- exact score
                 IF (@matchHomeGoals = @oddsHomeGoals and @matchAwayGoals = @oddsAwayGoals)
                     BEGIN
-                        INSERT INTO WinEntities (UserId, MatchId, Amount, IsExactScoreWin, WinDate)
-                        VALUES (@userId, @matchId, (@odds * 100), 1, @matchDate)
+                        INSERT INTO WinEntities (UserId, GroupId, MatchId, Amount, IsExactScoreWin, WinDate)
+                        VALUES (@userId, @groupId, @matchId, (@odds * 100), 1, @matchDate)
                         --IF (@odds> @highestWin)
                         --BEGIN
                         --	set @highestWin = @odds
@@ -82,8 +82,8 @@ WHILE @@FETCH_STATUS = 0
                                 where bo.MatchOddsGroupId = @matchOddsGroupId
                                   and bo.MatchWinnerEntityEnum = 2
                             END
-                        INSERT INTO WinEntities (UserId, MatchId, Amount, IsExactScoreWin, WinDate)
-                        VALUES (@userId, @matchId, (@baseOdds * 100), 0, @matchDate)
+                        INSERT INTO WinEntities (UserId, GroupId, MatchId, Amount, IsExactScoreWin, WinDate)
+                        VALUES (@userId, @groupId, @matchId, (@baseOdds * 100), 0, @matchDate)
                     END
                 FETCH NEXT FROM bet_cursor INTO @oddsId
             end
