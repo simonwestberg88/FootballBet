@@ -34,7 +34,7 @@
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Nickname">@context.NickName</MudTd>
-        <MudTd DataLabel="Amount">@context.WinAmount</MudTd>
+        <MudTd DataLabel="Amount">@($"{context.WinAmount:0}")</MudTd>
     </RowTemplate>
 </MudTable>
 
