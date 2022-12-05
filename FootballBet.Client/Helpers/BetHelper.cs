@@ -6,7 +6,7 @@ namespace FootballBet.Client.Helpers
     public static class BetHelper
     {
         public static string GetBackGroundColorDependingOnStatus(MatchDto match, BetResponse userBet)
-            => match.MatchStatus == "Match Finished"
+            => IsMatchFinished(match.MatchStatus)
                 ? MatchHelper.GetTypeOfWin(match, userBet) switch
                 {
                     "exact" => "#90F166",
@@ -14,5 +14,8 @@ namespace FootballBet.Client.Helpers
                     _ => "#F58702"
                 }
                 : "#FFFFFF";
+
+        public static bool IsMatchFinished(string matchStatus)
+            => string.IsNullOrEmpty(matchStatus) ? false : matchStatus.ToLower().Contains("finish");
     }
 }

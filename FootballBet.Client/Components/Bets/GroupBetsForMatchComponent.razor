@@ -19,17 +19,17 @@
             <tr bgcolor="@BetHelper.GetBackGroundColorDependingOnStatus(Match, bet.BetDto)">
                 <td>@($"{bet?.Nickname}")</td>
                 <td>@(bet.BetDto.HomeGoals)&nbsp-&nbsp@(bet.BetDto.AwayGoals)</td>
-                @if (@MatchHelper.GetTypeOfWin(Match, bet.BetDto) == "exact" && Match.MatchStatus == "Match Finished")
+                @if (@MatchHelper.GetTypeOfWin(Match, bet.BetDto) == "exact" && BetHelper.IsMatchFinished(Match.MatchStatus))
                 {
                     <td><del>@string.Format("{0:0}", bet.BetDto.PotentialBaseWin)</del></td>
                     <td><ins>@string.Format("{0:0}", bet.BetDto.PotentialWin)</ins></td>
                 }
-                else if (@MatchHelper.GetTypeOfWin(Match, bet.BetDto) == "base" && Match.MatchStatus == "Match Finished")
+                else if (@MatchHelper.GetTypeOfWin(Match, bet.BetDto) == "base" && BetHelper.IsMatchFinished(Match.MatchStatus))
                 {
                     <td><ins>@string.Format("{0:0}", bet.BetDto.PotentialBaseWin)</ins></td>
                     <td><del>@string.Format("{0:0}", bet.BetDto.PotentialWin)</del></td>
                 }
-                else if (@MatchHelper.GetTypeOfWin(Match, bet.BetDto) == "lost" && Match.MatchStatus == "Match Finished")
+                else if (@MatchHelper.GetTypeOfWin(Match, bet.BetDto) == "lost" && BetHelper.IsMatchFinished(Match.MatchStatus))
                 {
                     <td><del>@string.Format("{0:0}", bet.BetDto.PotentialBaseWin)</del></td>
                     <td><del>@string.Format("{0:0}", bet.BetDto.PotentialWin)</del></td>
