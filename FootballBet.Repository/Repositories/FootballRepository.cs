@@ -145,7 +145,7 @@ public class FootballRepository : IFootballRepository
         var matches = await _context.MatchEntities
             .Where(m => m.LeagueId == leagueId
                         && m.Date < dateTimeNow && m.Date > date
-                        && ((int)m.MatchStatus < (int)MatchStatus.P || m.MatchStatus == MatchStatus.LIVE))
+                        && ((int)m.MatchStatus <= (int)MatchStatus.P || m.MatchStatus == MatchStatus.LIVE || m.MatchStatus == MatchStatus.BT))
             .ToListAsync();
         return matches;
     }
