@@ -176,6 +176,23 @@ namespace FootballBet.Infrastructure.Services
                 WinStats = winStats
             };
         }
+        
+        public async Task<WinStatsResponse> GetLatestWinsAsync(string groupId)
+        {
+            var wins = (await _statRepository.GetLatestWinsAsync(groupId)).ToList();
+            // map wins to WinStats object
+            var winStats = wins.Select(w => new WinStats
+            {
+                NickName = _userRepository.GetUserNickNameAsync(w.UserId ?? "", groupId).Result,
+                Date = w.WinDate,
+                WinAmount = w.Amount,
+                IsExactWin = w.IsExactScoreWin
+            }).ToList();
+            return new WinStatsResponse
+            {
+                WinStats = winStats
+            };
+        }
 
         public async Task<WinStatsResponse> GetWinStatsAsync(string groupId, string userId)
         {

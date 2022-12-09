@@ -13,10 +13,15 @@ public static class StatsApi
                 await service.GetAppBarStatsAsync(groupId, user.Identity.GetUserId())
         );
         
-        //get top 3 wins for group
+        //get top 10 wins for group
         app.MapGet("api/stats/topwins",
             async (string groupId, IStatsService service) =>
                 await service.GetTop10WinStatsAsync(groupId)
+        );
+        
+        app.MapGet("api/stats/latestwins",
+            async (string groupId, IStatsService service) =>
+                await service.GetLatestWinsAsync(groupId)
         );
         
         app.MapGet("api/stats/chart",
