@@ -9,5 +9,6 @@ namespace FootballBet.Infrastructure.Interfaces
         public Task<ChartResponse> GetChartStatsAsync(string groupId);
         public Task<WinStatsResponse> GetWinStatsAsync(string groupId, string userId);
         public Task<WinStatsResponse> GetTop10WinStatsAsync(string groupId);
+        public Task<WinStatsResponse> GetLatestWinsAsync(string groupId);
     }
 }

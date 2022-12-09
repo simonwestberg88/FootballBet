@@ -28,7 +28,7 @@
     @*<MudChart ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" ChartOptions="@chartOptions" Width="100%" Height="600px"></MudChart>*@
 }
 <MudText Typo="Typo.h4" Style="padding-left: 16px; padding-top: 16px" GutterBottom="true">Biggest Wins</MudText>
-<MudTable Items="@Top10Wins.WinStats" Hover="true">
+<MudTable Items="@Top10Wins.WinStats" Dense="enabled" Hover="true">
     <HeaderContent>
         <MudTh>User</MudTh>
         <MudTh>Amount</MudTh>
@@ -36,6 +36,19 @@
     <RowTemplate>
         <MudTd DataLabel="Nickname">@context.NickName</MudTd>
         <MudTd DataLabel="Amount">@($"{context.WinAmount:0}")</MudTd>
+    </RowTemplate>
+</MudTable>
+<MudText Typo="Typo.h4" Style="padding-left: 16px; padding-top: 16px" GutterBottom="true">Latest Wins</MudText>
+<MudTable Items="@LatestWins.WinStats" Dense="enabled" Hover="true">
+    <HeaderContent>
+        <MudTh>User</MudTh>
+        <MudTh>Amount</MudTh>
+        <MudTh>Date</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Nickname">@context.NickName</MudTd>
+        <MudTd DataLabel="Amount">@($"{context.WinAmount:0}")</MudTd>
+        <MudTd DataLabel="Date">@($"{context.Date}")</MudTd>
     </RowTemplate>
 </MudTable>
 <StatsChartComponent GroupId="@ThisGroupId"></StatsChartComponent>
@@ -50,11 +63,13 @@
     private bool enabled = true;
     private IEnumerable<UserDto> TableElements = new List<UserDto>();
     private WinStatsResponse Top10Wins { get; set; } = new ();
+    private WinStatsResponse LatestWins { get; set; } = new ();
 
     protected override async Task OnInitializedAsync()
     {
         GameDayStat = await Http.GetFromJsonAsync<GameDayStatsContainerShared>($"/groupStats/{ThisGroupId}") ?? new();
         Top10Wins = await StatsService.GetTop10WinStats(ThisGroupId);
+        LatestWins = await StatsService.GetLatestWins(ThisGroupId);
         //CreateSeries(GameDayStat.GameDayStats, GameDayStat.Members);
         //CreateXAxis(GameDayStat.GameDates);
         TableElements = GameDayStat.Members.OrderByDescending(x => x.Balance);
